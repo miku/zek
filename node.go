@@ -11,8 +11,7 @@ type Node struct {
 	Examples []string   `json:"examples"`
 	Children []*Node
 
-	// freqs counts the number of occurences of this node within parent.
-	freqs            []int
+	freqs            []int // freqs counts the number of occurences of this node within parent.
 	childFrequencies map[xml.Name]int
 }
 
@@ -35,6 +34,16 @@ func (node *Node) mergeAttr(attr []xml.Attr) {
 		}
 		node.Attr = append(node.Attr, a)
 	}
+}
+
+// IsMultivalued returns true, if this node appeared more than once.
+func (node *Node) IsMultivalued() bool {
+	for _, f := range node.freqs {
+		if f > 1 {
+			return true
+		}
+	}
+	return false
 }
 
 // CreateOrGetChild creates a child if no child with the same tag name exists,
