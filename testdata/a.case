@@ -1,0 +1,8 @@
+<a></a>
+
+----
+
+type Document struct {
+    XMLName xml.Name `xml:"a"`
+    A       string   `xml:",chardata"`
+}
