@@ -23,9 +23,9 @@ type Node struct {
 	Attr     []xml.Attr `json:"attr,omitempty"`
 	Examples []string   `json:"examples,omitempty"`
 	Children []*Node    `json:"children,omitempty"`
+	Freqs    []int      `json:"freqs,omitempty"` // Collect number of occurences of this node within parent.
 
-	freqs      []int            // Collect number of occurences of this node within parent.
-	childFreqs map[xml.Name]int // Count child tag occurences.
+	childFreqs map[xml.Name]int // Count child tag occurences, used temporarily.
 }
 
 // ReadFrom reads XML from a reader.
@@ -92,7 +92,7 @@ func (node *Node) mergeAttr(attr []xml.Attr) {
 
 // IsMultivalued returns true, if this node appeared more than once.
 func (node *Node) IsMultivalued() bool {
-	for _, f := range node.freqs {
+	for _, f := range node.Freqs {
 		if f > 1 {
 			return true
 		}
@@ -131,7 +131,7 @@ func (node *Node) End() {
 			if c.Name != name {
 				continue
 			}
-			c.freqs = append(c.freqs, freq)
+			c.Freqs = append(c.Freqs, freq)
 		}
 	}
 	// Reset counter.

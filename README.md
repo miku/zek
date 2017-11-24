@@ -41,4 +41,5 @@ Attributes are least important.
 * TODO: recursive structures. Detect Duplicate Subtrees. Extract the subtrees as
   separate structs and use them in the main struct.
 * TODO: calculate some stats on the fields (cardinality, multiplicity, average values)
+* TODO: correlate values between fields
 * TODO: add examples as comments
