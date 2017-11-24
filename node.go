@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-// countwriter counts bytes written to it.
+// countwriter counts bytes written to it. Does not support concurrent access.
 type countwriter struct {
 	n int64
 }

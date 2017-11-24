@@ -93,147 +93,298 @@ func TestNodeReadFrom(t *testing.T) {
 	}{
 		{
 			input: ``,
-			serializedResult: `{
-				"name": {
-					"Space": "",
-					"Local": ""
-				}
+			serializedResult: `
+			{
+					"name": {
+							"Space": "",
+							"Local": ""
+					}
 			}`,
 			err: nil,
 		},
 		{
-			input:            `<?xml version="1.0"?><a></a>`,
-			serializedResult: `{"name":{"Space":"","Local":"a"}}`,
-			err:              nil,
-		},
-		{
-			input:            `<a></a>`,
-			serializedResult: `{"name":{"Space":"","Local":"a"}}`,
-			err:              nil,
-		},
-		{
-			input: `<a><b></b></a>`,
+			input: `<?xml version="1.0"?><a></a>`,
 			serializedResult: `
-				{
-				  "name": {
-				    "Space": "",
-				    "Local": "a"
-				  },
-				  "children": [
-				    {
-				      "name": {
-					"Space": "",
-					"Local": "b"
-				      }
-				    }
-				  ]
-				}
-			`,
+			{
+					"name": {
+							"Space": "",
+							"Local": "a"
+					}
+			}`,
+			err: nil,
+		},
+		{
+			input: `<a></a>`,
+			serializedResult: `
+			{
+					"name": {
+							"Space": "",
+							"Local": "a"
+					}
+			}`,
 			err: nil,
 		},
 		{
 			input: `<a><b></b></a>`,
 			serializedResult: `
-				{
-				  "name": {
-				    "Space": "",
-				    "Local": "a"
-				  },
-				  "children": [
-				    {
-				      "name": {
-					"Space": "",
-					"Local": "b"
-				      }
-				    }
-				  ]
-				}
-			`,
+			{
+					"name": {
+							"Space": "",
+							"Local": "a"
+					},
+					"children": [
+							{
+									"name": {
+											"Space": "",
+											"Local": "b"
+									}
+							}
+					]
+			}`,
+			err: nil,
+		},
+		{
+			input: `<a><b></b></a>`,
+			serializedResult: `
+			{
+					"name": {
+							"Space": "",
+							"Local": "a"
+					},
+					"children": [
+							{
+									"name": {
+											"Space": "",
+											"Local": "b"
+									}
+							}
+					]
+			}`,
 			err: nil,
 		},
 		{
 			input: `<a><b></b><b></b></a>`,
 			serializedResult: `
-				{
-				  "name": {
-				    "Space": "",
-				    "Local": "a"
-				  },
-				  "children": [
-				    {
-				      "name": {
-					"Space": "",
-					"Local": "b"
-				      }
-				    }
-				  ]
-				}
-			`,
+			{
+					"name": {
+							"Space": "",
+							"Local": "a"
+					},
+					"children": [
+							{
+									"name": {
+											"Space": "",
+											"Local": "b"
+									}
+							}
+					]
+			}`,
 			err: nil,
 		},
 		{
 			input: `<a><b><c></c></b></a>`,
 			serializedResult: `
-				{
-				  "name": {
-				    "Space": "",
-				    "Local": "a"
-				  },
-				  "children": [
-				    {
-				      "name": {
-					"Space": "",
-					"Local": "b"
-				      },
-				      "children": [
-					{
-					  "name": {
-					    "Space": "",
-					    "Local": "c"
-					  }
-					}
-				      ]
-				    }
-				  ]
-				}
-			`,
+			{
+					"name": {
+							"Space": "",
+							"Local": "a"
+					},
+					"children": [
+							{
+									"name": {
+											"Space": "",
+											"Local": "b"
+									},
+									"children": [
+											{
+													"name": {
+															"Space": "",
+															"Local": "c"
+													}
+											}
+									]
+							}
+					]
+			}`,
 			err: nil,
 		},
 		{
 			input: `<a id="1"><b><c></c></b></a>`,
 			serializedResult: `
-				{
-				  "name": {
-				    "Space": "",
-				    "Local": "a"
-				  },
-				  "attr": [
-				    {
-				      "Name": {
-					"Space": "",
-					"Local": "id"
-				      },
-				      "Value": "1"
-				    }
-				  ],
-				  "children": [
-				    {
-				      "name": {
-					"Space": "",
-					"Local": "b"
-				      },
-				      "children": [
-					{
-					  "name": {
-					    "Space": "",
-					    "Local": "c"
-					  }
-					}
-				      ]
-				    }
-				  ]
-				}
-			`,
+			{
+					"name": {
+							"Space": "",
+							"Local": "a"
+					},
+					"attr": [
+							{
+									"Name": {
+											"Space": "",
+											"Local": "id"
+									},
+									"Value": "1"
+							}
+					],
+					"children": [
+							{
+									"name": {
+											"Space": "",
+											"Local": "b"
+									},
+									"children": [
+											{
+													"name": {
+															"Space": "",
+															"Local": "c"
+													}
+											}
+									]
+							}
+					]
+			}`,
+			err: nil,
+		},
+		{
+			input: `<a id="2"><b><c></c></b></a><a id="1"></a>`,
+			serializedResult: `
+			{
+					"name": {
+							"Space": "",
+							"Local": "a"
+					},
+					"attr": [
+							{
+									"Name": {
+											"Space": "",
+											"Local": "id"
+									},
+									"Value": "2"
+							}
+					],
+					"children": [
+							{
+									"name": {
+											"Space": "",
+											"Local": "b"
+									},
+									"children": [
+											{
+													"name": {
+															"Space": "",
+															"Local": "c"
+													}
+											}
+									]
+							}
+					]
+			}`,
+			err: nil,
+		},
+		{
+			input: `<x><a id="2"><b><c></c></b></a><a id="1"><b><d></d></b></a></x>`,
+			serializedResult: `
+			{
+					"name": {
+							"Space": "",
+							"Local": "x"
+					},
+					"children": [
+							{
+									"name": {
+											"Space": "",
+											"Local": "a"
+									},
+									"attr": [
+											{
+													"Name": {
+															"Space": "",
+															"Local": "id"
+													},
+													"Value": "2"
+											}
+									],
+									"children": [
+											{
+													"name": {
+															"Space": "",
+															"Local": "b"
+													},
+													"children": [
+															{
+																	"name": {
+																			"Space": "",
+																			"Local": "c"
+																	}
+															},
+															{
+																	"name": {
+																			"Space": "",
+																			"Local": "d"
+																	}
+															}
+													]
+											}
+									]
+							}
+					]
+			}`,
+			err: nil,
+		},
+		{
+			input: `<x><a id="2"><b><c></c></b></a><a name="A"><b><d></d></b></a></x>`,
+			serializedResult: `
+			{
+					"name": {
+							"Space": "",
+							"Local": "x"
+					},
+					"children": [
+							{
+									"name": {
+											"Space": "",
+											"Local": "a"
+									},
+									"attr": [
+											{
+													"Name": {
+															"Space": "",
+															"Local": "id"
+													},
+													"Value": "2"
+											},
+											{
+												"Name": {
+														"Space": "",
+														"Local": "name"
+												},
+												"Value": "A"
+										}
+									],
+									"children": [
+											{
+													"name": {
+															"Space": "",
+															"Local": "b"
+													},
+													"children": [
+															{
+																	"name": {
+																			"Space": "",
+																			"Local": "c"
+																	}
+															},
+															{
+																	"name": {
+																			"Space": "",
+																			"Local": "d"
+																	}
+															}
+													]
+											}
+									]
+							}
+					]
+			}`,
 			err: nil,
 		},
 	}
@@ -252,7 +403,7 @@ func TestNodeReadFrom(t *testing.T) {
 		s := string(b)
 		if ok, err := deepEqualJSON(s, c.serializedResult); !ok {
 			if err != nil {
-				t.Errorf("deep JSON comparison failed: %v", err)
+				t.Errorf("documents differ: %v", err)
 			}
 			t.Errorf("got %v, want %v", s, c.serializedResult)
 		}
