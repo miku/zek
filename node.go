@@ -108,7 +108,7 @@ func (node *Node) CreateOrGetChild(name xml.Name, attr []xml.Attr) *Node {
 		if child.Name.Local != name.Local {
 			continue
 		}
-		node.mergeAttr(attr)
+		child.mergeAttr(attr)
 		node.childFreqs[name]++
 		return child
 	}
