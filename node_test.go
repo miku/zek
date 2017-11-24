@@ -387,6 +387,47 @@ func TestNodeReadFrom(t *testing.T) {
 			}`,
 			err: nil,
 		},
+		{
+			input: `<x><a><b><c></c><c></c></b></a><a><b><d></d><d></d></b></a></x>`,
+			serializedResult: `
+			{
+					"name": {
+							"Space": "",
+							"Local": "x"
+					},
+					"children": [
+							{
+									"name": {
+											"Space": "",
+											"Local": "a"
+									},
+									"children": [
+											{
+													"name": {
+															"Space": "",
+															"Local": "b"
+													},
+													"children": [
+															{
+																	"name": {
+																			"Space": "",
+																			"Local": "c"
+																	}
+															},
+															{
+																	"name": {
+																			"Space": "",
+																			"Local": "d"
+																	}
+															}
+													]
+											}
+									]
+							}
+					]
+			}`,
+			err: nil,
+		},
 	}
 
 	for _, c := range cases {
