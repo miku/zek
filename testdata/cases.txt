@@ -10,7 +10,7 @@ type Document struct {
 }
 
 
-====
+========
 
 
 # https://play.golang.org/p/q5yhxaSuZ3
@@ -25,7 +25,7 @@ type A struct {
 }
 
 
-====
+========
 
 
 <a><b></b><b></b></a>
@@ -38,7 +38,8 @@ type A struct {
 }
 
 
-====
+========
+
 
 # Chardata and attribute, https://play.golang.org/p/I0rhyf8mRE
 
@@ -53,4 +54,41 @@ type Document struct {
 }
 
 
-====
+========
+
+
+# Chardata and attribute, https://play.golang.org/p/PuEF2VNohM
+
+<a id="1" name="x"></a>
+
+----
+
+type Document struct {
+    XMLName xml.Name `xml:"a"`
+    A       string   `xml:",chardata"`
+    ID      string   `xml:"id,attr"`
+    Name    string   `xml:"name,attr"`
+}
+
+
+========
+
+
+
+# Chardata and attribute, https://play.golang.org/p/IxEunQ7PrD
+
+<a id="1" name="x"><b id="2">xxx</b></a>
+
+----
+
+type Document struct {
+    XMLName xml.Name `xml:"a"`
+    A       string   `xml:",chardata"`
+    ID      string   `xml:"id,attr"`
+    Name    string   `xml:"name,attr"`
+    B       struct {
+         ID   string `xml:"id,attr"`
+         Text string `xml:",chardata"`
+    } `xml:"b"`
+}
+
