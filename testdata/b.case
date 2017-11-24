@@ -1,9 +1,0 @@
-<a><b></b></a>
-
-----
-
-type Document struct {
-    A struct {
-        B string `xml:"b"`
-    } `xml:"a"`
-}

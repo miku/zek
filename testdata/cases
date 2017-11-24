@@ -1,0 +1,56 @@
+# Special case, we need an artificial wrapper root element.
+
+<a></a>
+
+----
+
+type Document struct {
+    XMLName xml.Name `xml:"a"`
+    A       string   `xml:",chardata"`
+}
+
+
+====
+
+
+# https://play.golang.org/p/q5yhxaSuZ3
+
+<a><b></b></a>
+
+----
+
+type A struct {
+    XMLName xml.Name `xml:"a"`
+    B       string   `xml:"b"`
+}
+
+
+====
+
+
+<a><b></b><b></b></a>
+
+----
+
+type A struct {
+    XMLName xml.Name `xml:"a"`
+    B       []string `xml:"b"`
+}
+
+
+====
+
+# Chardata and attribute, https://play.golang.org/p/I0rhyf8mRE
+
+<a id="1"></a>
+
+----
+
+type Document struct {
+    XMLName xml.Name `xml:"a"`
+    A       string   `xml:",chardata"`
+    ID      string   `xml:"id,attr"`
+}
+
+
+====
