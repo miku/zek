@@ -1,7 +1,9 @@
 SHELL := /bin/bash
 TARGETS = zek
 
-# http://docs.travis-ci.com/user/languages/go/#Default-Test-Script
+zek:
+	go build -o zek cmd/zek/main.go
+
 test:
 	go get -d && go test -v
 
@@ -18,5 +20,3 @@ clean:
 	go clean
 	rm -f $(TARGETS)
 
-zek:
-	go build -o zek cmd/zek/main.go
