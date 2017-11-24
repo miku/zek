@@ -11,7 +11,7 @@ type countwriter struct {
 	n int64
 }
 
-// Write increments the number of bytes read by len(p).
+// Write increments the number by len(p).
 func (w *countwriter) Write(p []byte) (n int, err error) {
 	w.n += w.n + int64(len(p))
 	return len(p), nil
@@ -24,9 +24,8 @@ type Node struct {
 	Examples []string   `json:"examples,omitempty"`
 	Children []*Node    `json:"children,omitempty"`
 
-	maxExamples      int   // Maximum number of examples for this node.
-	freqs            []int // Counts the number of occurences of this node within parent.
-	childFrequencies map[xml.Name]int
+	freqs      []int            // Collect number of occurences of this node within parent.
+	childFreqs map[xml.Name]int // Count child tag occurences.
 }
 
 // ReadFrom reads XML from a reader.
@@ -62,7 +61,7 @@ func (node *Node) ReadFrom(r io.Reader) (n int64, err error) {
 				break
 			}
 			n := stack.Peek().(*Node)
-			n.Examples = append(n.Examples, v)
+			n.Examples = append(n.Examples, v) // XXX: example sampling.
 		}
 	}
 	if len(root.Children) > 0 {
@@ -71,8 +70,7 @@ func (node *Node) ReadFrom(r io.Reader) (n int64, err error) {
 	return cw.n, nil
 }
 
-// attrListContains returns true, if the attribute name is contained in the
-// given attribute list.
+// attrListContains determines containment only on attribute name, not value.
 func attrListContains(attrs []xml.Attr, attr xml.Attr) bool {
 	for _, a := range attrs {
 		if a.Name == attr.Name {
@@ -111,14 +109,14 @@ func (node *Node) CreateOrGetChild(name xml.Name, attr []xml.Attr) *Node {
 			continue
 		}
 		node.mergeAttr(attr)
-		node.childFrequencies[name]++
+		node.childFreqs[name]++
 		return child
 	}
 
-	if node.childFrequencies == nil {
-		node.childFrequencies = make(map[xml.Name]int)
+	if node.childFreqs == nil {
+		node.childFreqs = make(map[xml.Name]int)
 	}
-	node.childFrequencies[name]++
+	node.childFreqs[name]++
 
 	n := &Node{Name: name, Attr: attr}
 	node.Children = append(node.Children, n)
@@ -127,15 +125,15 @@ func (node *Node) CreateOrGetChild(name xml.Name, attr []xml.Attr) *Node {
 
 // End signals end of an element.
 func (node *Node) End() {
-	// Take note of frequencies, collect them inside node for later stats.
-	for name, freq := range node.childFrequencies {
+	// Take note of frequencies, collect them inside child for later stats.
+	for name, freq := range node.childFreqs {
 		for _, c := range node.Children {
 			if c.Name != name {
 				continue
 			}
-			node.freqs = append(node.freqs, freq)
+			c.freqs = append(c.freqs, freq)
 		}
 	}
 	// Reset counter.
-	node.childFrequencies = make(map[xml.Name]int)
+	node.childFreqs = make(map[xml.Name]int)
 }

@@ -26,7 +26,7 @@ func (s *Stack) Peek() interface{} {
 	s.Lock()
 	defer s.Unlock()
 	if len(s.v) == 0 {
-		panic("pop from empty stack")
+		panic("peek at empty stack")
 	}
 	return s.v[len(s.v)-1]
 }
