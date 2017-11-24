@@ -1,8 +1,10 @@
 package zek
 
 import (
+	"encoding/json"
 	"encoding/xml"
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -63,19 +65,196 @@ func TestNodeMergeAttr(t *testing.T) {
 			attr:   []xml.Attr{xml.Attr{Name: xml.Name{Local: "id"}}},
 			result: []xml.Attr{xml.Attr{Name: xml.Name{Local: "id"}}},
 		},
-		{
-			node: &Node{Attr: []xml.Attr{xml.Attr{Name: xml.Name{Local: "id"}}}},
-			attr: []xml.Attr{xml.Attr{Name: xml.Name{Local: "xx"}}},
-			result: []xml.Attr{
-				xml.Attr{Name: xml.Name{Local: "id"}},
-				xml.Attr{Name: xml.Name{Local: "xx"}},
-			},
-		},
 	}
 	for _, c := range cases {
 		c.node.mergeAttr(c.attr)
 		if !reflect.DeepEqual(c.node.Attr, c.result) {
 			t.Errorf("got %v, want %v", c.node.Attr, c.result)
+		}
+	}
+}
+
+func deepEqualJSON(s, t string) (bool, error) {
+	var a, b interface{}
+	if err := json.Unmarshal([]byte(s), &a); err != nil {
+		return false, err
+	}
+	if err := json.Unmarshal([]byte(t), &b); err != nil {
+		return false, err
+	}
+	return reflect.DeepEqual(a, b), nil
+}
+
+func TestNodeReadFrom(t *testing.T) {
+	var cases = []struct {
+		input            string // Raw XML input string.
+		serializedResult string // Compare to JSON serialization.
+		err              error
+	}{
+		{
+			input: ``,
+			serializedResult: `{
+				"name": {
+					"Space": "",
+					"Local": ""
+				}
+			}`,
+			err: nil,
+		},
+		{
+			input:            `<?xml version="1.0"?><a></a>`,
+			serializedResult: `{"name":{"Space":"","Local":"a"}}`,
+			err:              nil,
+		},
+		{
+			input:            `<a></a>`,
+			serializedResult: `{"name":{"Space":"","Local":"a"}}`,
+			err:              nil,
+		},
+		{
+			input: `<a><b></b></a>`,
+			serializedResult: `
+				{
+				  "name": {
+				    "Space": "",
+				    "Local": "a"
+				  },
+				  "children": [
+				    {
+				      "name": {
+					"Space": "",
+					"Local": "b"
+				      }
+				    }
+				  ]
+				}
+			`,
+			err: nil,
+		},
+		{
+			input: `<a><b></b></a>`,
+			serializedResult: `
+				{
+				  "name": {
+				    "Space": "",
+				    "Local": "a"
+				  },
+				  "children": [
+				    {
+				      "name": {
+					"Space": "",
+					"Local": "b"
+				      }
+				    }
+				  ]
+				}
+			`,
+			err: nil,
+		},
+		{
+			input: `<a><b></b><b></b></a>`,
+			serializedResult: `
+				{
+				  "name": {
+				    "Space": "",
+				    "Local": "a"
+				  },
+				  "children": [
+				    {
+				      "name": {
+					"Space": "",
+					"Local": "b"
+				      }
+				    }
+				  ]
+				}
+			`,
+			err: nil,
+		},
+		{
+			input: `<a><b><c></c></b></a>`,
+			serializedResult: `
+				{
+				  "name": {
+				    "Space": "",
+				    "Local": "a"
+				  },
+				  "children": [
+				    {
+				      "name": {
+					"Space": "",
+					"Local": "b"
+				      },
+				      "children": [
+					{
+					  "name": {
+					    "Space": "",
+					    "Local": "c"
+					  }
+					}
+				      ]
+				    }
+				  ]
+				}
+			`,
+			err: nil,
+		},
+		{
+			input: `<a id="1"><b><c></c></b></a>`,
+			serializedResult: `
+				{
+				  "name": {
+				    "Space": "",
+				    "Local": "a"
+				  },
+				  "attr": [
+				    {
+				      "Name": {
+					"Space": "",
+					"Local": "id"
+				      },
+				      "Value": "1"
+				    }
+				  ],
+				  "children": [
+				    {
+				      "name": {
+					"Space": "",
+					"Local": "b"
+				      },
+				      "children": [
+					{
+					  "name": {
+					    "Space": "",
+					    "Local": "c"
+					  }
+					}
+				      ]
+				    }
+				  ]
+				}
+			`,
+			err: nil,
+		},
+	}
+
+	for _, c := range cases {
+		r := strings.NewReader(c.input)
+		node := new(Node)
+		_, err := node.ReadFrom(r)
+		if err != c.err {
+			t.Errorf("got %v, want %v", err, c.err)
+		}
+		b, err := json.Marshal(node)
+		if err != nil {
+			t.Errorf("unexpected error during serialization: %v", err)
+		}
+		s := string(b)
+		if ok, err := deepEqualJSON(s, c.serializedResult); !ok {
+			if err != nil {
+				t.Errorf("deep JSON comparison failed: %v", err)
+			}
+			t.Errorf("got %v, want %v", s, c.serializedResult)
 		}
 	}
 }

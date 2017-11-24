@@ -2,7 +2,6 @@ package zek
 
 import (
 	"bytes"
-	"encoding/xml"
 	"testing"
 )
 
@@ -11,20 +10,7 @@ func TestWriteNode(t *testing.T) {
 		node   *Node
 		result string
 		err    error
-	}{
-		{
-			node:   &Node{},
-			result: "",
-			err:    nil,
-		},
-		{
-			node: &Node{
-				Name: xml.Name{Local: "a"},
-			},
-			result: "type A string",
-			err:    nil,
-		},
-	}
+	}{}
 
 	for _, c := range cases {
 		var buf bytes.Buffer
