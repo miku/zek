@@ -93,6 +93,6 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 	for _, child := range node.Children {
 		sw.writeNode(child, false)
 	}
-	io.WriteString(sew, "}")
+	io.WriteString(sew, "}\n")
 	return err
 }

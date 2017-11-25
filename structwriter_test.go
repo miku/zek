@@ -43,6 +43,11 @@ func TestWriteNode(t *testing.T) {
 			result: "testdata/w.3.go",
 			err:    nil,
 		},
+		{
+			input:  "testdata/w.4.xml",
+			result: "testdata/w.4.go",
+			err:    nil,
+		},
 	}
 
 	for _, c := range cases {
