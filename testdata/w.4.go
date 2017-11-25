@@ -1,12 +1,14 @@
 type Records struct {
 	XMLName xml.Name `xml:"Records"`
 	Text    string   `xml:",chardata"`
+	Xsi     string   `xml:"xsi,attr"`
 	Record  []struct {
 		XMLName xml.Name `xml:"Record"`
 		Text    string   `xml:",chardata"`
 		Header  struct {
 			XMLName    xml.Name `xml:"header"`
 			Text       string   `xml:",chardata"`
+			Status     string   `xml:"status,attr"`
 			Identifier struct {
 				XMLName xml.Name `xml:"identifier"`
 				Text    string   `xml:",chardata"`
@@ -24,9 +26,12 @@ type Records struct {
 			XMLName xml.Name `xml:"metadata"`
 			Text    string   `xml:",chardata"`
 			Rfc1807 struct {
-				XMLName    xml.Name `xml:"rfc1807"`
-				Text       string   `xml:",chardata"`
-				BibVersion struct {
+				XMLName        xml.Name `xml:"rfc1807"`
+				Text           string   `xml:",chardata"`
+				Xmlns          string   `xml:"xmlns,attr"`
+				Xsi            string   `xml:"xsi,attr"`
+				SchemaLocation string   `xml:"schemaLocation,attr"`
+				BibVersion     struct {
 					XMLName xml.Name `xml:"bib-version"`
 					Text    string   `xml:",chardata"`
 				}

@@ -1,5 +1,3 @@
-import "encoding/xml"
-
 type Root struct {
 	XMLName xml.Name `xml:"root"`
 	Text    string   `xml:",chardata"`
