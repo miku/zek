@@ -23,34 +23,48 @@ func (sew stickyErrWriter) Write(p []byte) (n int, err error) {
 	return
 }
 
-// GoName generates a camel case name for a given string. Allows exceptions for
-// certain fields, e.g. ISBN.
-func GoName(name string) string {
-	var capped []string
-	splitter := func(c rune) bool {
-		return c == '_' || c == '-'
-	}
-	for _, s := range strings.FieldsFunc(name, splitter) {
-		switch strings.ToLower(s) {
-		case "id", "isbn", "ismn", "eissn", "issn", "lccn", "rsn", "url", "urn", "zdb":
-			capped = append(capped, strings.ToUpper(s))
-		default:
-			capped = append(capped, strings.Title(s))
+// stringSliceContains returns true, if a string is found in a slice.
+func stringSliceContains(ss []string, s string) bool {
+	for _, v := range ss {
+		if v == s {
+			return true
 		}
 	}
-	return strings.Join(capped, "")
+	return false
+}
+
+// createNameFunc returns a function that converts a tag into a canonical Go
+// name. Given list of strings will be uppercased.
+func createNameFunc(upper []string) func(string) string {
+	f := func(name string) string {
+		var capped []string
+		splitter := func(c rune) bool {
+			return c == '_' || c == '-'
+		}
+		for _, s := range strings.FieldsFunc(name, splitter) {
+			switch {
+			case stringSliceContains(upper, strings.ToLower(s)):
+				capped = append(capped, strings.ToUpper(s))
+			default:
+				capped = append(capped, strings.Title(s))
+			}
+		}
+		return strings.Join(capped, "")
+	}
+	return f
 }
 
 // StructWriter can turn a node into a struct and can be configured.
 type StructWriter struct {
-	w       io.Writer
-	GoName  func(string) string
-	onStart sync.Once
+	w        io.Writer
+	NameFunc func(string) string // Turns xml tag names into Go names.
+	onStart  sync.Once
 }
 
-// NewStructWriter can write a node to a given writer.
+// NewStructWriter can write a node to a given writer. Default list of abbreviations to wholly uppercase.
 func NewStructWriter(w io.Writer) *StructWriter {
-	return &StructWriter{w: w, GoName: GoName}
+	exceptions := []string{"id", "isbn", "ismn", "eissn", "issn", "lccn", "rsn", "url", "urn", "zdb"}
+	return &StructWriter{w: w, NameFunc: createNameFunc(exceptions)}
 }
 
 // WriteNode writes a node to a writer. XXX: Implement.
@@ -71,7 +85,7 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 		io.WriteString(sew, "type ")
 	})
 
-	io.WriteString(sew, sw.GoName(node.Name.Local))
+	io.WriteString(sew, sw.NameFunc(node.Name.Local))
 	io.WriteString(sew, " ")
 
 	if node.IsMultivalued() {
