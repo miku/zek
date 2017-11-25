@@ -63,7 +63,7 @@ type StructWriter struct {
 
 // NewStructWriter can write a node to a given writer. Default list of abbreviations to wholly uppercase.
 func NewStructWriter(w io.Writer) *StructWriter {
-	exceptions := []string{"id", "isbn", "ismn", "eissn", "issn", "lccn", "rsn", "url", "urn", "zdb"}
+	exceptions := []string{"id", "isbn", "ismn", "eissn", "issn", "lccn", "rfc", "rsn", "url", "urn", "zdb"}
 	return &StructWriter{
 		w:                 w,
 		NameFunc:          createNameFunc(exceptions),
