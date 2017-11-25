@@ -53,6 +53,16 @@ func TestWriteNode(t *testing.T) {
 			result: "testdata/w.5.go",
 			err:    nil,
 		},
+		{
+			input:  "testdata/w.6.xml",
+			result: "testdata/w.6.go",
+			err:    nil,
+		},
+		{
+			input:  "testdata/w.7.xml",
+			result: "testdata/w.7.go",
+			err:    nil,
+		},
 	}
 
 	// XXX: remove package and import statements.

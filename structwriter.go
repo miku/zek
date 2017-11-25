@@ -55,14 +55,21 @@ func createNameFunc(upper []string) func(string) string {
 
 // StructWriter can turn a node into a struct and can be configured.
 type StructWriter struct {
-	w        io.Writer
-	NameFunc func(string) string // Turns xml tag names into Go names.
+	w                 io.Writer
+	NameFunc          func(string) string // Turns xml tag names into Go names.
+	TextFieldName     string              // Field name for chardata.
+	AttributePrefixes []string            // In case of a name clash, try these prefixes.
 }
 
 // NewStructWriter can write a node to a given writer. Default list of abbreviations to wholly uppercase.
 func NewStructWriter(w io.Writer) *StructWriter {
 	exceptions := []string{"id", "isbn", "ismn", "eissn", "issn", "lccn", "rsn", "url", "urn", "zdb"}
-	return &StructWriter{w: w, NameFunc: createNameFunc(exceptions)}
+	return &StructWriter{
+		w:                 w,
+		NameFunc:          createNameFunc(exceptions),
+		TextFieldName:     "Text",
+		AttributePrefixes: []string{"Attr", "Attribute"},
+	}
 }
 
 // WriteNode writes a node to a writer. XXX: Implement.
@@ -70,7 +77,8 @@ func (sw *StructWriter) WriteNode(node *Node) (err error) {
 	if sw.w == nil {
 		return nil
 	}
-	if node == nil || reflect.DeepEqual(node, new(Node)) {
+	empty := new(Node)
+	if node == nil || reflect.DeepEqual(node, empty) {
 		return nil
 	}
 	return sw.writeNode(node, true)
@@ -89,18 +97,35 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 	}
 	io.WriteString(sew, "struct { \n")
 	io.WriteString(sew, fmt.Sprintf("XMLName xml.Name `xml:\"%s\"`\n", node.Name.Local))
-	io.WriteString(sew, fmt.Sprintf("Text string `xml:\",chardata\"`\n"))
-	// XXX: check, if there is a direct child with this name.
-	for _, attr := range node.Attr {
+	io.WriteString(sew, fmt.Sprintf("%s string `xml:\",chardata\"`\n", sw.TextFieldName))
+
+	// Returns false if the given name would clash with any of the generated field names.
+	isValidName := func(name string) bool {
+		if name == sw.TextFieldName {
+			return false
+		}
 		for _, child := range node.Children {
-			if sw.NameFunc(child.Name.Local) == sw.NameFunc(attr.Name.Local) {
-				// XXX: resolve.
-				return fmt.Errorf("name clash between attribute and child node")
+			if sw.NameFunc(child.Name.Local) == name {
+				return false
 			}
 		}
-		io.WriteString(sew, fmt.Sprintf("%s string `xml:\"%s,attr\"`\n", sw.NameFunc(attr.Name.Local), attr.Name.Local))
+		return true
 	}
-	// XXX: check, if there is a child named "text" and rename it.
+
+	// Write attributes.
+	for _, attr := range node.Attr {
+		fieldName := sw.NameFunc(attr.Name.Local)
+		for _, prefix := range sw.AttributePrefixes {
+			if isValidName(fieldName) {
+				break
+			}
+			fieldName = fmt.Sprintf("%s%s", prefix, fieldName)
+		}
+		if !isValidName(fieldName) {
+			return fmt.Errorf("cannot avoid name clash for attribute: %s", attr.Name.Local)
+		}
+		io.WriteString(sew, fmt.Sprintf("%s string `xml:\"%s,attr\"`\n", fieldName, attr.Name.Local))
+	}
 	for _, child := range node.Children {
 		sw.writeNode(child, false)
 	}
