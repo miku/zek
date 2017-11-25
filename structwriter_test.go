@@ -55,6 +55,7 @@ func TestWriteNode(t *testing.T) {
 		},
 	}
 
+	// XXX: remove package and import statements.
 	for _, c := range cases {
 		f, err := os.Open(c.input)
 		if err != nil {
@@ -77,6 +78,8 @@ func TestWriteNode(t *testing.T) {
 		if err != nil {
 			t.Errorf("cannot open test output file: %s", err)
 		}
+
+		// XXX: Filter out anything before the first type statement.
 
 		if ok, err := codeEquals(buf.Bytes(), b); !ok || err != nil {
 			if err != nil {

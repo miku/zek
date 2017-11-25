@@ -90,9 +90,17 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 	io.WriteString(sew, "struct { \n")
 	io.WriteString(sew, fmt.Sprintf("XMLName xml.Name `xml:\"%s\"`\n", node.Name.Local))
 	io.WriteString(sew, fmt.Sprintf("Text string `xml:\",chardata\"`\n"))
+	// XXX: check, if there is a direct child with this name.
 	for _, attr := range node.Attr {
+		for _, child := range node.Children {
+			if sw.NameFunc(child.Name.Local) == sw.NameFunc(attr.Name.Local) {
+				// XXX: resolve.
+				return fmt.Errorf("name clash between attribute and child node")
+			}
+		}
 		io.WriteString(sew, fmt.Sprintf("%s string `xml:\"%s,attr\"`\n", sw.NameFunc(attr.Name.Local), attr.Name.Local))
 	}
+	// XXX: check, if there is a child named "text" and rename it.
 	for _, child := range node.Children {
 		sw.writeNode(child, false)
 	}
