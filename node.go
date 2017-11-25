@@ -23,7 +23,7 @@ type Node struct {
 	Attr     []xml.Attr `json:"attr,omitempty"`
 	Examples []string   `json:"examples,omitempty"`
 	Children []*Node    `json:"children,omitempty"`
-	Freqs    []int      `json:"freqs,omitempty"` // Collect number of occurences of this node within parent.
+	Freqs    []int      `json:"-"` // Collect number of occurences of this node within parent.
 
 	childFreqs map[xml.Name]int // Count child tag occurences, used temporarily.
 }

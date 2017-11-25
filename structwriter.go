@@ -5,7 +5,6 @@ import (
 	"io"
 	"reflect"
 	"strings"
-	"sync"
 )
 
 type stickyErrWriter struct {
@@ -58,7 +57,6 @@ func createNameFunc(upper []string) func(string) string {
 type StructWriter struct {
 	w        io.Writer
 	NameFunc func(string) string // Turns xml tag names into Go names.
-	onStart  sync.Once
 }
 
 // NewStructWriter can write a node to a given writer. Default list of abbreviations to wholly uppercase.
@@ -78,35 +76,23 @@ func (sw *StructWriter) WriteNode(node *Node) (err error) {
 	return sw.writeNode(node, true)
 }
 
+// writeNode writes a node.
 func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 	sew := stickyErrWriter{w: sw.w, err: &err}
-
-	sw.onStart.Do(func() {
+	if top {
 		io.WriteString(sew, "type ")
-	})
-
+	}
 	io.WriteString(sew, sw.NameFunc(node.Name.Local))
 	io.WriteString(sew, " ")
-
 	if node.IsMultivalued() {
 		io.WriteString(sew, "[]")
 	}
-
-	if len(node.Children) == 0 {
-		io.WriteString(sew, fmt.Sprintf("string `xml:\"%s\"`\n", node.Name.Local))
-	} else {
-		io.WriteString(sew, "struct { \n")
-		if top {
-			io.WriteString(sew, fmt.Sprintf("XMLName xml.Name `xml:\"%s\"`\n", node.Name.Local))
-		}
-		for _, child := range node.Children {
-			sw.writeNode(child, false)
-		}
-		if top {
-			io.WriteString(sew, "}")
-		} else {
-			io.WriteString(sew, fmt.Sprintf("} `xml:\"%s\"`\n", node.Name.Local))
-		}
+	io.WriteString(sew, "struct { \n")
+	io.WriteString(sew, fmt.Sprintf("XMLName xml.Name `xml:\"%s\"`\n", node.Name.Local))
+	io.WriteString(sew, fmt.Sprintf("Text string `xml:\",chardata\"`\n"))
+	for _, child := range node.Children {
+		sw.writeNode(child, false)
 	}
+	io.WriteString(sew, "}")
 	return err
 }

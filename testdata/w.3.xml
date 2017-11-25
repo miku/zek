@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<root>
+<a>
+  <b>
+    <c>Hi</c>
+  </b>
+  <b>
+    <c>World</c>
+    <d/>
+  </b>
+</a>
+<a>
+  <b>
+    <c>Hello</c>
+  </b>
+</a>
+<a>
+  <b>
+    <d>World</d>
+  </b>
+</a>
+</root>
