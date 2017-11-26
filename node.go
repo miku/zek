@@ -3,6 +3,7 @@ package zek
 import (
 	"encoding/xml"
 	"io"
+	"reflect"
 	"strings"
 )
 
@@ -140,4 +141,20 @@ func (node *Node) End() {
 	}
 	// Reset counter.
 	node.childFreqs = make(map[xml.Name]int)
+}
+
+// Height returns the height of the tree. A tree with zero nodes has height
+// zero, a single node tree has height 1.
+func (node *Node) Height() int {
+	if node == nil || reflect.DeepEqual(node, new(Node)) {
+		return 0
+	}
+	max := 0
+	for _, c := range node.Children {
+		h := c.Height()
+		if h > max {
+			max = h
+		}
+	}
+	return 1 + max
 }

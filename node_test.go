@@ -450,3 +450,38 @@ func TestNodeReadFrom(t *testing.T) {
 		}
 	}
 }
+
+func TestHeight(t *testing.T) {
+	var cases = []struct {
+		input  string
+		height int
+	}{
+		{
+			input: "", height: 0,
+		},
+		{
+			input: "<a></a>", height: 1,
+		},
+		{
+			input: "<a><b></b></a>", height: 2,
+		},
+		{
+			input: "<a><b></b><c><d></d></c></a>", height: 3,
+		},
+		{
+			input: "<a><b></b><b></b><b></b><b></b></a>", height: 2,
+		},
+	}
+
+	for _, c := range cases {
+		r := strings.NewReader(c.input)
+		node := new(Node)
+		_, err := node.ReadFrom(r)
+		if err != nil {
+			t.Errorf("failed to parse tree: %s", err)
+		}
+		if node.Height() != c.height {
+			t.Errorf("got %v, want %v", node.Height(), c.height)
+		}
+	}
+}

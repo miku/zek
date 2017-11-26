@@ -87,8 +87,7 @@ func (sw *StructWriter) WriteNode(node *Node) (err error) {
 	if sw.w == nil {
 		return nil
 	}
-	empty := new(Node)
-	if node == nil || reflect.DeepEqual(node, empty) {
+	if node == nil || reflect.DeepEqual(node, new(Node)) {
 		return nil
 	}
 	return sw.writeNode(node, true)

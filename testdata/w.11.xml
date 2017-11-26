@@ -1,0 +1,6 @@
+<list><value>a</value>
+       <list><value>b</value>
+           <list><value>c</value>
+           </list>
+       </list>
+   </list>

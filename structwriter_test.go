@@ -95,6 +95,12 @@ func TestWriteNode(t *testing.T) {
 			withComments: true,
 			err:          nil,
 		},
+		{
+			input:        "testdata/w.11.xml",
+			result:       "testdata/w.11.go",
+			withComments: true,
+			err:          nil,
+		},
 	}
 
 	for _, c := range cases {
