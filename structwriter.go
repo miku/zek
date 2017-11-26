@@ -95,22 +95,32 @@ func (sw *StructWriter) WriteNode(node *Node) (err error) {
 }
 
 // writeField writes a field with a simple xml struct tag to writer.
-func (sw *StructWriter) writeNameField(node *Node) (int, error) {
-	return fmt.Fprintf(sw.w, "XMLName xml.Name `xml:\"%s\"`\n", node.Name.Local)
+func (sw *StructWriter) writeNameField(w io.Writer, node *Node) (int, error) {
+	return fmt.Fprintf(w, "XMLName xml.Name `xml:\"%s\"`\n", node.Name.Local)
 }
 
 // writeChardataField writes a chardata field. Might add a comment as well.
-func (sw *StructWriter) writeChardataField(node *Node) (int, error) {
+func (sw *StructWriter) writeChardataField(w io.Writer, node *Node) (int, error) {
 	s := fmt.Sprintf("%s string `xml:\",chardata\"`", sw.TextFieldName)
 	if sw.WithComments && len(node.Examples) > 0 {
-		s = fmt.Sprintf("%s // %s", s, truncateString(strings.Join(node.Examples, ", "25, "...")))
+		s = fmt.Sprintf("%s // %s", s, truncateString(strings.Join(node.Examples, ", "), 25, "..."))
 	}
-	return fmt.Fprintf(sw.w, "%s\n", s)
+	return fmt.Fprintf(w, "%s\n", s)
 }
 
 // writeAttrField writes an attribute field.
-func (sw *StructWriter) writeAttrField(name, typeName, tag string) (int, error) {
-	return fmt.Fprintf(sw.w, "%s %s `xml:\"%s,attr\"`\n", name, typeName, tag)
+func (sw *StructWriter) writeAttrField(w io.Writer, name, typeName, tag string) (int, error) {
+	return fmt.Fprintf(w, "%s %s `xml:\"%s,attr\"`\n", name, typeName, tag)
+}
+
+// writeStructIntro writes the nodes current field name name and struct introduction.
+func (sw *StructWriter) writeStructIntro(w io.Writer, node *Node) {
+	io.WriteString(w, sw.NameFunc(node.Name.Local))
+	io.WriteString(w, " ")
+	if node.IsMultivalued() {
+		io.WriteString(w, "[]")
+	}
+	io.WriteString(w, "struct {\n")
 }
 
 // writeNode writes out the node as a struct. Output is not formatted.
@@ -119,15 +129,9 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 	if top {
 		io.WriteString(sew, "type ")
 	}
-	io.WriteString(sew, sw.NameFunc(node.Name.Local))
-	io.WriteString(sew, " ")
-	if node.IsMultivalued() {
-		io.WriteString(sew, "[]")
-	}
-	io.WriteString(sew, "struct {\n")
-
-	sw.writeNameField(node)
-	sw.writeChardataField(node)
+	sw.writeStructIntro(sew, node)
+	sw.writeNameField(sew, node)
+	sw.writeChardataField(sew, node)
 
 	// Helper to check for name clash with any generated field name.
 	isValidName := func(name string) bool {
@@ -154,7 +158,7 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 		if !isValidName(name) {
 			return fmt.Errorf("name clash: %s", attr.Name.Local)
 		}
-		sw.writeAttrField(name, "string", attr.Name.Local)
+		sw.writeAttrField(sew, name, "string", attr.Name.Local)
 	}
 
 	// Write children.
@@ -162,6 +166,7 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 		sw.writeNode(child, false)
 	}
 
+	// Write outro.
 	io.WriteString(sew, "}\n")
 	return err
 }
