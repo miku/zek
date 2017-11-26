@@ -4,10 +4,15 @@ import (
 	"bytes"
 	"go/format"
 	"io/ioutil"
+	"log"
 	"os"
 	"reflect"
+	"regexp"
 	"testing"
 )
+
+// startsWithType pattern to match where a type declaration starts.
+var startsWithType = regexp.MustCompile(`(?m)^type`)
 
 // codeEquals returns true, if two code snippets match.
 func codeEquals(a, b []byte) (bool, error) {
@@ -20,6 +25,15 @@ func codeEquals(a, b []byte) (bool, error) {
 		return false, err
 	}
 	return reflect.DeepEqual(fa, fb), nil
+}
+
+// skipUntilType remove any line before the first type declaration. Used for
+// testing, so snippets may be valid go code (and formatable).
+func skipUntilType(b []byte) []byte {
+	if loc := startsWithType.FindIndex(b); loc != nil {
+		return b[loc[0]:]
+	}
+	return b
 }
 
 func TestWriteNode(t *testing.T) {
@@ -89,7 +103,9 @@ func TestWriteNode(t *testing.T) {
 			t.Errorf("cannot open test output file: %s", err)
 		}
 
-		// XXX: Filter out anything before the first type statement.
+		log.Println(len(b))
+		b = skipUntilType(b)
+		log.Println(len(b))
 
 		if ok, err := codeEquals(buf.Bytes(), b); !ok || err != nil {
 			if err != nil {

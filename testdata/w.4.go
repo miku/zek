@@ -1,3 +1,7 @@
+package main
+
+import "encoding/xml"
+
 type Records struct {
 	XMLName xml.Name `xml:"Records"`
 	Text    string   `xml:",chardata"`
