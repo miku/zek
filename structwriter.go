@@ -103,7 +103,7 @@ func (sw *StructWriter) writeNameField(node *Node) (int, error) {
 func (sw *StructWriter) writeChardataField(node *Node) (int, error) {
 	s := fmt.Sprintf("%s string `xml:\",chardata\"`", sw.TextFieldName)
 	if sw.WithComments && len(node.Examples) > 0 {
-		s = fmt.Sprintf("%s // %s", s, truncateString(node.Examples[0], 25, "..."))
+		s = fmt.Sprintf("%s // %s", s, truncateString(strings.Join(node.Examples, ", "25, "...")))
 	}
 	return fmt.Fprintf(sw.w, "%s\n", s)
 }

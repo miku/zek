@@ -8,6 +8,6 @@ type X struct {
 	ID      string   `xml:"id,attr"`
 	Y       []struct {
 		XMLName xml.Name `xml:"y"`
-		Text    string   `xml:",chardata"` // L'Rell
+		Text    string   `xml:",chardata"` // L'Rell, Michael, Voq, Wis...
 	}
 }
