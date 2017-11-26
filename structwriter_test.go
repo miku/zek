@@ -38,9 +38,10 @@ func skipUntilType(b []byte) []byte {
 
 func TestWriteNode(t *testing.T) {
 	var cases = []struct {
-		input  string // Input XML filename.
-		result string // Generated struct filename.
-		err    error
+		input        string // Input XML filename.
+		result       string // Generated struct filename.
+		withComments bool
+		err          error
 	}{
 		{
 			input:  "testdata/w.1.xml",
@@ -77,6 +78,12 @@ func TestWriteNode(t *testing.T) {
 			result: "testdata/w.7.go",
 			err:    nil,
 		},
+		{
+			input:        "testdata/w.8.xml",
+			result:       "testdata/w.8.go",
+			withComments: true,
+			err:          nil,
+		},
 	}
 
 	// XXX: remove package and import statements.
@@ -88,12 +95,16 @@ func TestWriteNode(t *testing.T) {
 		defer f.Close()
 
 		node := new(Node)
+		node.MaxExamples = 10
+
 		if _, err := node.ReadFrom(f); err != nil {
 			t.Errorf("failed to read XML input: %s", err)
 		}
 
 		var buf bytes.Buffer
 		sw := NewStructWriter(&buf)
+		sw.WithComments = c.withComments
+
 		if err := sw.WriteNode(node); err != c.err {
 			t.Errorf("WriteNode failed: got %v, want %v", err, c.err)
 		}

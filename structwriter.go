@@ -32,6 +32,14 @@ func stringSliceContains(ss []string, s string) bool {
 	return false
 }
 
+// truncateString after n chars and append ellipsis.
+func truncateString(s string, n int, ellipsis string) string {
+	if len(s) < n {
+		return s
+	}
+	return fmt.Sprintf("%s%s", s[:n], ellipsis)
+}
+
 // createNameFunc returns a function that converts a tag into a canonical Go
 // name. Given list of strings will be wholly upper cased.
 func createNameFunc(upper []string) func(string) string {
@@ -59,6 +67,7 @@ type StructWriter struct {
 	NameFunc          func(string) string // Turns xml tag names into Go names.
 	TextFieldName     string              // Field name for chardata.
 	AttributePrefixes []string            // In case of a name clash, try these prefixes.
+	WithComments      bool                // Annotate struct with comments and examples.
 }
 
 // NewStructWriter can write a node to a given writer. Default list of
@@ -86,18 +95,22 @@ func (sw *StructWriter) WriteNode(node *Node) (err error) {
 }
 
 // writeField writes a field with a simple xml struct tag to writer.
-func writeField(w io.Writer, name, typeName, tag string) (int, error) {
-	return fmt.Fprintf(w, "%s %s `xml:\"%s\"`\n", name, typeName, tag)
+func (sw *StructWriter) writeNameField(node *Node) (int, error) {
+	return fmt.Fprintf(sw.w, "XMLName xml.Name `xml:\"%s\"`\n", node.Name.Local)
 }
 
-// writeChardataField writes a chardata field.
-func writeChardataField(w io.Writer, name, typeName string) (int, error) {
-	return fmt.Fprintf(w, "%s %s `xml:\",chardata\"`\n", name, typeName)
+// writeChardataField writes a chardata field. Might add a comment as well.
+func (sw *StructWriter) writeChardataField(node *Node) (int, error) {
+	if sw.WithComments && len(node.Examples) > 0 {
+		return fmt.Fprintf(sw.w, "%s string `xml:\",chardata\"` // %s\n",
+			sw.TextFieldName, truncateString(node.Examples[0], 25, "..."))
+	}
+	return fmt.Fprintf(sw.w, "%s string `xml:\",chardata\"`\n", sw.TextFieldName)
 }
 
 // writeAttrField writes an attribute field.
-func writeAttrField(w io.Writer, name, typeName, tag string) (int, error) {
-	return fmt.Fprintf(w, "%s %s `xml:\"%s,attr\"`\n", name, typeName, tag)
+func (sw *StructWriter) writeAttrField(name, typeName, tag string) (int, error) {
+	return fmt.Fprintf(sw.w, "%s %s `xml:\"%s,attr\"`\n", name, typeName, tag)
 }
 
 // writeNode writes out the node as a struct. Output is not formatted.
@@ -113,10 +126,10 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 	}
 	io.WriteString(sew, "struct {\n")
 
-	writeField(sew, "XMLName", "xml.Name", node.Name.Local)
-	writeChardataField(sew, sw.TextFieldName, "string")
+	sw.writeNameField(node)
+	sw.writeChardataField(node)
 
-	// Returns false if the given name would clash with any of the generated field names.
+	// Helper to check for name clash with any generated field name.
 	isValidName := func(name string) bool {
 		if name == sw.TextFieldName {
 			return false
@@ -139,10 +152,9 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 			name = fmt.Sprintf("%s%s", prefix, name)
 		}
 		if !isValidName(name) {
-			return fmt.Errorf("name clash (adjust AttributePrefix list): %s",
-				attr.Name.Local)
+			return fmt.Errorf("name clash: %s", attr.Name.Local)
 		}
-		writeAttrField(sew, name, "string", attr.Name.Local)
+		sw.writeAttrField(name, "string", attr.Name.Local)
 	}
 
 	// Write children.

@@ -19,11 +19,12 @@ func (w *countwriter) Write(p []byte) (n int, err error) {
 
 // Node represents an element in the XML tree.
 type Node struct {
-	Name     xml.Name   `json:"name,omitempty"`
-	Attr     []xml.Attr `json:"attr,omitempty"`
-	Examples []string   `json:"examples,omitempty"`
-	Children []*Node    `json:"children,omitempty"`
-	Freqs    []int      `json:"-"` // Collect number of occurences of this node within parent.
+	Name        xml.Name   `json:"name,omitempty"`
+	Attr        []xml.Attr `json:"attr,omitempty"`
+	Examples    []string   `json:"examples,omitempty"`
+	Children    []*Node    `json:"children,omitempty"`
+	Freqs       []int      `json:"-"` // Collect number of occurences of this node within parent.
+	MaxExamples int        `json:"-"` // Maximum number of examples to keep, gets passed to children.
 
 	childFreqs map[xml.Name]int // Count child tag occurences, used temporarily.
 }
@@ -61,7 +62,10 @@ func (node *Node) ReadFrom(r io.Reader) (n int64, err error) {
 				break
 			}
 			n := stack.Peek().(*Node)
-			n.Examples = append(n.Examples, v) // XXX: example sampling.
+			if len(n.Examples) < node.MaxExamples {
+				// XXX: sample better.
+				n.Examples = append(n.Examples, v)
+			}
 		}
 	}
 	if len(root.Children) > 0 {
@@ -118,7 +122,7 @@ func (node *Node) CreateOrGetChild(name xml.Name, attr []xml.Attr) *Node {
 	}
 	node.childFreqs[name]++
 
-	n := &Node{Name: name, Attr: attr}
+	n := &Node{Name: name, Attr: attr, MaxExamples: node.MaxExamples}
 	node.Children = append(node.Children, n)
 	return n
 }
