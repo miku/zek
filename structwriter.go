@@ -101,11 +101,11 @@ func (sw *StructWriter) writeNameField(node *Node) (int, error) {
 
 // writeChardataField writes a chardata field. Might add a comment as well.
 func (sw *StructWriter) writeChardataField(node *Node) (int, error) {
+	s := fmt.Sprintf("%s string `xml:\",chardata\"`", sw.TextFieldName)
 	if sw.WithComments && len(node.Examples) > 0 {
-		return fmt.Fprintf(sw.w, "%s string `xml:\",chardata\"` // %s\n",
-			sw.TextFieldName, truncateString(node.Examples[0], 25, "..."))
+		s = fmt.Sprintf("%s // %s", s, truncateString(node.Examples[0], 25, "..."))
 	}
-	return fmt.Fprintf(sw.w, "%s string `xml:\",chardata\"`\n", sw.TextFieldName)
+	return fmt.Fprintf(sw.w, "%s\n", s)
 }
 
 // writeAttrField writes an attribute field.
