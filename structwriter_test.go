@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"go/format"
 	"io/ioutil"
-	"log"
 	"os"
 	"reflect"
 	"regexp"
@@ -84,9 +83,14 @@ func TestWriteNode(t *testing.T) {
 			withComments: true,
 			err:          nil,
 		},
+		{
+			input:        "testdata/w.9.xml",
+			result:       "testdata/w.9.go",
+			withComments: true,
+			err:          nil,
+		},
 	}
 
-	// XXX: remove package and import statements.
 	for _, c := range cases {
 		f, err := os.Open(c.input)
 		if err != nil {
@@ -113,10 +117,7 @@ func TestWriteNode(t *testing.T) {
 		if err != nil {
 			t.Errorf("cannot open test output file: %s", err)
 		}
-
-		log.Println(len(b))
 		b = skipUntilType(b)
-		log.Println(len(b))
 
 		if ok, err := codeEquals(buf.Bytes(), b); !ok || err != nil {
 			if err != nil {
