@@ -19,4 +19,4 @@ TODO.md
 fixtures/y.xml
 fixtures/z.xml
 *.swp
-
+/readings
