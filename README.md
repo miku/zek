@@ -52,3 +52,11 @@ Scope
 * Learn XSD, DTD or similar schema from XML instances
 * Generate structs from XSD, DTD or plain XML
 * Readable structs, with good annotations
+* Random example data generation
+
+To-Read
+-------
+
+* https://www.w3.org/TR/xmlschema11-1/
+* https://github.com/kore/XML-Schema-learner
+* https://github.com/apache/xmlbeans
