@@ -21,3 +21,6 @@ fixtures/z.xml
 *.swp
 /readings
 .DS_Store
+/packaging/deb/zek/usr/
+*.deb
+*.rpm

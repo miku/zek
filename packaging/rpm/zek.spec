@@ -22,7 +22,7 @@ Generate a Go struct from an XML document.
 %install
 
 mkdir -p $RPM_BUILD_ROOT/usr/local/sbin
-install -m 755 microblob $RPM_BUILD_ROOT/usr/local/sbin
+install -m 755 zek $RPM_BUILD_ROOT/usr/local/sbin
 
 %post
 
