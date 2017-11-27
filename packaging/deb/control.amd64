@@ -1,0 +1,8 @@
+Package: zek
+Version: 0.1.0
+Section: utils
+Priority: optional
+Architecture: amd64
+Depends: libc6 (>= 2.12)
+Maintainer: Martin Czygan <martin.czygan@uni-leipzig.de>
+Description: Generate a Go struct from an XML document.
