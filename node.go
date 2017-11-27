@@ -5,6 +5,8 @@ import (
 	"io"
 	"reflect"
 	"strings"
+
+	"golang.org/x/net/html/charset"
 )
 
 // countwriter counts bytes written to it. Does not support concurrent access.
@@ -36,6 +38,7 @@ func (node *Node) ReadFrom(r io.Reader) (n int64, err error) {
 	rr := io.TeeReader(r, &cw)
 
 	dec := xml.NewDecoder(rr)
+	dec.CharsetReader = charset.NewReaderLabel
 	dec.Strict = false
 
 	stack, root := Stack{}, &Node{}
