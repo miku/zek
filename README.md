@@ -1,11 +1,12 @@
 zek
 ===
 
-Zek is a **prototype** for turning an XML directly to a Go struct.
+Zek is a **prototype** for creating Go struct from an XML document.
 
 Upsides:
 
 * it works fine for non-recursive structures,
+* does not need XSD or DTD,
 * it is relatively convenient to access attributes, children and text,
 * will generate a single struct, which make for a quite compact representation,
 * simple user interface,
