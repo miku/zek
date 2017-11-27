@@ -60,3 +60,8 @@ To-Read
 * https://www.w3.org/TR/xmlschema11-1/
 * https://github.com/kore/XML-Schema-learner
 * https://github.com/apache/xmlbeans
+
+Other
+-----
+
+* schema to schema converter (DTD, XSD, Relax-NG)
