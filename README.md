@@ -18,6 +18,17 @@ Downsides:
 * no support for recursive types (similar to *Russian Doll-ish* strategy, [[1](https://medbiq.org/std_specs/techguidelines/xmldesignguidelines.pdf#page=7)])
 * no type inference, everything is accessible as string.
 
+Install
+------
+
+```
+$ go get github.com/miku/zek/cmd/...
+```
+
+Debian and RPM packages:
+
+* https://github.com/miku/zek/releases
+
 Usage
 -----
 
