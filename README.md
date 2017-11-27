@@ -24,6 +24,7 @@ Usage
 $ zek -h
 Usage of zek:
   -d    debug output
+  -e    add comments with example
   -p    write out an example program
 ```
 
@@ -168,5 +169,89 @@ $ zek -p < fixtures/d.xml > sample.go && go run sample.go < fixtures/d.xml | jq 
       ]
     }
   ]
+}
+```
+
+Annotate with comments:
+
+```go
+$ zek -e < fixtures/l.xml
+type Records struct {
+	XMLName xml.Name `xml:"Records"`
+	Text    string   `xml:",chardata"` // \n
+	Xsi     string   `xml:"xsi,attr"`
+	Record  []struct {
+		Text   string `xml:",chardata"`
+		Header struct {
+			Text       string `xml:",chardata"`
+			Status     string `xml:"status,attr"`
+			Identifier struct {
+				Text string `xml:",chardata"` // oai:ojs.localhost:article...
+			} `xml:"identifier"`
+			Datestamp struct {
+				Text string `xml:",chardata"` // 2009-06-24T14:48:23Z, 200...
+			} `xml:"datestamp"`
+			SetSpec struct {
+				Text string `xml:",chardata"` // eppp:ART, eppp:ART, eppp:...
+			} `xml:"setSpec"`
+		} `xml:"header"`
+		Metadata struct {
+			Text    string `xml:",chardata"`
+			Rfc1807 struct {
+				Text           string `xml:",chardata"`
+				Xmlns          string `xml:"xmlns,attr"`
+				Xsi            string `xml:"xsi,attr"`
+				SchemaLocation string `xml:"schemaLocation,attr"`
+				BibVersion     struct {
+					Text string `xml:",chardata"` // v2, v2, v2, v2, v2, v2, v...
+				} `xml:"bib-version"`
+				ID struct {
+					Text string `xml:",chardata"` // http://journals.zpid.de/i...
+				} `xml:"id"`
+				Entry struct {
+					Text string `xml:",chardata"` // 2009-06-24T14:48:23Z, 200...
+				} `xml:"entry"`
+				Organization []struct {
+					Text string `xml:",chardata"` // Proceedings of the Worksh...
+				} `xml:"organization"`
+				Title struct {
+					Text string `xml:",chardata"` // Introduction and some Ide...
+				} `xml:"title"`
+				Type struct {
+					Text string `xml:",chardata"`
+				} `xml:"type"`
+				Author []struct {
+					Text string `xml:",chardata"` // KRAMPEN, Günter, CARBON,...
+				} `xml:"author"`
+				Copyright struct {
+					Text string `xml:",chardata"` // Das Urheberrecht liegt be...
+				} `xml:"copyright"`
+				OtherAccess struct {
+					Text string `xml:",chardata"` // url:http://journals.zpid....
+				} `xml:"other_access"`
+				Keyword struct {
+					Text string `xml:",chardata"`
+				} `xml:"keyword"`
+				Period []struct {
+					Text string `xml:",chardata"`
+				} `xml:"period"`
+				Monitoring struct {
+					Text string `xml:",chardata"`
+				} `xml:"monitoring"`
+				Language struct {
+					Text string `xml:",chardata"` // en, en, en, en, en, en, e...
+				} `xml:"language"`
+				Abstract struct {
+					Text string `xml:",chardata"` // After a short description...
+				} `xml:"abstract"`
+				Date struct {
+					Text string `xml:",chardata"` // 2009-06-22 12:12:00, 2009...
+				} `xml:"date"`
+			} `xml:"rfc1807"`
+		} `xml:"metadata"`
+		About struct {
+			Text string `xml:",chardata"`
+		} `xml:"about"`
+	} `xml:"Record"`
 }
 ```

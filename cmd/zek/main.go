@@ -14,6 +14,8 @@ import (
 )
 
 var (
+	withComments         = flag.Bool("e", false, "add comments with example")
+	maxExamples          = flag.Int("max-examples", 10, "limit number of examples")
 	debug                = flag.Bool("d", false, "debug output")
 	createExampleProgram = flag.Bool("p", false, "write out an example program")
 )
@@ -22,6 +24,7 @@ func main() {
 	flag.Parse()
 
 	root := new(zek.Node)
+	root.MaxExamples = *maxExamples
 	if _, err := root.ReadFrom(os.Stdin); err != nil {
 		log.Fatal(err)
 	}
@@ -30,6 +33,7 @@ func main() {
 	default:
 		var buf bytes.Buffer
 		sw := zek.NewStructWriter(&buf)
+		sw.WithComments = *withComments
 		if err := sw.WriteNode(root); err != nil {
 			log.Fatal(err)
 		}
@@ -56,6 +60,7 @@ func main() {
 		`)
 
 		sw := zek.NewStructWriter(&buf)
+		sw.WithComments = *withComments
 		if err := sw.WriteNode(root); err != nil {
 			log.Fatal(err)
 		}
