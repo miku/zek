@@ -13,7 +13,10 @@ import (
 	"github.com/miku/zek"
 )
 
-var createExampleProgram = flag.Bool("p", false, "write out an example program")
+var (
+	debug                = flag.Bool("d", false, "debug output")
+	createExampleProgram = flag.Bool("p", false, "write out an example program")
+)
 
 func main() {
 	flag.Parse()
@@ -23,7 +26,25 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if *createExampleProgram {
+	switch {
+	default:
+		var buf bytes.Buffer
+		sw := zek.NewStructWriter(&buf)
+		if err := sw.WriteNode(root); err != nil {
+			log.Fatal(err)
+		}
+		b, err := format.Source(buf.Bytes())
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(string(b))
+	case *debug:
+		b, err := json.Marshal(root)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(string(b))
+	case *createExampleProgram:
 		var buf bytes.Buffer
 		io.WriteString(&buf, `
 			package main
@@ -59,12 +80,5 @@ func main() {
 			log.Fatal(err)
 		}
 		fmt.Println(string(b))
-		os.Exit(0)
 	}
-
-	b, err := json.Marshal(root)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(string(b))
 }
