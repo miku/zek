@@ -14,7 +14,7 @@ Upsides:
 
 Downsides:
 
-* no support for recursive types (similar to *Russian Doll-ish* strategy, [1](https://medbiq.org/std_specs/techguidelines/xmldesignguidelines.pdf#page=7))
+* no support for recursive types (similar to *Russian Doll-ish* strategy, [[1](https://medbiq.org/std_specs/techguidelines/xmldesignguidelines.pdf#page=7)])
 * no type inference, everything is accessible as string.
 
 Usage
@@ -22,14 +22,14 @@ Usage
 
 ```shell
 $ zek -h
-Usage of ./zek:
+Usage of zek:
   -d    debug output
   -p    write out an example program
 ```
 
 Examples:
 
-```
+```xml
 $ cat fixtures/a.xml
 <a></a>
 
@@ -42,7 +42,7 @@ type A struct {
 
 Debug output dumps the internal tree as JSON to stdout.
 
-```
+```json
 $ zek -d < fixtures/a.xml
 {"name":{"Space":"","Local":"a"}}
 ```
@@ -89,7 +89,7 @@ $ zek -p < fixtures/a.xml > sample.go && go run sample.go < fixtures/a.xml | jq 
 
 More complex example:
 
-```shell
+```go
 $ zek < fixtures/d.xml
 type Root struct {
 	XMLName xml.Name `xml:"root"`
