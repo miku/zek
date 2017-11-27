@@ -1,0 +1,35 @@
+<item>
+	<title>Implicit 3D modelling of geological surfaces with the Generalized Radial Basis Functions (GRBF) algorithm</title>
+	<link>http://geoscan.nrcan.gc.ca/starweb/geoscan/servlet.starweb?path=geoscan/fulle.web&amp;search1=R=301665</link>
+	<description>Hillier, M J; de Kemp, E A; Schetselaar, E M. Geological Survey of Canada, Open File 7814,  2017; 15 pages, https://doi.org/10.4095/301665</description>
+	<guid isPermaLink="false">301665</guid>
+	<pubDate>Thu, 20 Jul 2017 00:00:00 EDT</pubDate>
+	<geoscan:download>http://geoscan.nrcan.gc.ca/starweb/geoscan/servlet.starweb?path=geoscan/downloade.web&amp;search1=R=301665</geoscan:download>
+	<geoscan:license>http://data.gc.ca/eng/open-government-licence-canada</geoscan:license>
+	<geoscan:title>Implicit 3D modelling of geological surfaces with the Generalized Radial Basis Functions (GRBF) algorithm</geoscan:title>
+	<geoscan:author>Hillier, M J; de Kemp, E A; Schetselaar, E M</geoscan:author>
+	<geoscan:source>Geological Survey of Canada, Open File 7814, 2017; 15 pages</geoscan:source>
+	<geoscan:SndSeries></geoscan:SndSeries>
+	<geoscan:publisher>Natural Resources Canada</geoscan:publisher>
+	<geoscan:edition></geoscan:edition>
+	<geoscan:meeting></geoscan:meeting>
+	<geoscan:documenttype>open file</geoscan:documenttype>
+	<geoscan:language>English</geoscan:language>
+	<geoscan:maps></geoscan:maps>
+	<geoscan:mapinfo></geoscan:mapinfo>
+	<geoscan:medium>on-line; digital</geoscan:medium>
+	<geoscan:province></geoscan:province>
+	<geoscan:nts></geoscan:nts>
+	<geoscan:area></geoscan:area>
+	<geoscan:subjects></geoscan:subjects>
+	<geoscan:program>Targeted Geoscience Initiative (TGI-5); Targeted Geoscience Initiative (TGI-4)</geoscan:program>
+	<geoscan:project>Volcanic and sedimentary systems</geoscan:project>
+	<geoscan:projectnumber>340321</geoscan:projectnumber>
+	<geoscan:abstract>We summarize an interpolation algorithm, which was developed to model 3D geological surfaces, and its application to modelling regional stratigraphic horizons in the Purcell basin, a study area in the SEDEX project under the Targeted Geoscience Initiative 4 program. We developed a
+		generalized interpolation framework using Radial Basis Functions (RBF) that implicitly models 3D continuous geological surfaces from scattered multivariate structural data. The general form of the mathematical framework permits additional geologic information to be included in the interpolation in
+		comparison to traditional interpolation methods using RBF's such as: (1) stratigraphic data from above and below targeted horizons (2) modelled anisotropy and (3) orientation constraints (e.g. planar and linear).</geoscan:abstract>
+	<geoscan:links></geoscan:links>
+	<geoscan:readme></geoscan:readme>
+	<geoscan:PPIid>24354</geoscan:PPIid>
+</item>
+
