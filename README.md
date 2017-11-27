@@ -43,3 +43,12 @@ Attributes are least important.
 * TODO: calculate some stats on the fields (cardinality, multiplicity, average values)
 * TODO: correlate values between fields
 * TODO: add examples as comments
+
+Scope
+-----
+
+* Become a go to library for advanced XML related processing in Go
+* https://kore-nordmann.de/talks/11_03_learning_xml_schema_definitions_from_xml_data.pdf
+* Learn XSD, DTD or similar schema from XML instances
+* Generate structs from XSD, DTD or plain XML
+* Readable structs, with good annotations
