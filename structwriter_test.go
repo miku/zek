@@ -135,7 +135,7 @@ func TestWriteNode(t *testing.T) {
 			if err != nil {
 				t.Errorf("failed to compare code snippets: %s", err)
 			}
-			t.Errorf("got %v, want %v", buf.String(), string(b))
+			t.Errorf("[%s] got %v, want %v", c.input, buf.String(), string(b))
 		}
 	}
 }

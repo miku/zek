@@ -6,19 +6,15 @@ type Root struct {
 	XMLName xml.Name `xml:"root"`
 	Text    string   `xml:",chardata"`
 	A       []struct {
-		XMLName xml.Name `xml:"a"`
-		Text    string   `xml:",chardata"`
-		B       []struct {
-			XMLName xml.Name `xml:"b"`
-			Text    string   `xml:",chardata"`
-			C       struct {
-				XMLName xml.Name `xml:"c"`
-				Text    string   `xml:",chardata"`
-			}
+		Text string `xml:",chardata"`
+		B    []struct {
+			Text string `xml:",chardata"`
+			C    struct {
+				Text string `xml:",chardata"`
+			} `xml:"c"`
 			D struct {
-				XMLName xml.Name `xml:"d"`
-				Text    string   `xml:",chardata"`
-			}
-		}
-	}
+				Text string `xml:",chardata"`
+			} `xml:"d"`
+		} `xml:"b"`
+	} `xml:"a"`
 }

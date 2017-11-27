@@ -7,99 +7,76 @@ type Records struct {
 	Text    string   `xml:",chardata"`
 	Xsi     string   `xml:"xsi,attr"`
 	Record  []struct {
-		XMLName xml.Name `xml:"Record"`
-		Text    string   `xml:",chardata"`
-		Header  struct {
-			XMLName    xml.Name `xml:"header"`
-			Text       string   `xml:",chardata"`
-			Status     string   `xml:"status,attr"`
+		Text   string `xml:",chardata"`
+		Header struct {
+			Text       string `xml:",chardata"`
+			Status     string `xml:"status,attr"`
 			Identifier struct {
-				XMLName xml.Name `xml:"identifier"`
-				Text    string   `xml:",chardata"`
-			}
+				Text string `xml:",chardata"`
+			} `xml:"identifier"`
 			Datestamp struct {
-				XMLName xml.Name `xml:"datestamp"`
-				Text    string   `xml:",chardata"`
-			}
+				Text string `xml:",chardata"`
+			} `xml:"datestamp"`
 			SetSpec struct {
-				XMLName xml.Name `xml:"setSpec"`
-				Text    string   `xml:",chardata"`
-			}
-		}
+				Text string `xml:",chardata"`
+			} `xml:"setSpec"`
+		} `xml:"header"`
 		Metadata struct {
-			XMLName xml.Name `xml:"metadata"`
-			Text    string   `xml:",chardata"`
+			Text    string `xml:",chardata"`
 			Rfc1807 struct {
-				XMLName        xml.Name `xml:"rfc1807"`
-				Text           string   `xml:",chardata"`
-				Xmlns          string   `xml:"xmlns,attr"`
-				Xsi            string   `xml:"xsi,attr"`
-				SchemaLocation string   `xml:"schemaLocation,attr"`
+				Text           string `xml:",chardata"`
+				Xmlns          string `xml:"xmlns,attr"`
+				Xsi            string `xml:"xsi,attr"`
+				SchemaLocation string `xml:"schemaLocation,attr"`
 				BibVersion     struct {
-					XMLName xml.Name `xml:"bib-version"`
-					Text    string   `xml:",chardata"`
-				}
+					Text string `xml:",chardata"`
+				} `xml:"bib-version"`
 				ID struct {
-					XMLName xml.Name `xml:"id"`
-					Text    string   `xml:",chardata"`
-				}
+					Text string `xml:",chardata"`
+				} `xml:"id"`
 				Entry struct {
-					XMLName xml.Name `xml:"entry"`
-					Text    string   `xml:",chardata"`
-				}
+					Text string `xml:",chardata"`
+				} `xml:"entry"`
 				Organization []struct {
-					XMLName xml.Name `xml:"organization"`
-					Text    string   `xml:",chardata"`
-				}
+					Text string `xml:",chardata"`
+				} `xml:"organization"`
 				Title struct {
-					XMLName xml.Name `xml:"title"`
-					Text    string   `xml:",chardata"`
-				}
+					Text string `xml:",chardata"`
+				} `xml:"title"`
 				Type struct {
-					XMLName xml.Name `xml:"type"`
-					Text    string   `xml:",chardata"`
-				}
+					Text string `xml:",chardata"`
+				} `xml:"type"`
 				Author []struct {
-					XMLName xml.Name `xml:"author"`
-					Text    string   `xml:",chardata"`
-				}
+					Text string `xml:",chardata"`
+				} `xml:"author"`
 				Copyright struct {
-					XMLName xml.Name `xml:"copyright"`
-					Text    string   `xml:",chardata"`
-				}
+					Text string `xml:",chardata"`
+				} `xml:"copyright"`
 				OtherAccess struct {
-					XMLName xml.Name `xml:"other_access"`
-					Text    string   `xml:",chardata"`
-				}
+					Text string `xml:",chardata"`
+				} `xml:"other_access"`
 				Keyword struct {
-					XMLName xml.Name `xml:"keyword"`
-					Text    string   `xml:",chardata"`
-				}
+					Text string `xml:",chardata"`
+				} `xml:"keyword"`
 				Period []struct {
-					XMLName xml.Name `xml:"period"`
-					Text    string   `xml:",chardata"`
-				}
+					Text string `xml:",chardata"`
+				} `xml:"period"`
 				Monitoring struct {
-					XMLName xml.Name `xml:"monitoring"`
-					Text    string   `xml:",chardata"`
-				}
+					Text string `xml:",chardata"`
+				} `xml:"monitoring"`
 				Language struct {
-					XMLName xml.Name `xml:"language"`
-					Text    string   `xml:",chardata"`
-				}
+					Text string `xml:",chardata"`
+				} `xml:"language"`
 				Abstract struct {
-					XMLName xml.Name `xml:"abstract"`
-					Text    string   `xml:",chardata"`
-				}
+					Text string `xml:",chardata"`
+				} `xml:"abstract"`
 				Date struct {
-					XMLName xml.Name `xml:"date"`
-					Text    string   `xml:",chardata"`
-				}
-			}
-		}
+					Text string `xml:",chardata"`
+				} `xml:"date"`
+			} `xml:"rfc1807"`
+		} `xml:"metadata"`
 		About struct {
-			XMLName xml.Name `xml:"about"`
-			Text    string   `xml:",chardata"`
-		}
-	}
+			Text string `xml:",chardata"`
+		} `xml:"about"`
+	} `xml:"Record"`
 }

@@ -7,7 +7,6 @@ type A struct {
 	Text    string   `xml:",chardata"`
 	AttrB   string   `xml:"b,attr"`
 	B       struct {
-		XMLName xml.Name `xml:"b"`
-		Text    string   `xml:",chardata"`
-	}
+		Text string `xml:",chardata"`
+	} `xml:"b"`
 }

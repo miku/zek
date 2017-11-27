@@ -98,6 +98,10 @@ func (sw *StructWriter) writeNameField(w io.Writer, node *Node) (int, error) {
 	return fmt.Fprintf(w, "XMLName xml.Name `xml:\"%s\"`\n", node.Name.Local)
 }
 
+func (sw *StructWriter) writeStructTag(w io.Writer, node *Node) (int, error) {
+	return fmt.Fprintf(w, "`xml:\"%s\"`", node.Name.Local)
+}
+
 // writeChardataField writes a chardata field. Might add a comment as well.
 func (sw *StructWriter) writeChardataField(w io.Writer, node *Node) (int, error) {
 	s := fmt.Sprintf("%s string `xml:\",chardata\"`", sw.TextFieldName)
@@ -129,7 +133,9 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 		io.WriteString(sew, "type ")
 	}
 	sw.writeStructIntro(sew, node)
-	sw.writeNameField(sew, node)
+	if top {
+		sw.writeNameField(sew, node)
+	}
 	sw.writeChardataField(sew, node)
 
 	// Helper to check for name clash with any generated field name.
@@ -166,6 +172,10 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 	}
 
 	// Write outro.
-	io.WriteString(sew, "}\n")
+	io.WriteString(sew, "} ")
+	if !top {
+		sw.writeStructTag(sew, node)
+	}
+	io.WriteString(sew, "\n")
 	return err
 }
