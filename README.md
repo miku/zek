@@ -345,3 +345,15 @@ type Thesis struct {
 	} `xml:"relation"`
 }
 ```
+
+Misc
+----
+
+As a side effect, zek seems to be a useful for debugging. Example:
+
+* https://github.com/miku/zek/blob/5ca19ad1c9a780bd0678422209e4b3d939d98d23/examples/oai/marcxml/record.go
+
+This record is emitted from a typical [OAI](https://www.openarchives.org/)
+server ([OJS](https://pkp.sfu.ca/ojs/), not even uncommon), yet one can quickly
+spot the flaw in the structure.
+
