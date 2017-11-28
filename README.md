@@ -19,7 +19,7 @@ Downsides:
 * no type inference, everything is accessible as string.
 
 Install
-------
+-------
 
 ```
 $ go get github.com/miku/zek/cmd/...
@@ -37,7 +37,11 @@ $ zek -h
 Usage of zek:
   -d    debug output
   -e    add comments with example
+  -max-examples int
+        limit number of examples (default 10)
   -p    write out an example program
+  -t string
+        emit struct for tag matching this name
 ```
 
 Examples:
