@@ -15,13 +15,14 @@ func (s *Stack) Len() int {
 	return len(s.v)
 }
 
-// Push item onto stack.
+// Put item onto stack.
 func (s *Stack) Put(item interface{}) {
 	s.Lock()
 	defer s.Unlock()
 	s.v = append(s.v, item)
 }
 
+// Peek returns the top element without removing it.
 func (s *Stack) Peek() interface{} {
 	s.Lock()
 	defer s.Unlock()
