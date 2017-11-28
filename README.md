@@ -12,8 +12,7 @@ Upsides:
 * it is relatively convenient to access attributes, children and text,
 * will generate a single struct, which make for a quite compact representation,
 * simple user interface,
-* comments with examples,
-* O(1) space complexity.
+* comments with examples.
 
 Downsides:
 
