@@ -519,4 +519,10 @@ func TestByName(t *testing.T) {
 			t.Errorf("got %v, want %v", result, c.result)
 		}
 	}
+
+	// Test case, where node is nil.
+	var nn *Node
+	if got := nn.ByName("anything"); got != nil {
+		t.Errorf("got %v, want nil", got)
+	}
 }
