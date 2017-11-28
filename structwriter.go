@@ -7,6 +7,15 @@ import (
 	"strings"
 )
 
+var (
+	// UppercaseByDefault is used during XML tag name to Go name conversion.
+	UppercaseByDefault = []string{"id", "isbn", "ismn", "eissn", "issn", "lccn", "rfc", "rsn", "uri", "url", "urn", "zdb"}
+	// DefaultTextField is used to hold character data.
+	DefaultTextField = "Text"
+	// DefaultAttributePrefixes are used, if there are name clashes.
+	DefaultAttributePrefixes = []string{"Attr", "Attribute"}
+)
+
 type stickyErrWriter struct {
 	w   io.Writer
 	err *error
@@ -73,12 +82,11 @@ type StructWriter struct {
 // NewStructWriter can write a node to a given writer. Default list of
 // abbreviations to wholly uppercase.
 func NewStructWriter(w io.Writer) *StructWriter {
-	exceptions := []string{"id", "isbn", "ismn", "eissn", "issn", "lccn", "rfc", "rsn", "url", "urn", "zdb"}
 	return &StructWriter{
 		w:                 w,
-		NameFunc:          CreateNameFunc(exceptions),
-		TextFieldName:     "Text",
-		AttributePrefixes: []string{"Attr", "Attribute"},
+		NameFunc:          CreateNameFunc(UppercaseByDefault),
+		TextFieldName:     DefaultTextField,
+		AttributePrefixes: DefaultAttributePrefixes,
 	}
 }
 
@@ -102,7 +110,8 @@ func (sw *StructWriter) writeNameField(w io.Writer, node *Node) (int, error) {
 func (sw *StructWriter) writeChardataField(w io.Writer, node *Node) (int, error) {
 	s := fmt.Sprintf("%s string `xml:\",chardata\"`", sw.TextFieldName)
 	if sw.WithComments && len(node.Examples) > 0 {
-		s = fmt.Sprintf("%s // %s", s, truncateString(strings.Join(node.Examples, ", "), 25, "..."))
+		examples := strings.Replace(strings.Join(node.Examples, ", "), "\n", " ", -1)
+		s = fmt.Sprintf("%s // %s", s, truncateString(examples, 25, "..."))
 	}
 	return fmt.Fprintf(w, "%s\n", s)
 }
