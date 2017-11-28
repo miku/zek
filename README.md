@@ -275,7 +275,7 @@ type Records struct {
 Only consider a nested element
 ------------------------------
 
-```shell
+```go
 $ zek -t thesis < fixtures/z.xml
 type Thesis struct {
 	XMLName        xml.Name `xml:"thesis"`
