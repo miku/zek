@@ -271,3 +271,60 @@ type Records struct {
 	} `xml:"Record"`
 }
 ```
+
+Only consider a nested element
+------------------------------
+
+```shell
+$ zek -t thesis < fixtures/z.xml
+type Thesis struct {
+	XMLName        xml.Name `xml:"thesis"`
+	Text           string   `xml:",chardata"`
+	Xmlns          string   `xml:"xmlns,attr"`
+	Doc            string   `xml:"doc,attr"`
+	Xsi            string   `xml:"xsi,attr"`
+	SchemaLocation string   `xml:"schemaLocation,attr"`
+	Title          []struct {
+		Text string `xml:",chardata"`
+	} `xml:"title"`
+	Creator []struct {
+		Text string `xml:",chardata"`
+	} `xml:"creator"`
+	Date []struct {
+		Text string `xml:",chardata"`
+	} `xml:"date"`
+	Identifier []struct {
+		Text string `xml:",chardata"`
+	} `xml:"identifier"`
+	Language []struct {
+		Text string `xml:",chardata"`
+	} `xml:"language"`
+	Rights []struct {
+		Text string `xml:",chardata"`
+	} `xml:"rights"`
+	Coverage []struct {
+		Text string `xml:",chardata"`
+	} `xml:"coverage"`
+	Publisher []struct {
+		Text string `xml:",chardata"`
+	} `xml:"publisher"`
+	Contributor []struct {
+		Text string `xml:",chardata"`
+	} `xml:"contributor"`
+	Subject []struct {
+		Text string `xml:",chardata"`
+	} `xml:"subject"`
+	Description []struct {
+		Text string `xml:",chardata"`
+	} `xml:"description"`
+	Source struct {
+		Text string `xml:",chardata"`
+	} `xml:"source"`
+	Type struct {
+		Text string `xml:",chardata"`
+	} `xml:"type"`
+	Relation []struct {
+		Text string `xml:",chardata"`
+	} `xml:"relation"`
+}
+```
