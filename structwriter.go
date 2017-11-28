@@ -40,9 +40,9 @@ func truncateString(s string, n int, ellipsis string) string {
 	return fmt.Sprintf("%s%s", s[:n], ellipsis)
 }
 
-// createNameFunc returns a function that converts a tag into a canonical Go
+// CreateNameFunc returns a function that converts a tag into a canonical Go
 // name. Given list of strings will be wholly upper cased.
-func createNameFunc(upper []string) func(string) string {
+func CreateNameFunc(upper []string) func(string) string {
 	f := func(name string) string {
 		var capped []string
 		splitter := func(c rune) bool {
@@ -76,7 +76,7 @@ func NewStructWriter(w io.Writer) *StructWriter {
 	exceptions := []string{"id", "isbn", "ismn", "eissn", "issn", "lccn", "rfc", "rsn", "url", "urn", "zdb"}
 	return &StructWriter{
 		w:                 w,
-		NameFunc:          createNameFunc(exceptions),
+		NameFunc:          CreateNameFunc(exceptions),
 		TextFieldName:     "Text",
 		AttributePrefixes: []string{"Attr", "Attribute"},
 	}
