@@ -1,7 +1,7 @@
 zek
 ===
 
-Zek is a **prototype** for creating Go struct from an XML document.
+Zek is a **prototype** for creating a Go struct from an XML document.
 
 [![Build Status](https://travis-ci.org/miku/zek.svg?branch=master)](https://travis-ci.org/miku/zek)
 
