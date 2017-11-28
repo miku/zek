@@ -165,15 +165,12 @@ func (node *Node) Height() int {
 }
 
 // ByName finds a node in the tree by name. Comparisons start at the current
-// node.  First match is returned. If nothing matches, nil is returned.
+// node. First match is returned. If nothing matches, nil is returned.
 func (node *Node) ByName(name string) *Node {
-	if name == "" {
-		return node
-	}
 	if node == nil {
 		return nil
 	}
-	if node.Name.Local == name {
+	if name == "" || node.Name.Local == name {
 		return node
 	}
 	for _, c := range node.Children {
