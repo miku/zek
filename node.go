@@ -20,7 +20,9 @@ func (w *countwriter) Write(p []byte) (n int, err error) {
 	return len(p), nil
 }
 
-// Node represents an element in the XML tree.
+// Node represents an element in the XML tree. It keeps track of its name,
+// attributes, childnodes and example chardata and basic statistics, e.g. how
+// often a node has been seen within its parent node.
 type Node struct {
 	Name        xml.Name   `json:"name,omitempty"`
 	Attr        []xml.Attr `json:"attr,omitempty"`
