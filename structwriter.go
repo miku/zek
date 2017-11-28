@@ -98,10 +98,6 @@ func (sw *StructWriter) writeNameField(w io.Writer, node *Node) (int, error) {
 	return fmt.Fprintf(w, "XMLName xml.Name `xml:\"%s\"`\n", node.Name.Local)
 }
 
-func (sw *StructWriter) writeStructTag(w io.Writer, node *Node) (int, error) {
-	return fmt.Fprintf(w, "`xml:\"%s\"`", node.Name.Local)
-}
-
 // writeChardataField writes a chardata field. Might add a comment as well.
 func (sw *StructWriter) writeChardataField(w io.Writer, node *Node) (int, error) {
 	s := fmt.Sprintf("%s string `xml:\",chardata\"`", sw.TextFieldName)
@@ -126,9 +122,15 @@ func (sw *StructWriter) writeStructIntro(w io.Writer, node *Node) {
 	io.WriteString(w, "struct {\n")
 }
 
+// writeStructTag writes xml tag at the end of struct declaration.
+func (sw *StructWriter) writeStructTag(w io.Writer, node *Node) (int, error) {
+	return fmt.Fprintf(w, "`xml:\"%s\"`", node.Name.Local)
+}
+
 // writeNode writes out the node as a struct. Output is not formatted.
 func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 	sew := stickyErrWriter{w: sw.w, err: &err}
+
 	if top {
 		io.WriteString(sew, "type ")
 	}
