@@ -485,3 +485,38 @@ func TestHeight(t *testing.T) {
 		}
 	}
 }
+
+func TestByName(t *testing.T) {
+	r := strings.NewReader(`<a><b><c></c></b></a>`)
+	root := new(Node)
+	if _, err := root.ReadFrom(r); err != nil {
+		t.Errorf("got %v, want nil", err)
+	}
+
+	var cases = []struct {
+		name   string
+		result *Node
+	}{
+		{
+			name: "", result: root,
+		},
+		{
+			name: "a", result: root,
+		},
+		{
+			name: "b", result: root.Children[0],
+		},
+		{
+			name: "c", result: root.Children[0].Children[0],
+		},
+		{
+			name: "d", result: nil,
+		},
+	}
+	for _, c := range cases {
+		result := root.ByName(c.name)
+		if result != c.result {
+			t.Errorf("got %v, want %v", result, c.result)
+		}
+	}
+}

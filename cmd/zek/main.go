@@ -18,6 +18,7 @@ var (
 	maxExamples          = flag.Int("max-examples", 10, "limit number of examples")
 	debug                = flag.Bool("d", false, "debug output")
 	createExampleProgram = flag.Bool("p", false, "write out an example program")
+	tagName              = flag.String("t", "", "emit struct for tag matching this name")
 )
 
 func main() {
@@ -27,6 +28,13 @@ func main() {
 	root.MaxExamples = *maxExamples
 	if _, err := root.ReadFrom(os.Stdin); err != nil {
 		log.Fatal(err)
+	}
+
+	// Move root, if we have a tagName. Ignore unknown names.
+	if *tagName != "" {
+		if n := root.ByName(*tagName); n != nil {
+			root = n
+		}
 	}
 
 	switch {
