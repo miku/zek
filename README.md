@@ -18,6 +18,8 @@ Downsides:
 * no support for recursive types (similar to *Russian Doll-ish* strategy, [[1](https://medbiq.org/std_specs/techguidelines/xmldesignguidelines.pdf#page=7)])
 * no type inference, everything is accessible as string.
 
+[![Build Status](https://travis-ci.org/miku/zek.svg?branch=master)](https://travis-ci.org/miku/zek)
+
 Install
 -------
 
