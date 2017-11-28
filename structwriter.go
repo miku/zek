@@ -112,16 +112,6 @@ func (sw *StructWriter) writeAttrField(w io.Writer, name, typeName, tag string) 
 	return fmt.Fprintf(w, "%s %s `xml:\"%s,attr\"`\n", name, typeName, tag)
 }
 
-// writeStructIntro writes the nodes current field name name and struct introduction.
-func (sw *StructWriter) writeStructIntro(w io.Writer, node *Node) {
-	io.WriteString(w, sw.NameFunc(node.Name.Local))
-	io.WriteString(w, " ")
-	if node.IsMultivalued() {
-		io.WriteString(w, "[]")
-	}
-	io.WriteString(w, "struct {\n")
-}
-
 // writeStructTag writes xml tag at the end of struct declaration.
 func (sw *StructWriter) writeStructTag(w io.Writer, node *Node) (int, error) {
 	return fmt.Fprintf(w, "`xml:\"%s\"`", node.Name.Local)
@@ -130,11 +120,15 @@ func (sw *StructWriter) writeStructTag(w io.Writer, node *Node) (int, error) {
 // writeNode writes out the node as a struct. Output is not formatted.
 func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 	sew := stickyErrWriter{w: sw.w, err: &err}
-
 	if top {
 		io.WriteString(sew, "type ")
 	}
-	sw.writeStructIntro(sew, node)
+	io.WriteString(sew, sw.NameFunc(node.Name.Local))
+	io.WriteString(sew, " ")
+	if node.IsMultivalued() && !top {
+		io.WriteString(sew, "[]")
+	}
+	io.WriteString(sew, "struct {\n")
 	if top {
 		sw.writeNameField(sew, node)
 	}
