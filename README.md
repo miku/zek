@@ -19,6 +19,10 @@ Downsides:
 * no support for recursive types (similar to *Russian Doll-ish* strategy, [[1](https://medbiq.org/std_specs/techguidelines/xmldesignguidelines.pdf#page=7)])
 * no type inference, everything is accessible as string.
 
+Related projects:
+
+* https://github.com/bemasher/JSONGen
+* https://github.com/dutchcoders/XMLGen
 
 Install
 -------
