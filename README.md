@@ -29,6 +29,9 @@ Debian and RPM packages:
 
 * https://github.com/miku/zek/releases
 
+
+![](https://github.com/miku/zek/blob/master/docs/114391.png)
+
 Usage
 -----
 
