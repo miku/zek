@@ -60,11 +60,14 @@ func main() {
 		var buf bytes.Buffer
 		io.WriteString(&buf, `
 			package main
-			import "encoding/xml"
-			import "os"
-			import "encoding/json"
-			import "log"
-			import "fmt"
+
+			import (
+				"encoding/json"
+				"encoding/xml"
+				"fmt"
+				"log"
+				"os"
+			)
 		`)
 
 		sw := zek.NewStructWriter(&buf)
