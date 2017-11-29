@@ -19,6 +19,7 @@ var (
 	debug                = flag.Bool("d", false, "debug output")
 	createExampleProgram = flag.Bool("p", false, "write out an example program")
 	tagName              = flag.String("t", "", "emit struct for tag matching this name")
+	skipFormatting       = flag.Bool("F", false, "skip formatting")
 )
 
 func main() {
@@ -45,11 +46,15 @@ func main() {
 		if err := sw.WriteNode(root); err != nil {
 			log.Fatal(err)
 		}
-		b, err := format.Source(buf.Bytes())
-		if err != nil {
-			log.Fatal(err)
+		if !*skipFormatting {
+			b, err := format.Source(buf.Bytes())
+			if err != nil {
+				log.Fatal(err)
+			}
+			fmt.Println(string(b))
+		} else {
+			fmt.Println(buf.String())
 		}
-		fmt.Println(string(b))
 	case *debug:
 		b, err := json.Marshal(root)
 		if err != nil {
@@ -91,10 +96,14 @@ func main() {
 			}
 		`, sw.NameFunc(root.Name.Local)))
 
-		b, err := format.Source(buf.Bytes())
-		if err != nil {
-			log.Fatal(err)
+		if !*skipFormatting {
+			b, err := format.Source(buf.Bytes())
+			if err != nil {
+				log.Fatal(err)
+			}
+			fmt.Println(string(b))
+		} else {
+			fmt.Println(buf.String())
 		}
-		fmt.Println(string(b))
 	}
 }
