@@ -37,7 +37,7 @@ type Record struct {
 				Text string `xml:",chardata"` // Micromechanical modeling ...
 				Type string `xml:"type,attr"`
 				Lang string `xml:"lang,attr"`
-				Type string `xml:"type,attr"`
+				// Type string `xml:"type,attr"`
 			} `xml:"title"`
 			Creator struct {
 				Text   string `xml:",chardata"`
@@ -64,7 +64,7 @@ type Record struct {
 				Text string `xml:",chardata"` // Transformation induzierte...
 				Type string `xml:"type,attr"`
 				Lang string `xml:"lang,attr"`
-				Type string `xml:"type,attr"`
+				// Type string `xml:"type,attr"`
 			} `xml:"abstract"`
 			Publisher struct {
 				Text                    string `xml:",chardata"`

@@ -40,7 +40,7 @@ type Record struct {
 				Text string `xml:",chardata"` // Micromechanical modeling ...
 				Type string `xml:"type,attr"`
 				Lang string `xml:"lang,attr"`
-				Type string `xml:"type,attr"`
+				// Type string `xml:"type,attr"`
 			} `xml:"title"`
 			Creator []struct {
 				Text   string `xml:",chardata"`
@@ -69,13 +69,13 @@ type Record struct {
 			Abstract []struct {
 				Text string `xml:",chardata"` // Transformation induzierte...
 				Type string `xml:"type,attr"`
-				Type string `xml:"type,attr"`
+				// Type string `xml:"type,attr"`
 				Lang string `xml:"lang,attr"`
 			} `xml:"abstract"`
 			Publisher struct {
-				Text                    string `xml:",chardata"`
-				Type                    string `xml:"type,attr"`
-				Type                    string `xml:"type,attr"`
+				Text string `xml:",chardata"`
+				Type string `xml:"type,attr"`
+				// Type                    string `xml:"type,attr"`
 				UniversityOrInstitution struct {
 					Text string `xml:",chardata"`
 					Name struct {
@@ -91,9 +91,9 @@ type Record struct {
 				} `xml:"address"`
 			} `xml:"publisher"`
 			Contributor []struct {
-				Text   string `xml:",chardata"`
-				Type   string `xml:"type,attr"`
-				Type   string `xml:"type,attr"`
+				Text string `xml:",chardata"`
+				Type string `xml:"type,attr"`
+				// Type   string `xml:"type,attr"`
 				Role   string `xml:"role,attr"`
 				Person struct {
 					Text string `xml:",chardata"`
@@ -127,7 +127,7 @@ type Record struct {
 			Identifier struct {
 				Text string `xml:",chardata"` // urn:nbn:de:hbz:294-43966,...
 				Type string `xml:"type,attr"`
-				Type string `xml:"type,attr"`
+				// Type string `xml:"type,attr"`
 			} `xml:"identifier"`
 			Medium struct {
 				Text string `xml:",chardata"` // application/pdf, applicat...

@@ -41,7 +41,7 @@ type Record struct {
 				Text string `xml:",chardata"` // Realisierung eines Batchm...
 				Type string `xml:"type,attr"`
 				Lang string `xml:"lang,attr"`
-				Type string `xml:"type,attr"`
+				// Type string `xml:"type,attr"`
 			} `xml:"title"`
 			Creator []struct {
 				Text   string `xml:",chardata"`
@@ -68,7 +68,7 @@ type Record struct {
 				Text string `xml:",chardata"` // Es werden sowohl die Char...
 				Type string `xml:"type,attr"`
 				Lang string `xml:"lang,attr"`
-				Type string `xml:"type,attr"`
+				// Type string `xml:"type,attr"`
 			} `xml:"abstract"`
 			Publisher []struct {
 				Text                    string `xml:",chardata"`
@@ -98,7 +98,7 @@ type Record struct {
 			Identifier struct {
 				Text string `xml:",chardata"` // urn:nbn:de:bsz:ch1-199500...
 				Type string `xml:"type,attr"`
-				Type string `xml:"type,attr"`
+				// Type string `xml:"type,attr"`
 			} `xml:"identifier"`
 			Language []struct {
 				Text string `xml:",chardata"` // ger, ger, ger, ger, ger, ...
@@ -110,9 +110,9 @@ type Record struct {
 					Text string `xml:",chardata"` // other, Diplom, Diplom, ot...
 				} `xml:"level"`
 				Grantor []struct {
-					Text                    string `xml:",chardata"`
-					Type                    string `xml:"type,attr"`
-					Type                    string `xml:"type,attr"`
+					Text string `xml:",chardata"`
+					Type string `xml:"type,attr"`
+					// Type                    string `xml:"type,attr"`
 					CountryCode             string `xml:"countryCode,attr"`
 					UniversityOrInstitution struct {
 						Text string `xml:",chardata"`
@@ -194,7 +194,7 @@ type Record struct {
 				Text string `xml:",chardata"` // Klassifizierung von P2P-A...
 				Type string `xml:"type,attr"`
 				Lang string `xml:"lang,attr"`
-				Type string `xml:"type,attr"`
+				// Type string `xml:"type,attr"`
 			} `xml:"tableOfContents"`
 			Replaces struct {
 				Text string `xml:",chardata"` // http://nbn-resolving.de/u...
@@ -204,7 +204,7 @@ type Record struct {
 				Text string `xml:",chardata"` // Das Vampir-Genre im Wande...
 				Type string `xml:"type,attr"`
 				Lang string `xml:"lang,attr"`
-				Type string `xml:"type,attr"`
+				// Type string `xml:"type,attr"`
 			} `xml:"alternative"`
 			Created struct {
 				Text string `xml:",chardata"` // 2010, 2010, 2010, 2010, 2...

@@ -289,7 +289,7 @@ type Record struct {
 					} `xml:"issue"`
 				} `xml:"in_book"`
 				Other struct {
-					Text string `xml:",chardata"`
+					// Text string `xml:",chardata"`
 					Text struct {
 						Text string `xml:",chardata"` // publisher: Dansk Center f...
 					} `xml:"text"`
@@ -298,7 +298,7 @@ type Record struct {
 					} `xml:"year"`
 				} `xml:"other"`
 				Inetpub []struct {
-					Text string `xml:",chardata"`
+					// Text string `xml:",chardata"`
 					Text struct {
 						Text string `xml:",chardata"` // PDF in institutional repo...
 					} `xml:"text"`
