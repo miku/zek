@@ -357,3 +357,6 @@ This record is emitted from a typical [OAI](https://www.openarchives.org/)
 server ([OJS](https://pkp.sfu.ca/ojs/), not even uncommon), yet one can quickly
 spot the flaw in the structure.
 
+Over 30 different struct generated manually in the course of a few hours
+(around five minutes per source): https://git.io/vbTDo.
+
