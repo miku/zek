@@ -3,6 +3,7 @@ package zek
 import (
 	"bytes"
 	"go/format"
+	"io"
 	"io/ioutil"
 	"os"
 	"reflect"
@@ -13,8 +14,22 @@ import (
 // startsWithType pattern to match where a type declaration starts.
 var startsWithType = regexp.MustCompile(`(?m)^type`)
 
+// removeComments removes simple comments.
+func removeComments(b []byte) []byte {
+	var buf bytes.Buffer
+	re := regexp.MustCompile(`//.*`)
+	for _, line := range bytes.Split(b, []byte("\n")) {
+		buf.Write(re.ReplaceAll(line, nil))
+		io.WriteString(&buf, "\n")
+	}
+	return buf.Bytes()
+}
+
 // codeEquals returns true, if two code snippets match.
 func codeEquals(a, b []byte) (bool, error) {
+	a = bytes.TrimSpace(removeComments(a))
+	b = bytes.TrimSpace(removeComments(b))
+
 	fa, err := format.Source(bytes.TrimSpace(a))
 	if err != nil {
 		return false, err
