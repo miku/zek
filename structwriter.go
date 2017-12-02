@@ -95,7 +95,8 @@ func NewStructWriter(w io.Writer) *StructWriter {
 	if err != nil {
 		hostname = "an unknown host"
 	}
-	banner := fmt.Sprintf("generated %s by %s on %s.", time.Now().Format("2006-01-02 15:04:05"), usr.Username, hostname)
+	banner := fmt.Sprintf("generated %s by %s on %s.",
+		time.Now().Format("2006-01-02 15:04:05"), usr.Username, hostname)
 
 	return &StructWriter{
 		w:                 w,
