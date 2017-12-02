@@ -22,7 +22,7 @@ func (s *Stack) Put(item interface{}) {
 	s.v = append(s.v, item)
 }
 
-// Peek returns the top element without removing it.
+// Peek returns the top element without removing it. Panic it stack is empty.
 func (s *Stack) Peek() interface{} {
 	s.Lock()
 	defer s.Unlock()

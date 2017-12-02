@@ -147,8 +147,10 @@ func (sw *StructWriter) writeStructTag(w io.Writer, node *Node) (int, error) {
 func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 	sew := stickyErrWriter{w: sw.w, err: &err}
 	if top {
-		io.WriteString(sew, fmt.Sprintf("// %s was %s\n",
-			sw.NameFunc(node.Name.Local), sw.Banner))
+		if sw.Banner != "" {
+			io.WriteString(sew, fmt.Sprintf("// %s was %s\n",
+				sw.NameFunc(node.Name.Local), sw.Banner))
+		}
 		io.WriteString(sew, "type ")
 	}
 	io.WriteString(sew, sw.NameFunc(node.Name.Local))
