@@ -125,6 +125,7 @@ func (sw *StructWriter) writeNameField(w io.Writer, node *Node) (int, error) {
 
 // writeChardataField writes a chardata field. Might add a comment as well.
 func (sw *StructWriter) writeChardataField(w io.Writer, node *Node) (int, error) {
+	// XXX: Check, if there is any child or attribute with this name.
 	s := fmt.Sprintf("%s string `xml:\",chardata\"`", sw.TextFieldName)
 	if sw.WithComments && len(node.Examples) > 0 {
 		examples := strings.Replace(strings.Join(node.Examples, ", "), "\n", " ", -1)
