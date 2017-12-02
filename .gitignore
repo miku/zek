@@ -24,3 +24,4 @@ fixtures/z.xml
 /packaging/deb/zek/usr/
 *.deb
 *.rpm
+/tmp
