@@ -27,8 +27,25 @@ func main() {
 
 	root := new(zek.Node)
 	root.MaxExamples = *maxExamples
-	if _, err := root.ReadFrom(os.Stdin); err != nil {
-		log.Fatal(err)
+
+	// Read one or more XML files given as arguments.
+	if flag.NArg() > 0 {
+		var readers []io.Reader
+		for _, fn := range flag.Args() {
+			f, err := os.Open(fn)
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer f.Close()
+			readers = append(readers, f)
+		}
+		if _, err := root.ReadFromAll(readers); err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		if _, err := root.ReadFrom(os.Stdin); err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	// Move root, if we have a tagName. Ignore unknown names.
