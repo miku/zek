@@ -34,8 +34,9 @@ type Node struct {
 	childFreqs map[xml.Name]int // Count child tag occurences, used temporarily.
 }
 
-// ReadFrom reads XML from a reader.
-func (node *Node) ReadFrom(r io.Reader) (n int64, err error) {
+// readNode reads from an reader and returns a node, along with the bytes read
+// and error. Node will be a synthetic root node, which need to be decapitated.
+func readNode(r io.Reader, maxExamples int) (node *Node, n int64, err error) {
 	cw := countwriter{}
 	rr := io.TeeReader(r, &cw)
 
@@ -52,7 +53,7 @@ func (node *Node) ReadFrom(r io.Reader) (n int64, err error) {
 			break
 		}
 		if err != nil {
-			return cw.n, err
+			return root, cw.n, err
 		}
 		switch t := token.(type) {
 		case xml.StartElement:
@@ -68,16 +69,27 @@ func (node *Node) ReadFrom(r io.Reader) (n int64, err error) {
 				break
 			}
 			n := stack.Peek().(*Node)
-			if len(n.Examples) < node.MaxExamples {
+			if len(n.Examples) < maxExamples {
 				// XXX: sample better.
 				n.Examples = append(n.Examples, v)
 			}
 		}
 	}
-	if len(root.Children) > 0 {
-		*node = *root.Children[0]
+	stack.Pop() // Drop synthetic root from stack.
+	return root, cw.n, nil
+}
+
+// ReadFrom reads XML from a reader.
+func (node *Node) ReadFrom(r io.Reader) (int64, error) {
+	nn, n, err := readNode(r, node.MaxExamples)
+	if err != nil {
+		return n, err
 	}
-	return cw.n, nil
+	// Decapitate node.
+	if len(nn.Children) > 0 {
+		*node = *nn.Children[0]
+	}
+	return n, err
 }
 
 // attrListContains determines containment only on attribute name, not value.
