@@ -379,5 +379,5 @@ spot the flaw in the structure.
 Over 30 different struct generated manually in the course of a few hours
 (around five minutes per source): https://git.io/vbTDo.
 
--- Current extent leader: [1532](https://github.com/miku/zek/blob/master/fixtures/r.go) lines struct
+-- Current extent leader: [1532](https://github.com/miku/zek/blob/master/fixtures/r.txt) lines struct
 
