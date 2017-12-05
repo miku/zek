@@ -34,8 +34,9 @@ type Node struct {
 	childFreqs map[xml.Name]int // Count child tag occurences, used temporarily.
 }
 
-// readNode reads from an reader and returns a node, along with the bytes read
-// and error. Node will be a synthetic root node, which need to be decapitated.
+// readNode reads XML from a reader and returns a parsed node. If node is
+// given, it is reused, allowing for multiple passes (e.g. from multiple
+// files).
 func readNode(r io.Reader, root *Node, maxExamples int) (node *Node, n int64, err error) {
 	cw := countwriter{}
 	rr := io.TeeReader(r, &cw)
