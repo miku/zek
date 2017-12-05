@@ -20,6 +20,7 @@ var (
 	createExampleProgram = flag.Bool("p", false, "write out an example program")
 	tagName              = flag.String("t", "", "emit struct for tag matching this name")
 	skipFormatting       = flag.Bool("F", false, "skip formatting")
+	strict               = flag.Bool("s", false, "strict parsing and writing")
 )
 
 func main() {
@@ -60,6 +61,8 @@ func main() {
 		var buf bytes.Buffer
 		sw := zek.NewStructWriter(&buf)
 		sw.WithComments = *withComments
+		sw.Strict = *strict
+
 		if err := sw.WriteNode(root); err != nil {
 			log.Fatal(err)
 		}
@@ -94,6 +97,8 @@ func main() {
 
 		sw := zek.NewStructWriter(&buf)
 		sw.WithComments = *withComments
+		sw.Strict = *strict
+
 		if err := sw.WriteNode(root); err != nil {
 			log.Fatal(err)
 		}
