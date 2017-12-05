@@ -12,11 +12,13 @@ Upsides:
 * it is relatively convenient to access attributes, children and text,
 * will generate a single struct, which make for a quite compact representation,
 * simple user interface,
-* comments with examples.
+* comments with examples,
+* schema inference across multiple files.
 
 Downsides:
 
-* no support for recursive types (similar to *Russian Doll-ish* strategy, [[1](https://medbiq.org/std_specs/techguidelines/xmldesignguidelines.pdf#page=7)])
+* experimental, early, buggy, unstable prototype,
+* no support for recursive types (similar to *Russian Doll* strategy, [[1](https://medbiq.org/std_specs/techguidelines/xmldesignguidelines.pdf#page=7)])
 * no type inference, everything is accessible as string.
 
 Bugs:
@@ -84,15 +86,17 @@ $ zek -d < fixtures/a.xml
 Example program:
 
 ```go
-$ zek -p < fixtures/a.xml
 package main
 
-import "encoding/xml"
-import "os"
-import "encoding/json"
-import "log"
-import "fmt"
+import (
+	"encoding/json"
+	"encoding/xml"
+	"fmt"
+	"log"
+	"os"
+)
 
+// A was generated 2017-12-05 17:35:21 by tir on apollo.
 type A struct {
 	XMLName xml.Name `xml:"a"`
 	Text    string   `xml:",chardata"`
@@ -346,6 +350,21 @@ type Thesis struct {
 }
 ```
 
+Inference across files
+----------------------
+
+```
+$ zek fixtures/a.xml fixtures/b.xml fixtures/c.xml
+// A was generated 2017-12-05 17:40:14 by tir on apollo.
+type A struct {
+	XMLName xml.Name `xml:"a"`
+	Text    string   `xml:",chardata"`
+	B       []struct {
+		Text string `xml:",chardata"`
+	} `xml:"b"`
+}
+```
+
 Misc
 ----
 
@@ -359,4 +378,6 @@ spot the flaw in the structure.
 
 Over 30 different struct generated manually in the course of a few hours
 (around five minutes per source): https://git.io/vbTDo.
+
+-- Current extent leader: [1532](https://github.com/miku/zek/blob/master/fixtures/r.go) lines struct
 
