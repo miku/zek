@@ -2,6 +2,7 @@ package ddfmxd
 
 import "encoding/xml"
 
+// Record was generated 2017-12-05 23:03:28 by tir on apollo.
 type Record struct {
 	XMLName xml.Name `xml:"Record"`
 	Text    string   `xml:",chardata"`
@@ -289,8 +290,8 @@ type Record struct {
 					} `xml:"issue"`
 				} `xml:"in_book"`
 				Other struct {
-					// Text string `xml:",chardata"`
-					Text struct {
+					Chardata string `xml:",chardata"`
+					Text     struct {
 						Text string `xml:",chardata"` // publisher: Dansk Center f...
 					} `xml:"text"`
 					Year struct {
@@ -298,8 +299,8 @@ type Record struct {
 					} `xml:"year"`
 				} `xml:"other"`
 				Inetpub []struct {
-					// Text string `xml:",chardata"`
-					Text struct {
+					Chardata string `xml:",chardata"`
+					Text     struct {
 						Text string `xml:",chardata"` // PDF in institutional repo...
 					} `xml:"text"`
 					URI struct {
