@@ -36,7 +36,7 @@ type Node struct {
 
 // readNode reads XML from a reader and returns a parsed node. If node is
 // given, it is reused, allowing for multiple passes (e.g. from multiple
-// files).
+// files). XXX: maxExamples should be factored out into options.
 func readNode(r io.Reader, root *Node, maxExamples int) (node *Node, n int64, err error) {
 	cw := countwriter{}
 	rr := io.TeeReader(r, &cw)
@@ -83,22 +83,21 @@ func readNode(r io.Reader, root *Node, maxExamples int) (node *Node, n int64, er
 	return root, cw.n, nil
 }
 
-// ReadFromAll builds a node from all readers (XML).
+// ReadFromAll builds a single node from all readers.
 func (node *Node) ReadFromAll(readers []io.Reader) (n int64, err error) {
-	root := &Node{} // Shared root.
-	var nr int64    // Bytes read from single reader.
+	root := &Node{}
+	var nr int64
 	for _, r := range readers {
-		root, nr, err = readNode(r, root, node.MaxExamples)
-		n = n + nr
-		if err != nil {
+		if root, nr, err = readNode(r, root, node.MaxExamples); err != nil {
 			return n, err
 		}
+		n = n + nr
 	}
-	// Decapitate node.
 	if len(root.Children) > 0 {
+		// Decapitate node.
 		*node = *root.Children[0]
 	}
-	return n, err
+	return n, nil
 }
 
 // ReadFrom reads XML from a reader.
@@ -107,11 +106,11 @@ func (node *Node) ReadFrom(r io.Reader) (int64, error) {
 	if err != nil {
 		return n, err
 	}
-	// Decapitate node.
 	if len(nn.Children) > 0 {
+		// Decapitate node.
 		*node = *nn.Children[0]
 	}
-	return n, err
+	return n, nil
 }
 
 // attrListContains determines containment only on attribute name, not value.
