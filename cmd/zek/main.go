@@ -21,6 +21,7 @@ var (
 	tagName              = flag.String("t", "", "emit struct for tag matching this name")
 	skipFormatting       = flag.Bool("F", false, "skip formatting")
 	strict               = flag.Bool("s", false, "strict parsing and writing")
+	exampleMaxChars      = flag.Int("x", 25, "max chars for example")
 )
 
 func main() {
@@ -62,6 +63,7 @@ func main() {
 		sw := zek.NewStructWriter(&buf)
 		sw.WithComments = *withComments
 		sw.Strict = *strict
+		sw.ExampleMaxChars = *exampleMaxChars
 
 		if err := sw.WriteNode(root); err != nil {
 			log.Fatal(err)
@@ -98,6 +100,7 @@ func main() {
 		sw := zek.NewStructWriter(&buf)
 		sw.WithComments = *withComments
 		sw.Strict = *strict
+		sw.ExampleMaxChars = *exampleMaxChars
 
 		if err := sw.WriteNode(root); err != nil {
 			log.Fatal(err)
