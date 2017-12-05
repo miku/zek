@@ -1,8 +1,10 @@
 package zek
 
 import (
+	"encoding/xml"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"os/user"
 	"reflect"
@@ -167,8 +169,8 @@ func (sw *StructWriter) writeChardataField(w io.Writer, node *Node) (int, error)
 }
 
 // writeAttrField writes an attribute field.
-func (sw *StructWriter) writeAttrField(w io.Writer, name, typeName, tag string) (int, error) {
-	return fmt.Fprintf(w, "%s %s `xml:\"%s,attr\"`\n", name, typeName, tag)
+func (sw *StructWriter) writeAttrField(w io.Writer, name, typeName string, attr xml.Attr) (int, error) {
+	return fmt.Fprintf(w, "%s %s `xml:\"%s,attr\"`\n", name, typeName, attr.Name.Local)
 }
 
 // writeStructTag writes xml tag at the end of struct declaration.
@@ -210,7 +212,8 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 		return true
 	}
 
-	// Write attributes.
+	// Write attributes. XXX: Better handling of duplicate attributes.
+	written := make(map[string]bool)
 	for _, attr := range node.Attr {
 		name := sw.NameFunc(attr.Name.Local)
 		for _, prefix := range sw.AttributePrefixes {
@@ -222,7 +225,12 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 		if !isValidName(name) {
 			return fmt.Errorf("name clash: %s", attr.Name.Local)
 		}
-		sw.writeAttrField(sew, name, "string", attr.Name.Local)
+		if _, ok := written[attr.Name.Local]; ok {
+			log.Fatalf("[not implemented] duplicate local attribute name: %s", attr)
+			continue
+		}
+		sw.writeAttrField(sew, name, "string", attr)
+		written[attr.Name.Local] = true
 	}
 
 	// Write children.
