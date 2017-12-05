@@ -14,8 +14,9 @@ import (
 
 var (
 	// UppercaseByDefault is used during XML tag name to Go name conversion.
-	UppercaseByDefault = []string{"id", "Id", "isbn", "ismn", "eissn", "issn", "http", "lccn",
-		"rfc", "rsn", "uri", "url", "urn", "zdb"}
+	UppercaseByDefault = []string{"id", "Id", "isbn", "ismn", "json",
+		"eissn", "issn", "http", "lccn", "rfc", "rsn", "uri", "url",
+		"urn", "xml", "Xml", "zdb"}
 	// DefaultTextFieldNames list struct field names for chardata, most preferred first.
 	DefaultTextFieldNames = []string{"Text", "Chardata"}
 	// DefaultAttributePrefixes are used, if there are name clashes.
