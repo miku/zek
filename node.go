@@ -36,7 +36,7 @@ type Node struct {
 
 // readNode reads from an reader and returns a node, along with the bytes read
 // and error. Node will be a synthetic root node, which need to be decapitated.
-func readNode(r io.Reader, maxExamples int) (node *Node, n int64, err error) {
+func readNode(r io.Reader, root *Node, maxExamples int) (node *Node, n int64, err error) {
 	cw := countwriter{}
 	rr := io.TeeReader(r, &cw)
 
@@ -44,7 +44,10 @@ func readNode(r io.Reader, maxExamples int) (node *Node, n int64, err error) {
 	dec.CharsetReader = charset.NewReaderLabel
 	dec.Strict = false
 
-	stack, root := Stack{}, &Node{}
+	if root == nil {
+		root = &Node{}
+	}
+	stack := Stack{}
 	stack.Put(root)
 
 	for {
@@ -79,9 +82,27 @@ func readNode(r io.Reader, maxExamples int) (node *Node, n int64, err error) {
 	return root, cw.n, nil
 }
 
+// ReadFromAll builds a node from all readers (XML).
+func (node *Node) ReadFromAll(readers []io.Reader) (n int64, err error) {
+	root := &Node{} // Shared root.
+	var nr int64    // Bytes read from single reader.
+	for _, r := range readers {
+		root, nr, err = readNode(r, root, node.MaxExamples)
+		n = n + nr
+		if err != nil {
+			return n, err
+		}
+	}
+	// Decapitate node.
+	if len(root.Children) > 0 {
+		*node = *root.Children[0]
+	}
+	return n, err
+}
+
 // ReadFrom reads XML from a reader.
 func (node *Node) ReadFrom(r io.Reader) (int64, error) {
-	nn, n, err := readNode(r, node.MaxExamples)
+	nn, n, err := readNode(r, nil, node.MaxExamples)
 	if err != nil {
 		return n, err
 	}

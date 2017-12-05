@@ -3,6 +3,7 @@ package zek
 import (
 	"encoding/json"
 	"encoding/xml"
+	"io"
 	"reflect"
 	"strings"
 	"testing"
@@ -524,5 +525,402 @@ func TestByName(t *testing.T) {
 	var nn *Node
 	if got := nn.ByName("anything"); got != nil {
 		t.Errorf("got %v, want nil", got)
+	}
+}
+
+func TestNodeReadFromAll(t *testing.T) {
+	var cases = []struct {
+		inputs           []string // Raw XML input strings.
+		serializedResult string   // Compare to JSON serialization.
+		err              error
+	}{
+		{
+			inputs: []string{``, ``},
+			serializedResult: `
+			{
+					"name": {
+							"Space": "",
+							"Local": ""
+					}
+			}`,
+			err: nil,
+		},
+		{
+			inputs: []string{`<?xml version="1.0"?><a></a>`},
+			serializedResult: `
+			{
+					"name": {
+							"Space": "",
+							"Local": "a"
+					}
+			}`,
+			err: nil,
+		},
+		{
+			inputs: []string{`<a><b></b></a>`, `<a><c></c></a>`},
+			serializedResult: `
+			{
+				"name": {
+					"Space": "",
+					"Local": "a"
+				},
+				"children": [
+					{
+						"name": {
+							"Space": "",
+							"Local": "b"
+						}
+					},
+					{
+						"name": {
+							"Space": "",
+							"Local": "c"
+						}
+					}
+				]
+			}
+			`,
+			err: nil,
+		},
+		{
+			inputs: []string{`<a></a>`, ``},
+			serializedResult: `
+			{
+					"name": {
+							"Space": "",
+							"Local": "a"
+					}
+			}`,
+			err: nil,
+		},
+		{
+			inputs: []string{`<a><b></b></a>`, `<a></a>`},
+			serializedResult: `
+			{
+					"name": {
+							"Space": "",
+							"Local": "a"
+					},
+					"children": [
+							{
+									"name": {
+											"Space": "",
+											"Local": "b"
+									}
+							}
+					]
+			}`,
+			err: nil,
+		},
+		{
+			inputs: []string{`<a></a>`, `<a><b></b></a>`},
+			serializedResult: `
+			{
+					"name": {
+							"Space": "",
+							"Local": "a"
+					},
+					"children": [
+							{
+									"name": {
+											"Space": "",
+											"Local": "b"
+									}
+							}
+					]
+			}`,
+			err: nil,
+		},
+		{
+			inputs: []string{`<a><b></b><b></b></a>`, `<a><b></b></a>`},
+			serializedResult: `
+			{
+					"name": {
+							"Space": "",
+							"Local": "a"
+					},
+					"children": [
+							{
+									"name": {
+											"Space": "",
+											"Local": "b"
+									}
+							}
+					]
+			}`,
+			err: nil,
+		},
+		{
+			inputs: []string{`<a><b><c></c></b></a>`, ``},
+			serializedResult: `
+			{
+					"name": {
+							"Space": "",
+							"Local": "a"
+					},
+					"children": [
+							{
+									"name": {
+											"Space": "",
+											"Local": "b"
+									},
+									"children": [
+											{
+													"name": {
+															"Space": "",
+															"Local": "c"
+													}
+											}
+									]
+							}
+					]
+			}`,
+			err: nil,
+		},
+		{
+			inputs: []string{`<a id="1"><b><c></c></b></a>`, ``},
+			serializedResult: `
+			{
+					"name": {
+							"Space": "",
+							"Local": "a"
+					},
+					"attr": [
+							{
+									"Name": {
+											"Space": "",
+											"Local": "id"
+									},
+									"Value": "1"
+							}
+					],
+					"children": [
+							{
+									"name": {
+											"Space": "",
+											"Local": "b"
+									},
+									"children": [
+											{
+													"name": {
+															"Space": "",
+															"Local": "c"
+													}
+											}
+									]
+							}
+					]
+			}`,
+			err: nil,
+		},
+		{
+			inputs: []string{`<a id="2"><b><c></c></b></a><a id="1"></a>`, ``, ``},
+			serializedResult: `
+			{
+					"name": {
+							"Space": "",
+							"Local": "a"
+					},
+					"attr": [
+							{
+									"Name": {
+											"Space": "",
+											"Local": "id"
+									},
+									"Value": "2"
+							}
+					],
+					"children": [
+							{
+									"name": {
+											"Space": "",
+											"Local": "b"
+									},
+									"children": [
+											{
+													"name": {
+															"Space": "",
+															"Local": "c"
+													}
+											}
+									]
+							}
+					]
+			}`,
+			err: nil,
+		},
+		{
+			inputs: []string{`<x><a id="2"><b><c></c></b></a><a id="1"><b><d></d></b></a></x>`, ``},
+			serializedResult: `
+			{
+					"name": {
+							"Space": "",
+							"Local": "x"
+					},
+					"children": [
+							{
+									"name": {
+											"Space": "",
+											"Local": "a"
+									},
+									"attr": [
+											{
+													"Name": {
+															"Space": "",
+															"Local": "id"
+													},
+													"Value": "2"
+											}
+									],
+									"children": [
+											{
+													"name": {
+															"Space": "",
+															"Local": "b"
+													},
+													"children": [
+															{
+																	"name": {
+																			"Space": "",
+																			"Local": "c"
+																	}
+															},
+															{
+																	"name": {
+																			"Space": "",
+																			"Local": "d"
+																	}
+															}
+													]
+											}
+									]
+							}
+					]
+			}`,
+			err: nil,
+		},
+		{
+			inputs: []string{`<x><a id="2"><b><c></c></b></a><a name="A"><b><d></d></b></a></x>`},
+			serializedResult: `
+			{
+					"name": {
+							"Space": "",
+							"Local": "x"
+					},
+					"children": [
+							{
+									"name": {
+											"Space": "",
+											"Local": "a"
+									},
+									"attr": [
+											{
+													"Name": {
+															"Space": "",
+															"Local": "id"
+													},
+													"Value": "2"
+											},
+											{
+												"Name": {
+														"Space": "",
+														"Local": "name"
+												},
+												"Value": "A"
+										}
+									],
+									"children": [
+											{
+													"name": {
+															"Space": "",
+															"Local": "b"
+													},
+													"children": [
+															{
+																	"name": {
+																			"Space": "",
+																			"Local": "c"
+																	}
+															},
+															{
+																	"name": {
+																			"Space": "",
+																			"Local": "d"
+																	}
+															}
+													]
+											}
+									]
+							}
+					]
+			}`,
+			err: nil,
+		},
+		{
+			inputs: []string{`<x><a><b><c></c><c></c></b></a><a><b><d></d><d></d></b></a></x>`, ``},
+			serializedResult: `
+			{
+					"name": {
+							"Space": "",
+							"Local": "x"
+					},
+					"children": [
+							{
+									"name": {
+											"Space": "",
+											"Local": "a"
+									},
+									"children": [
+											{
+													"name": {
+															"Space": "",
+															"Local": "b"
+													},
+													"children": [
+															{
+																	"name": {
+																			"Space": "",
+																			"Local": "c"
+																	}
+															},
+															{
+																	"name": {
+																			"Space": "",
+																			"Local": "d"
+																	}
+															}
+													]
+											}
+									]
+							}
+					]
+			}`,
+			err: nil,
+		},
+	}
+
+	for _, c := range cases {
+		var readers []io.Reader
+
+		for _, input := range c.inputs {
+			readers = append(readers, strings.NewReader(input))
+		}
+
+		node := new(Node)
+		_, err := node.ReadFromAll(readers)
+		if err != c.err {
+			t.Errorf("got %v, want %v", err, c.err)
+		}
+		b, err := json.Marshal(node)
+		if err != nil {
+			t.Errorf("unexpected error during serialization: %v", err)
+		}
+		s := string(b)
+		if ok, err := deepEqualJSON(s, c.serializedResult); !ok {
+			if err != nil {
+				t.Errorf("documents differ: %v", err)
+			}
+			t.Errorf("got %v, want %v", s, c.serializedResult)
+		}
 	}
 }
