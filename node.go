@@ -48,6 +48,7 @@ func readNode(r io.Reader, root *Node, maxExamples int) (node *Node, n int64, er
 	if root == nil {
 		root = &Node{}
 	}
+
 	stack := Stack{}
 	stack.Put(root)
 
@@ -74,12 +75,13 @@ func readNode(r io.Reader, root *Node, maxExamples int) (node *Node, n int64, er
 			}
 			n := stack.Peek().(*Node)
 			if len(n.Examples) < maxExamples {
-				// XXX: sample better.
+				// XXX: sample better, e.g. reservoir dictionary.
 				n.Examples = append(n.Examples, v)
 			}
 		}
 	}
-	stack.Pop() // Drop synthetic root from stack.
+
+	stack.Pop()
 	return root, cw.n, nil
 }
 
