@@ -1,4 +1,7 @@
 package misc
+
+import "encoding/xml"
+
 // Fuentes was generated 2017-12-05 23:56:07 by tir on apollo.
 type Fuentes struct {
 	XMLName xml.Name `xml:"fuentes"`
@@ -24,5 +27,4 @@ type Fuentes struct {
 			Text string `xml:",chardata"` // http://www.eclac.cl/celad...
 		} `xml:"url_organizacion"`
 	} `xml:"fuente"`
-} 
-
+}
