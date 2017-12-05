@@ -353,7 +353,7 @@ type Thesis struct {
 Inference across files
 ----------------------
 
-```
+```go
 $ zek fixtures/a.xml fixtures/b.xml fixtures/c.xml
 // A was generated 2017-12-05 17:40:14 by tir on apollo.
 type A struct {
