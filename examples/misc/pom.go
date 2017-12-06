@@ -2,8 +2,8 @@ package misc
 
 import "encoding/xml"
 
-// Project was generated 2017-12-06 00:05:23 by tir on apollo.
-type Project struct {
+// POM was generated 2017-12-06 00:05:23 by tir on apollo.
+type POM struct {
 	XMLName        xml.Name `xml:"project"`
 	Text           string   `xml:",chardata"`
 	Xmlns          string   `xml:"xmlns,attr"`
