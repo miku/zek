@@ -54,13 +54,17 @@ Usage
 ```shell
 $ zek -h
 Usage of zek:
+  -F    skip formatting
   -d    debug output
   -e    add comments with example
   -max-examples int
         limit number of examples (default 10)
   -p    write out an example program
+  -s    strict parsing and writing
   -t string
         emit struct for tag matching this name
+  -x int
+        max chars for example (default 25)
 ```
 
 Examples:
