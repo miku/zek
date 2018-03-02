@@ -59,10 +59,14 @@ Usage of zek:
   -e    add comments with example
   -max-examples int
         limit number of examples (default 10)
+  -n string
+        use a different name for the top-level struct
   -p    write out an example program
   -s    strict parsing and writing
   -t string
         emit struct for tag matching this name
+  -version
+        show version
   -x int
         max chars for example (default 25)
 ```
