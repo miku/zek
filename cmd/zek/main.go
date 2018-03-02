@@ -22,6 +22,7 @@ var (
 	skipFormatting       = flag.Bool("F", false, "skip formatting")
 	strict               = flag.Bool("s", false, "strict parsing and writing")
 	exampleMaxChars      = flag.Int("x", 25, "max chars for example")
+	version              = flag.Bool("version", false, "show version")
 )
 
 func main() {
@@ -29,6 +30,11 @@ func main() {
 
 	root := new(zek.Node)
 	root.MaxExamples = *maxExamples
+
+	if *version {
+		fmt.Println(zek.Version)
+		os.Exit(0)
+	}
 
 	// Read one or more XML files given as arguments.
 	if flag.NArg() > 0 {
