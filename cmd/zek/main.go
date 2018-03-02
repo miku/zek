@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"encoding/xml"
 	"flag"
 	"fmt"
 	"go/format"
@@ -23,6 +24,7 @@ var (
 	strict               = flag.Bool("s", false, "strict parsing and writing")
 	exampleMaxChars      = flag.Int("x", 25, "max chars for example")
 	version              = flag.Bool("version", false, "show version")
+	structName           = flag.String("n", "", "use a different name for the top-level struct")
 )
 
 func main() {
@@ -61,6 +63,10 @@ func main() {
 		if n := root.ByName(*tagName); n != nil {
 			root = n
 		}
+	}
+
+	if *structName != "" {
+		root.Name = xml.Name{Space: "", Local: *structName}
 	}
 
 	switch {
