@@ -106,6 +106,8 @@ func main() {
 				"fmt"
 				"log"
 				"os"
+
+				"golang.org/x/net/html/charset"
 			)
 		`)
 
@@ -121,6 +123,9 @@ func main() {
 		io.WriteString(&buf, fmt.Sprintf(`
 			func main() {
 				dec := xml.NewDecoder(os.Stdin)
+				dec.CharsetReader = charset.NewReaderLabel
+				dec.Strict = false
+
 				var doc %s
 				if err := dec.Decode(&doc); err != nil {
 					log.Fatal(err)
