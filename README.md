@@ -33,6 +33,7 @@ Related projects:
 
 * https://github.com/bemasher/JSONGen
 * https://github.com/dutchcoders/XMLGen
+* https://github.com/gnewton/chidley
 
 Install
 -------
