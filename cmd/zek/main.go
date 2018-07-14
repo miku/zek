@@ -16,6 +16,7 @@ import (
 
 var (
 	withComments         = flag.Bool("e", false, "add comments with example")
+	withJSONTags         = flag.Bool("j", false, "add JSON tags")
 	maxExamples          = flag.Int("max-examples", 10, "limit number of examples")
 	debug                = flag.Bool("d", false, "debug output")
 	createExampleProgram = flag.Bool("p", false, "write out an example program")
@@ -74,6 +75,7 @@ func main() {
 		var buf bytes.Buffer
 		sw := zek.NewStructWriter(&buf)
 		sw.WithComments = *withComments
+		sw.WithJSONTags = *withJSONTags
 		sw.Strict = *strict
 		sw.ExampleMaxChars = *exampleMaxChars
 

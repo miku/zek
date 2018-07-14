@@ -130,7 +130,7 @@ func (sw *StructWriter) WriteNode(node *Node) (err error) {
 // writeField writes a field with a simple xml struct tag to writer.
 func (sw *StructWriter) writeNameField(w io.Writer, node *Node) (int, error) {
 	if sw.WithJSONTags {
-		return fmt.Fprintf(w, "XMLName xml.Name `xml:\"%s\" json:\"%s\"`\n",
+		return fmt.Fprintf(w, "XMLName xml.Name `xml:\"%s\" json:\"%s,omitempty\"`\n",
 			node.Name.Local, strings.ToLower(node.Name.Local))
 	}
 	return fmt.Fprintf(w, "XMLName xml.Name `xml:\"%s\"`\n", node.Name.Local)
@@ -168,7 +168,12 @@ func (sw *StructWriter) writeChardataField(w io.Writer, node *Node) (int, error)
 		return 0, fmt.Errorf("name clash, text field")
 	}
 
-	s := fmt.Sprintf("%s string `xml:\",chardata\"`", textFieldName)
+	var s string
+	if sw.WithJSONTags {
+		s = fmt.Sprintf("%s string `xml:\",chardata\" json:\"%s,omitempty\"`", textFieldName, strings.ToLower(textFieldName))
+	} else {
+		s = fmt.Sprintf("%s string `xml:\",chardata\"`", textFieldName)
+	}
 	if sw.WithComments && len(node.Examples) > 0 {
 		examples := strings.Replace(strings.Join(node.Examples, ", "), "\n", " ", -1)
 		s = fmt.Sprintf("%s // %s", s, truncateString(examples, sw.ExampleMaxChars, "..."))
@@ -178,13 +183,16 @@ func (sw *StructWriter) writeChardataField(w io.Writer, node *Node) (int, error)
 
 // writeAttrField writes an attribute field.
 func (sw *StructWriter) writeAttrField(w io.Writer, name, typeName string, attr xml.Attr) (int, error) {
+	if sw.WithJSONTags {
+		return fmt.Fprintf(w, "%s %s `xml:\"%s,attr\" json:\"%s,omitempty\"`\n", name, typeName, attr.Name.Local, strings.ToLower(attr.Name.Local))
+	}
 	return fmt.Fprintf(w, "%s %s `xml:\"%s,attr\"`\n", name, typeName, attr.Name.Local)
 }
 
 // writeStructTag writes xml tag at the end of struct declaration.
 func (sw *StructWriter) writeStructTag(w io.Writer, node *Node) (int, error) {
 	if sw.WithJSONTags {
-		return fmt.Fprintf(w, "`xml:\"%s\" json:\"%s\"`", node.Name.Local, strings.ToLower(node.Name.Local))
+		return fmt.Fprintf(w, "`xml:\"%s\" json:\"%s,omitempty\"`", node.Name.Local, strings.ToLower(node.Name.Local))
 	}
 	return fmt.Fprintf(w, "`xml:\"%s\"`", node.Name.Local)
 }
