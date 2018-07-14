@@ -58,6 +58,7 @@ Usage of zek:
   -F    skip formatting
   -d    debug output
   -e    add comments with example
+  -j    add JSON tags
   -max-examples int
         limit number of examples (default 10)
   -n string
