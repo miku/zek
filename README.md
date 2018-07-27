@@ -381,6 +381,12 @@ This is also useful, if you deal with archives containing XML files:
 $ unzip -p 4082359.zip '*.xml' | zek -e
 ```
 
+Given a directory full of zip files, you can combined find, unzip and zek:
+
+```shell
+$ for i in $(find ftp/b571 -type f -name "*zip"); do unzip -p $i '*xml'; done | zek -e
+```
+
 Misc
 ----
 
