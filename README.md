@@ -375,6 +375,12 @@ type A struct {
 }
 ```
 
+This is also useful, if you deal with archives containing XML files:
+
+```shell
+$ unzip -p 4082359.zip '*.xml' | zek -e
+```
+
 Misc
 ----
 
