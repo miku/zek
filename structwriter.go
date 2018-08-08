@@ -218,7 +218,7 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 	}
 	sw.writeChardataField(sew, node)
 
-	// Helper to check for name clash with any generated field name.
+	// Helper to check for name clash of attribute with any generated field name.
 	isValidName := func(name string) bool {
 		if name == sw.TextFieldNames[0] {
 			return false
