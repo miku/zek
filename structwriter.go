@@ -89,6 +89,7 @@ type StructWriter struct {
 	ExampleMaxChars   int                 // Max length of example comment.
 	Strict            bool                // Whether to ignore implementation holes.
 	WithJSONTags      bool                // Include JSON struct tags.
+	Compact           bool                // Emit more compact struct.
 }
 
 // NewStructWriter can write a node to a given writer. Default list of
@@ -212,6 +213,12 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 	if node.IsMultivalued() && !top {
 		io.WriteString(sew, "[]")
 	}
+
+	if sw.Compact && len(node.Children) == 0 && len(node.Attr) == 0 {
+		fmt.Fprintf(sew, "string `xml:\"%s\"`\n", node.Name.Local)
+		return nil
+	}
+
 	io.WriteString(sew, "struct {\n")
 	if top {
 		sw.writeNameField(sew, node)

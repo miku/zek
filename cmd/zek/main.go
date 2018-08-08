@@ -26,6 +26,7 @@ var (
 	exampleMaxChars      = flag.Int("x", 25, "max chars for example")
 	version              = flag.Bool("version", false, "show version")
 	structName           = flag.String("n", "", "use a different name for the top-level struct")
+	compact              = flag.Bool("c", false, "emit more compact struct")
 )
 
 func main() {
@@ -78,6 +79,7 @@ func main() {
 		sw.WithJSONTags = *withJSONTags
 		sw.Strict = *strict
 		sw.ExampleMaxChars = *exampleMaxChars
+		sw.Compact = *compact
 
 		if err := sw.WriteNode(root); err != nil {
 			log.Fatal(err)
@@ -117,6 +119,7 @@ func main() {
 		sw.WithComments = *withComments
 		sw.Strict = *strict
 		sw.ExampleMaxChars = *exampleMaxChars
+		sw.Compact = *compact
 
 		if err := sw.WriteNode(root); err != nil {
 			log.Fatal(err)
