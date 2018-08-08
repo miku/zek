@@ -56,6 +56,7 @@ Usage
 $ zek -h
 Usage of zek:
   -F    skip formatting
+  -c    emit more compact struct
   -d    debug output
   -e    add comments with example
   -j    add JSON tags
