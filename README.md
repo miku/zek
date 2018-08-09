@@ -306,7 +306,7 @@ type Records struct {
 
 The above struct can be made a bit more compact - use the `-c` flag (since 0.1.4) to see how:
 
-```
+```go
 $ zek -c -e < fixtures/l.xml
 // Records was generated 2018-08-09 14:10:25 by tir on sol.
 type Records struct {
