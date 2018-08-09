@@ -215,8 +215,13 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 	}
 
 	if sw.Compact && len(node.Children) == 0 && len(node.Attr) == 0 {
-		fmt.Fprintf(sew, "string `xml:\"%s\"`\n", node.Name.Local)
-		return nil
+		s := fmt.Sprintf("string `xml:\"%s\"`", node.Name.Local)
+		if sw.WithComments && len(node.Examples) > 0 {
+			examples := strings.Replace(strings.Join(node.Examples, ", "), "\n", " ", -1)
+			s = fmt.Sprintf("%s // %s", s, truncateString(examples, sw.ExampleMaxChars, "..."))
+		}
+		fmt.Fprintf(sew, "%s\n", s)
+		return err
 	}
 
 	io.WriteString(sew, "struct {\n")
