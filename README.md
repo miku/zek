@@ -304,7 +304,7 @@ type Records struct {
 }
 ```
 
-The above struct can be made a bit more compact - use the `-c` flag to see how:
+The above struct can be made a bit more compact - use the `-c` flag (since 0.1.4) to see how:
 
 ```
 $ zek -c -e < fixtures/l.xml
