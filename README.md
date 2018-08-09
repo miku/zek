@@ -308,49 +308,48 @@ The above struct can be made a bit more compact - use the `-c` flag to see how:
 
 ```
 $ zek -c -e < fixtures/l.xml
-// Records was generated 2018-08-09 14:00:07 by tir on sol.
+// Records was generated 2018-08-09 14:10:25 by tir on sol.
 type Records struct {
-        XMLName xml.Name `xml:"Records"`
-        Text    string   `xml:",chardata"` // \n
-        Xsi     string   `xml:"xsi,attr"`
-        Record  []struct {
-                Text   string `xml:",chardata"`
-                Header struct {
-                        Text       string `xml:",chardata"`
-                        Status     string `xml:"status,attr"`
-                        Identifier string `xml:"identifier"`
-                        Datestamp  string `xml:"datestamp"`
-                        SetSpec    string `xml:"setSpec"`
-                } `xml:"header"`
-                Metadata struct {
-                        Text    string `xml:",chardata"`
-                        Rfc1807 struct {
-                                Text           string   `xml:",chardata"`
-                                Xmlns          string   `xml:"xmlns,attr"`
-                                Xsi            string   `xml:"xsi,attr"`
-                                SchemaLocation string   `xml:"schemaLocation,attr"`
-                                BibVersion     string   `xml:"bib-version"`
-                                ID             string   `xml:"id"`
-                                Entry          string   `xml:"entry"`
-                                Organization   []string `xml:"organization"`
-                                Title          string   `xml:"title"`
-                                Type           string   `xml:"type"`
-                                Author         []string `xml:"author"`
-                                Copyright      string   `xml:"copyright"`
-                                OtherAccess    string   `xml:"other_access"`
-                                Keyword        string   `xml:"keyword"`
-                                Period         []string `xml:"period"`
-                                Monitoring     string   `xml:"monitoring"`
-                                Language       string   `xml:"language"`
-                                Abstract       string   `xml:"abstract"`
-                                Date           string   `xml:"date"`
-                        } `xml:"rfc1807"`
-                } `xml:"metadata"`
-                About string `xml:"about"`
-        } `xml:"Record"`
+    XMLName xml.Name `xml:"Records"`
+    Text    string   `xml:",chardata"` // \n
+    Xsi     string   `xml:"xsi,attr"`
+    Record  []struct {
+        Text   string `xml:",chardata"`
+        Header struct {
+            Text       string `xml:",chardata"`
+            Status     string `xml:"status,attr"`
+            Identifier string `xml:"identifier"` // oai:ojs.localhost:article...
+            Datestamp  string `xml:"datestamp"`  // 2009-06-24T14:48:23Z, 200...
+            SetSpec    string `xml:"setSpec"`    // eppp:ART, eppp:ART, eppp:...
+        } `xml:"header"`
+        Metadata struct {
+            Text    string `xml:",chardata"`
+            Rfc1807 struct {
+                Text           string   `xml:",chardata"`
+                Xmlns          string   `xml:"xmlns,attr"`
+                Xsi            string   `xml:"xsi,attr"`
+                SchemaLocation string   `xml:"schemaLocation,attr"`
+                BibVersion     string   `xml:"bib-version"`  // v2, v2, v2, v2, v2, v2, v...
+                ID             string   `xml:"id"`           // http://journals.zpid.de/i...
+                Entry          string   `xml:"entry"`        // 2009-06-24T14:48:23Z, 200...
+                Organization   []string `xml:"organization"` // Proceedings of the Worksh...
+                Title          string   `xml:"title"`        // Introduction and some Ide...
+                Type           string   `xml:"type"`
+                Author         []string `xml:"author"`       // KRAMPEN, Günter, CARBON,...
+                Copyright      string   `xml:"copyright"`    // Das Urheberrecht liegt be...
+                OtherAccess    string   `xml:"other_access"` // url:http://journals.zpid....
+                Keyword        string   `xml:"keyword"`
+                Period         []string `xml:"period"`
+                Monitoring     string   `xml:"monitoring"`
+                Language       string   `xml:"language"` // en, en, en, en, en, en, e...
+                Abstract       string   `xml:"abstract"` // After a short description...
+                Date           string   `xml:"date"`     // 2009-06-22 12:12:00, 2009...
+            } `xml:"rfc1807"`
+        } `xml:"metadata"`
+        About string `xml:"about"`
+    } `xml:"Record"`
 }
 ```
-
 
 Only consider a nested element
 ------------------------------
