@@ -1,11 +1,10 @@
-zek
-===
+# zek
 
 Zek is a **prototype** for creating a Go struct from an XML document.
 
-----
+> Skip the fluff, just the code.
 
-Skip the fluff, just the code. Given some [XML](https://raw.githubusercontent.com/miku/zek/master/fixtures/e.xml), run:
+Given some [XML](https://raw.githubusercontent.com/miku/zek/master/fixtures/e.xml), run:
 
 ```go
 $ curl -s https://raw.githubusercontent.com/miku/zek/master/fixtures/e.xml | zek -e -c
@@ -69,7 +68,7 @@ type Rss struct {
 }
 ```
 
-----
+## About
 
 [![Build Status](https://travis-ci.org/miku/zek.svg?branch=master)](https://travis-ci.org/miku/zek)
 
@@ -103,8 +102,7 @@ Related projects:
 * https://github.com/dutchcoders/XMLGen
 * https://github.com/gnewton/chidley
 
-Install
--------
+## Install
 
 ```
 $ go get github.com/miku/zek/cmd/...
@@ -117,8 +115,7 @@ Debian and RPM packages:
 
 ![](https://github.com/miku/zek/blob/master/docs/114391.png)
 
-Usage
------
+## Usage
 
 ```shell
 $ zek -h
@@ -419,8 +416,7 @@ type Records struct {
 }
 ```
 
-Only consider a nested element
-------------------------------
+## Only consider a nested element
 
 ```go
 $ zek -t thesis < fixtures/z.xml
@@ -476,8 +472,7 @@ type Thesis struct {
 }
 ```
 
-Inference across files
-----------------------
+## Inference across files
 
 ```go
 $ zek fixtures/a.xml fixtures/b.xml fixtures/c.xml
@@ -503,8 +498,7 @@ Given a directory full of zip files, you can combined find, unzip and zek:
 $ for i in $(find ftp/b571 -type f -name "*zip"); do unzip -p $i '*xml'; done | zek -e
 ```
 
-Misc
-----
+## Misc
 
 As a side effect, zek seems to be a useful for debugging. Example:
 
