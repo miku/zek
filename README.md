@@ -1,6 +1,6 @@
 # zek
 
-Zek is a **prototype** for creating a Go struct from an XML document.
+Zek is a **prototype** for creating a Go [struct](https://golang.org/ref/spec#Struct_types) from an XML document.
 
 > Skip the fluff, just the code.
 
