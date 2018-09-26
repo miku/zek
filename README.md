@@ -526,11 +526,11 @@ type OAIPMH struct {
                                         Xmlns          string `xml:"xmlns,attr"`
                                         Xsi            string `xml:"xsi,attr"`
                                         SchemaLocation string `xml:"schemaLocation,attr"`
-                                        Leader         struct {
-                                                Text string `xml:",chardata"` // 00001nM2.01200024------h,...
+                                        Leader         struct
+                                                Text string `xml:",chardata"` // 00001nM2.01200024
                                         } `xml:"leader"`
                                         Controlfield []struct {
-                                                Text string `xml:",chardata"` // 00001nM2.01200024------h,...
+                                                Text string `xml:",chardata"` // 00001nM2.01200024
                                                 Tag  string `xml:"tag,attr"`
                                         } `xml:"controlfield"`
                                         Datafield []struct {
@@ -539,7 +539,7 @@ type OAIPMH struct {
                                                 Ind1     string `xml:"ind1,attr"`
                                                 Ind2     string `xml:"ind2,attr"`
                                                 Subfield []struct {
-                                                        Text string `xml:",chardata"` // KM0000002, 19990812, Kn 1...
+                                                        Text string `xml:",chardata"` // KM0000002
                                                         Code string `xml:"code,attr"`
                                                 } `xml:"subfield"`
                                         } `xml:"datafield"`
