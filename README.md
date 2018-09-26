@@ -498,6 +498,58 @@ Given a directory full of zip files, you can combined find, unzip and zek:
 $ for i in $(find ftp/b571 -type f -name "*zip"); do unzip -p $i '*xml'; done | zek -e
 ```
 
+Another example (tarball with thousands of XML files, seemingly MARC):
+
+```shell
+$ tar -xOzf /tmp/20180725.125255.tar.gz | zek -e
+// OAIPMH was generated 2018-09-26 15:03:29 by tir on sol.
+type OAIPMH struct {
+        XMLName        xml.Name `xml:"OAI-PMH"`
+        Text           string   `xml:",chardata"`
+        Xmlns          string   `xml:"xmlns,attr"`
+        Xsi            string   `xml:"xsi,attr"`
+        SchemaLocation string   `xml:"schemaLocation,attr"`
+        ListRecords    struct {
+                Text   string `xml:",chardata"`
+                Record struct {
+                        Text   string `xml:",chardata"`
+                        Header struct {
+                                Text       string `xml:",chardata"`
+                                Identifier struct {
+                                        Text string `xml:",chardata"` // aleph-publish:000000001, ...
+                                } `xml:"identifier"`
+                        } `xml:"header"`
+                        Metadata struct {
+                                Text   string `xml:",chardata"`
+                                Record struct {
+                                        Text           string `xml:",chardata"`
+                                        Xmlns          string `xml:"xmlns,attr"`
+                                        Xsi            string `xml:"xsi,attr"`
+                                        SchemaLocation string `xml:"schemaLocation,attr"`
+                                        Leader         struct {
+                                                Text string `xml:",chardata"` // 00001nM2.01200024------h,...
+                                        } `xml:"leader"`
+                                        Controlfield []struct {
+                                                Text string `xml:",chardata"` // 00001nM2.01200024------h,...
+                                                Tag  string `xml:"tag,attr"`
+                                        } `xml:"controlfield"`
+                                        Datafield []struct {
+                                                Text     string `xml:",chardata"`
+                                                Tag      string `xml:"tag,attr"`
+                                                Ind1     string `xml:"ind1,attr"`
+                                                Ind2     string `xml:"ind2,attr"`
+                                                Subfield []struct {
+                                                        Text string `xml:",chardata"` // KM0000002, 19990812, Kn 1...
+                                                        Code string `xml:"code,attr"`
+                                                } `xml:"subfield"`
+                                        } `xml:"datafield"`
+                                } `xml:"record"`
+                        } `xml:"metadata"`
+                } `xml:"record"`
+        } `xml:"ListRecords"`
+}
+```
+
 ## Misc
 
 As a side effect, zek seems to be a useful for debugging. Example:
