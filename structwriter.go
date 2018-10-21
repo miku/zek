@@ -96,16 +96,17 @@ type StructWriter struct {
 // abbreviations to wholly uppercase.
 func NewStructWriter(w io.Writer) *StructWriter {
 	// Some info for banner.
-	usr, err := user.Current()
-	if err != nil {
-		usr.Name = "an unknown user"
+	usrName := "an unknown user"
+	usr, _ := user.Current()
+	if usr != nil {
+		usrName = usr.Username
 	}
 	hostname, err := os.Hostname()
 	if err != nil {
 		hostname = "an unknown host"
 	}
 	banner := fmt.Sprintf("generated %s by %s on %s.",
-		time.Now().Format("2006-01-02 15:04:05"), usr.Username, hostname)
+		time.Now().Format("2006-01-02 15:04:05"), usrName, hostname)
 
 	return &StructWriter{
 		w:                 w,
