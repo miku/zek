@@ -68,6 +68,10 @@ type Rss struct {
 }
 ```
 
+## Online
+
+Try it online at [https://www.onlinetool.io/xmltogo/](https://www.onlinetool.io/xmltogo/).
+
 ## About
 
 [![Build Status](https://travis-ci.org/miku/zek.svg?branch=master)](https://travis-ci.org/miku/zek)
