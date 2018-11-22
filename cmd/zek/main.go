@@ -27,6 +27,7 @@ var (
 	version              = flag.Bool("version", false, "show version")
 	structName           = flag.String("n", "", "use a different name for the top-level struct")
 	compact              = flag.Bool("c", false, "emit more compact struct")
+	uniqueExamples       = flag.Bool("u", false, "filter out duplicated examples")
 )
 
 func main() {
@@ -80,6 +81,7 @@ func main() {
 		sw.Strict = *strict
 		sw.ExampleMaxChars = *exampleMaxChars
 		sw.Compact = *compact
+		sw.UniqueExamples = *uniqueExamples
 
 		if err := sw.WriteNode(root); err != nil {
 			log.Fatal(err)
