@@ -52,10 +52,11 @@ func skipUntilType(b []byte) []byte {
 
 func TestWriteNode(t *testing.T) {
 	var cases = []struct {
-		input        string // Input XML filename.
-		result       string // Generated struct filename.
-		withComments bool
-		err          error
+		input          string // Input XML filename.
+		result         string // Generated struct filename.
+		withComments   bool
+		uniqueExamples bool
+		err            error
 	}{
 		{
 			input:  "testdata/w.1.xml",
@@ -116,6 +117,20 @@ func TestWriteNode(t *testing.T) {
 			withComments: true,
 			err:          nil,
 		},
+		{
+			input:          "testdata/w.12.xml",
+			result:         "testdata/w.12.go",
+			withComments:   true,
+			uniqueExamples: false,
+			err:            nil,
+		},
+		{
+			input:          "testdata/w.13.xml",
+			result:         "testdata/w.13.go",
+			withComments:   true,
+			uniqueExamples: true,
+			err:            nil,
+		},
 	}
 
 	for _, c := range cases {
@@ -135,6 +150,7 @@ func TestWriteNode(t *testing.T) {
 		var buf bytes.Buffer
 		sw := NewStructWriter(&buf)
 		sw.WithComments = c.withComments
+		sw.UniqueExamples = c.uniqueExamples
 
 		if err := sw.WriteNode(node); err != c.err {
 			t.Errorf("WriteNode failed: got %v, want %v", err, c.err)
