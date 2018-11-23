@@ -137,6 +137,7 @@ Usage of zek:
   -s    strict parsing and writing
   -t string
         emit struct for tag matching this name
+  -u    filter out duplicated examples
   -version
         show version
   -x int
