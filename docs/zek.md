@@ -25,8 +25,8 @@ Pike. Go has many source code generators, notably
 [*JSONGen*](https://github.com/bemasher/JSONGen) and also a few for XML. The
 `zek` tool is a bit different, as it will *always* emit a valid struct - as
 opposed to the otherwise great
-[*XMLGen*](https://github.com/dutchcoders/XMLGen)
-- and it will work on raw data, that has no DTD or XSD.
+[*XMLGen*](https://github.com/dutchcoders/XMLGen) - and it will work on raw
+data, that has no DTD or XSD.
 
 An online version has been created by Krzysztof Kowalczyk which is available
 at https://www.onlinetool.io/xmltogo/.
