@@ -24,6 +24,9 @@ Generate a Go struct from an XML document.
 mkdir -p $RPM_BUILD_ROOT/usr/local/sbin
 install -m 755 zek $RPM_BUILD_ROOT/usr/local/sbin
 
+mkdir -p $RPM_BUILD_ROOT/usr/local/share/man/man1
+install -m 644 zek.1 $RPM_BUILD_ROOT/usr/local/share/man/man1/zek.1
+
 %post
 
 %clean
@@ -35,6 +38,8 @@ rm -rf %{_topdir}/BUILD/%{name}
 %defattr(-,root,root)
 
 /usr/local/sbin/zek
+/usr/local/share/man/man1/zek.1
+
 
 %changelog
 
