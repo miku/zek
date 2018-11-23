@@ -25,3 +25,5 @@ fixtures/z.xml
 *.deb
 *.rpm
 /tmp
+docs/zek.1
+/zek.1
