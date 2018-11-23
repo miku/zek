@@ -90,6 +90,7 @@ type StructWriter struct {
 	Strict            bool                // Whether to ignore implementation holes.
 	WithJSONTags      bool                // Include JSON struct tags.
 	Compact           bool                // Emit more compact struct.
+	UniqueExamples    bool                // Filter out duplicated examples
 }
 
 // NewStructWriter can write a node to a given writer. Default list of
@@ -176,6 +177,11 @@ func (sw *StructWriter) writeChardataField(w io.Writer, node *Node) (int, error)
 	} else {
 		s = fmt.Sprintf("%s string `xml:\",chardata\"`", textFieldName)
 	}
+
+	if sw.UniqueExamples {
+		node.Examples = uniqueStrings(node.Examples)
+	}
+
 	if sw.WithComments && len(node.Examples) > 0 {
 		examples := strings.Replace(strings.Join(node.Examples, ", "), "\n", " ", -1)
 		s = fmt.Sprintf("%s // %s", s, truncateString(examples, sw.ExampleMaxChars, "..."))
@@ -213,6 +219,10 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 	io.WriteString(sew, " ")
 	if node.IsMultivalued() && !top {
 		io.WriteString(sew, "[]")
+	}
+
+	if sw.UniqueExamples {
+		node.Examples = uniqueStrings(node.Examples)
 	}
 
 	if sw.Compact && len(node.Children) == 0 && len(node.Attr) == 0 {
@@ -281,4 +291,16 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 	}
 	io.WriteString(sew, "\n")
 	return err
+}
+
+func uniqueStrings(ss []string) []string {
+	uniq := make([]string, 0, len(ss))
+	m := map[string]struct{}{}
+	for _, s := range ss {
+		if _, ok := m[s]; !ok {
+			uniq = append(uniq, s)
+			m[s] = struct{}{}
+		}
+	}
+	return uniq
 }
