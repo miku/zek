@@ -17,7 +17,7 @@ var startsWithType = regexp.MustCompile(`(?m)^type`)
 // removeComments removes simple comments.
 func removeComments(b []byte) []byte {
 	var buf bytes.Buffer
-	re := regexp.MustCompile(`//.*`)
+	re := regexp.MustCompile(`^//.*`)
 	for _, line := range bytes.Split(b, []byte("\n")) {
 		buf.Write(re.ReplaceAll(line, nil))
 		io.WriteString(&buf, "\n")
