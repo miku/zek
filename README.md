@@ -109,7 +109,7 @@ Related projects:
 ## Install
 
 ```
-$ go get github.com/miku/zek/cmd/...
+$ go get github.com/miku/zek/cmd/zek/...
 ```
 
 Debian and RPM packages:
