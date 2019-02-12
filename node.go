@@ -17,10 +17,10 @@ type Node struct {
 	Attr        []xml.Attr `json:"attr,omitempty"`
 	Examples    []string   `json:"examples,omitempty"`
 	Children    []*Node    `json:"children,omitempty"`
-	Freqs       []int      `json:"-"` // Collect number of occurences of this node within parent.
+	Freqs       []int      `json:"-"` // Collect number of occurrences of this node within parent.
 	MaxExamples int        `json:"-"` // Maximum number of examples to keep, gets passed to children.
 
-	childFreqs map[xml.Name]int // Count child tag occurences, used temporarily.
+	childFreqs map[xml.Name]int // Count child tag occurrences, used temporarily.
 }
 
 // readNode reads XML from a reader and returns a parsed node. If node is
