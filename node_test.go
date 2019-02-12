@@ -16,22 +16,22 @@ func TestAttrListContains(t *testing.T) {
 		result bool
 	}{
 		{
-			attrs:  []xml.Attr{xml.Attr{}},
+			attrs:  []xml.Attr{{}},
 			attr:   xml.Attr{},
 			result: true,
 		},
 		{
-			attrs:  []xml.Attr{xml.Attr{}},
+			attrs:  []xml.Attr{{}},
 			attr:   xml.Attr{Name: xml.Name{Local: "id"}},
 			result: false,
 		},
 		{
-			attrs:  []xml.Attr{xml.Attr{Name: xml.Name{Local: "id"}}},
+			attrs:  []xml.Attr{{Name: xml.Name{Local: "id"}}},
 			attr:   xml.Attr{Name: xml.Name{Local: "id"}},
 			result: true,
 		},
 		{
-			attrs:  []xml.Attr{xml.Attr{Name: xml.Name{Local: "id"}, Value: "yyy"}},
+			attrs:  []xml.Attr{{Name: xml.Name{Local: "id"}, Value: "yyy"}},
 			attr:   xml.Attr{Name: xml.Name{Local: "id"}, Value: "xxx"},
 			result: true,
 		},
@@ -58,13 +58,13 @@ func TestNodeMergeAttr(t *testing.T) {
 		},
 		{
 			node:   &Node{Attr: []xml.Attr{}},
-			attr:   []xml.Attr{xml.Attr{Name: xml.Name{Local: "id"}}},
-			result: []xml.Attr{xml.Attr{Name: xml.Name{Local: "id"}}},
+			attr:   []xml.Attr{{Name: xml.Name{Local: "id"}}},
+			result: []xml.Attr{{Name: xml.Name{Local: "id"}}},
 		},
 		{
-			node:   &Node{Attr: []xml.Attr{xml.Attr{Name: xml.Name{Local: "id"}}}},
-			attr:   []xml.Attr{xml.Attr{Name: xml.Name{Local: "id"}}},
-			result: []xml.Attr{xml.Attr{Name: xml.Name{Local: "id"}}},
+			node:   &Node{Attr: []xml.Attr{{Name: xml.Name{Local: "id"}}}},
+			attr:   []xml.Attr{{Name: xml.Name{Local: "id"}}},
+			result: []xml.Attr{{Name: xml.Name{Local: "id"}}},
 		},
 	}
 	for _, c := range cases {
