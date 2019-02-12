@@ -106,6 +106,10 @@ Related projects:
 * https://github.com/dutchcoders/XMLGen
 * https://github.com/gnewton/chidley
 
+Presentations:
+
+* [Lightning talk about struct generators](https://gist.github.com/miku/39e4273d15abfd7e4297071338da3349) at [GoLab 2018](https://www.golab.io/)
+
 ## Install
 
 ```
