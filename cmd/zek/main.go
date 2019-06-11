@@ -27,7 +27,7 @@ var (
 	version              = flag.Bool("version", false, "show version")
 	structName           = flag.String("n", "", "use a different name for the top-level struct")
 	compact              = flag.Bool("c", false, "emit more compact struct")
-	nonCompact           = flag.Bool("C", false, "emit more less compact struct")
+	nonCompact           = flag.Bool("C", false, "emit less compact struct")
 	uniqueExamples       = flag.Bool("u", false, "filter out duplicated examples")
 )
 
