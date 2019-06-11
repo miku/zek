@@ -27,6 +27,7 @@ var (
 	version              = flag.Bool("version", false, "show version")
 	structName           = flag.String("n", "", "use a different name for the top-level struct")
 	compact              = flag.Bool("c", false, "emit more compact struct")
+	nonCompact           = flag.Bool("C", false, "emit more less compact struct")
 	uniqueExamples       = flag.Bool("u", false, "filter out duplicated examples")
 )
 
@@ -80,7 +81,7 @@ func main() {
 		sw.WithJSONTags = *withJSONTags
 		sw.Strict = *strict
 		sw.ExampleMaxChars = *exampleMaxChars
-		sw.Compact = *compact
+		sw.Compact = !*nonCompact
 		sw.UniqueExamples = *uniqueExamples
 
 		if err := sw.WriteNode(root); err != nil {
