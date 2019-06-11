@@ -128,8 +128,9 @@ Debian and RPM packages:
 ```shell
 $ zek -h
 Usage of zek:
+  -C    emit less compact struct
   -F    skip formatting
-  -c    emit more compact struct
+  -c    emit more compact struct (noop, as this is the default since 0.1.7)
   -d    debug output
   -e    add comments with example
   -j    add JSON tags
