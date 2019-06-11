@@ -122,7 +122,7 @@ func main() {
 		sw.WithComments = *withComments
 		sw.Strict = *strict
 		sw.ExampleMaxChars = *exampleMaxChars
-		sw.Compact = *compact
+		sw.Compact = !*nonCompact
 
 		if err := sw.WriteNode(root); err != nil {
 			log.Fatal(err)
