@@ -155,7 +155,7 @@ Examples:
 $ cat fixtures/a.xml
 <a></a>
 
-$ zek < fixtures/a.xml
+$ zek -C < fixtures/a.xml
 type A struct {
     XMLName xml.Name `xml:"a"`
     Text    string   `xml:",chardata"`
@@ -201,7 +201,7 @@ func main() {
 	fmt.Println(string(b))
 }
 
-$ zek -p < fixtures/a.xml > sample.go && go run sample.go < fixtures/a.xml | jq . && rm sample.go
+$ zek -C -p < fixtures/a.xml > sample.go && go run sample.go < fixtures/a.xml | jq . && rm sample.go
 {
   "XMLName": {
     "Space": "",
@@ -215,21 +215,18 @@ More complex example:
 
 ```go
 $ zek < fixtures/d.xml
+// Root was generated 2019-06-11 16:27:04 by tir on hayiti.
 type Root struct {
-	XMLName xml.Name `xml:"root"`
-	Text    string   `xml:",chardata"`
-	A       []struct {
-		Text string `xml:",chardata"`
-		B    []struct {
-			Text string `xml:",chardata"`
-			C    struct {
-				Text string `xml:",chardata"`
-			} `xml:"c"`
-			D struct {
-				Text string `xml:",chardata"`
-			} `xml:"d"`
-		} `xml:"b"`
-	} `xml:"a"`
+        XMLName xml.Name `xml:"root"`
+        Text    string   `xml:",chardata"`
+        A       []struct {
+                Text string `xml:",chardata"`
+                B    []struct {
+                        Text string `xml:",chardata"`
+                        C    string `xml:"c"`
+                        D    string `xml:"d"`
+                } `xml:"b"`
+        } `xml:"a"`
 }
 
 $ zek -p < fixtures/d.xml > sample.go && go run sample.go < fixtures/d.xml | jq . && rm sample.go
@@ -245,21 +242,13 @@ $ zek -p < fixtures/d.xml > sample.go && go run sample.go < fixtures/d.xml | jq 
       "B": [
         {
           "Text": "\n    \n  ",
-          "C": {
-            "Text": "Hi"
-          },
-          "D": {
-            "Text": ""
-          }
+          "C": "Hi",
+          "D": ""
         },
         {
           "Text": "\n    \n    \n  ",
-          "C": {
-            "Text": "World"
-          },
-          "D": {
-            "Text": ""
-          }
+          "C": "World",
+          "D": ""
         }
       ]
     },
@@ -268,12 +257,8 @@ $ zek -p < fixtures/d.xml > sample.go && go run sample.go < fixtures/d.xml | jq 
       "B": [
         {
           "Text": "\n    \n  ",
-          "C": {
-            "Text": "Hello"
-          },
-          "D": {
-            "Text": ""
-          }
+          "C": "Hello",
+          "D": ""
         }
       ]
     },
@@ -282,12 +267,8 @@ $ zek -p < fixtures/d.xml > sample.go && go run sample.go < fixtures/d.xml | jq 
       "B": [
         {
           "Text": "\n    \n  ",
-          "C": {
-            "Text": ""
-          },
-          "D": {
-            "Text": "World"
-          }
+          "C": "",
+          "D": "World"
         }
       ]
     }
@@ -299,186 +280,78 @@ Annotate with comments:
 
 ```go
 $ zek -e < fixtures/l.xml
+// Records was generated 2019-06-11 16:29:35 by tir on hayiti.
 type Records struct {
-	XMLName xml.Name `xml:"Records"`
-	Text    string   `xml:",chardata"` // \n
-	Xsi     string   `xml:"xsi,attr"`
-	Record  []struct {
-		Text   string `xml:",chardata"`
-		Header struct {
-			Text       string `xml:",chardata"`
-			Status     string `xml:"status,attr"`
-			Identifier struct {
-				Text string `xml:",chardata"` // oai:ojs.localhost:article...
-			} `xml:"identifier"`
-			Datestamp struct {
-				Text string `xml:",chardata"` // 2009-06-24T14:48:23Z, 200...
-			} `xml:"datestamp"`
-			SetSpec struct {
-				Text string `xml:",chardata"` // eppp:ART, eppp:ART, eppp:...
-			} `xml:"setSpec"`
-		} `xml:"header"`
-		Metadata struct {
-			Text    string `xml:",chardata"`
-			Rfc1807 struct {
-				Text           string `xml:",chardata"`
-				Xmlns          string `xml:"xmlns,attr"`
-				Xsi            string `xml:"xsi,attr"`
-				SchemaLocation string `xml:"schemaLocation,attr"`
-				BibVersion     struct {
-					Text string `xml:",chardata"` // v2, v2, v2, v2, v2, v2, v...
-				} `xml:"bib-version"`
-				ID struct {
-					Text string `xml:",chardata"` // http://journals.zpid.de/i...
-				} `xml:"id"`
-				Entry struct {
-					Text string `xml:",chardata"` // 2009-06-24T14:48:23Z, 200...
-				} `xml:"entry"`
-				Organization []struct {
-					Text string `xml:",chardata"` // Proceedings of the Worksh...
-				} `xml:"organization"`
-				Title struct {
-					Text string `xml:",chardata"` // Introduction and some Ide...
-				} `xml:"title"`
-				Type struct {
-					Text string `xml:",chardata"`
-				} `xml:"type"`
-				Author []struct {
-					Text string `xml:",chardata"` // KRAMPEN, Günter, CARBON,...
-				} `xml:"author"`
-				Copyright struct {
-					Text string `xml:",chardata"` // Das Urheberrecht liegt be...
-				} `xml:"copyright"`
-				OtherAccess struct {
-					Text string `xml:",chardata"` // url:http://journals.zpid....
-				} `xml:"other_access"`
-				Keyword struct {
-					Text string `xml:",chardata"`
-				} `xml:"keyword"`
-				Period []struct {
-					Text string `xml:",chardata"`
-				} `xml:"period"`
-				Monitoring struct {
-					Text string `xml:",chardata"`
-				} `xml:"monitoring"`
-				Language struct {
-					Text string `xml:",chardata"` // en, en, en, en, en, en, e...
-				} `xml:"language"`
-				Abstract struct {
-					Text string `xml:",chardata"` // After a short description...
-				} `xml:"abstract"`
-				Date struct {
-					Text string `xml:",chardata"` // 2009-06-22 12:12:00, 2009...
-				} `xml:"date"`
-			} `xml:"rfc1807"`
-		} `xml:"metadata"`
-		About struct {
-			Text string `xml:",chardata"`
-		} `xml:"about"`
-	} `xml:"Record"`
-}
-```
-
-The above struct can be made a bit more compact - use the `-c` flag (since 0.1.4) to see how:
-
-```go
-$ zek -c -e < fixtures/l.xml
-// Records was generated 2018-08-09 14:10:25 by tir on sol.
-type Records struct {
-    XMLName xml.Name `xml:"Records"`
-    Text    string   `xml:",chardata"` // \n
-    Xsi     string   `xml:"xsi,attr"`
-    Record  []struct {
-        Text   string `xml:",chardata"`
-        Header struct {
-            Text       string `xml:",chardata"`
-            Status     string `xml:"status,attr"`
-            Identifier string `xml:"identifier"` // oai:ojs.localhost:article...
-            Datestamp  string `xml:"datestamp"`  // 2009-06-24T14:48:23Z, 200...
-            SetSpec    string `xml:"setSpec"`    // eppp:ART, eppp:ART, eppp:...
-        } `xml:"header"`
-        Metadata struct {
-            Text    string `xml:",chardata"`
-            Rfc1807 struct {
-                Text           string   `xml:",chardata"`
-                Xmlns          string   `xml:"xmlns,attr"`
-                Xsi            string   `xml:"xsi,attr"`
-                SchemaLocation string   `xml:"schemaLocation,attr"`
-                BibVersion     string   `xml:"bib-version"`  // v2, v2, v2, v2, v2, v2, v...
-                ID             string   `xml:"id"`           // http://journals.zpid.de/i...
-                Entry          string   `xml:"entry"`        // 2009-06-24T14:48:23Z, 200...
-                Organization   []string `xml:"organization"` // Proceedings of the Worksh...
-                Title          string   `xml:"title"`        // Introduction and some Ide...
-                Type           string   `xml:"type"`
-                Author         []string `xml:"author"`       // KRAMPEN, Günter, CARBON,...
-                Copyright      string   `xml:"copyright"`    // Das Urheberrecht liegt be...
-                OtherAccess    string   `xml:"other_access"` // url:http://journals.zpid....
-                Keyword        string   `xml:"keyword"`
-                Period         []string `xml:"period"`
-                Monitoring     string   `xml:"monitoring"`
-                Language       string   `xml:"language"` // en, en, en, en, en, en, e...
-                Abstract       string   `xml:"abstract"` // After a short description...
-                Date           string   `xml:"date"`     // 2009-06-22 12:12:00, 2009...
-            } `xml:"rfc1807"`
-        } `xml:"metadata"`
-        About string `xml:"about"`
-    } `xml:"Record"`
+        XMLName xml.Name `xml:"Records"`
+        Text    string   `xml:",chardata"` // \n
+        Xsi     string   `xml:"xsi,attr"`
+        Record  []struct {
+                Text   string `xml:",chardata"`
+                Header struct {
+                        Text       string `xml:",chardata"`
+                        Status     string `xml:"status,attr"`
+                        Identifier string `xml:"identifier"` // oai:ojs.localhost:article...
+                        Datestamp  string `xml:"datestamp"`  // 2009-06-24T14:48:23Z, 200...
+                        SetSpec    string `xml:"setSpec"`    // eppp:ART, eppp:ART, eppp:...
+                } `xml:"header"`
+                Metadata struct {
+                        Text    string `xml:",chardata"`
+                        Rfc1807 struct {
+                                Text           string   `xml:",chardata"`
+                                Xmlns          string   `xml:"xmlns,attr"`
+                                Xsi            string   `xml:"xsi,attr"`
+                                SchemaLocation string   `xml:"schemaLocation,attr"`
+                                BibVersion     string   `xml:"bib-version"`  // v2, v2, v2...
+                                ID             string   `xml:"id"`           // http://jou...
+                                Entry          string   `xml:"entry"`        // 2009-06-24...
+                                Organization   []string `xml:"organization"` // Proceeding...
+                                Title          string   `xml:"title"`        // Introducti...
+                                Type           string   `xml:"type"`
+                                Author         []string `xml:"author"`       // KRAMPEN, G..
+                                Copyright      string   `xml:"copyright"`    // Das Urhebe...
+                                OtherAccess    string   `xml:"other_access"` // url:http:/...
+                                Keyword        string   `xml:"keyword"`
+                                Period         []string `xml:"period"`
+                                Monitoring     string   `xml:"monitoring"`
+                                Language       string   `xml:"language"` // en, en, en, e...
+                                Abstract       string   `xml:"abstract"` // After a short...
+                                Date           string   `xml:"date"`     // 2009-06-22 12...
+                        } `xml:"rfc1807"`
+                } `xml:"metadata"`
+                About string `xml:"about"`
+        } `xml:"Record"`
 }
 ```
 
 ## Only consider a nested element
 
 ```go
-$ zek -t thesis < fixtures/z.xml
-type Thesis struct {
-	XMLName        xml.Name `xml:"thesis"`
-	Text           string   `xml:",chardata"`
-	Xmlns          string   `xml:"xmlns,attr"`
-	Doc            string   `xml:"doc,attr"`
-	Xsi            string   `xml:"xsi,attr"`
-	SchemaLocation string   `xml:"schemaLocation,attr"`
-	Title          []struct {
-		Text string `xml:",chardata"`
-	} `xml:"title"`
-	Creator []struct {
-		Text string `xml:",chardata"`
-	} `xml:"creator"`
-	Date []struct {
-		Text string `xml:",chardata"`
-	} `xml:"date"`
-	Identifier []struct {
-		Text string `xml:",chardata"`
-	} `xml:"identifier"`
-	Language []struct {
-		Text string `xml:",chardata"`
-	} `xml:"language"`
-	Rights []struct {
-		Text string `xml:",chardata"`
-	} `xml:"rights"`
-	Coverage []struct {
-		Text string `xml:",chardata"`
-	} `xml:"coverage"`
-	Publisher []struct {
-		Text string `xml:",chardata"`
-	} `xml:"publisher"`
-	Contributor []struct {
-		Text string `xml:",chardata"`
-	} `xml:"contributor"`
-	Subject []struct {
-		Text string `xml:",chardata"`
-	} `xml:"subject"`
-	Description []struct {
-		Text string `xml:",chardata"`
-	} `xml:"description"`
-	Source struct {
-		Text string `xml:",chardata"`
-	} `xml:"source"`
-	Type struct {
-		Text string `xml:",chardata"`
-	} `xml:"type"`
-	Relation []struct {
-		Text string `xml:",chardata"`
-	} `xml:"relation"`
+$ zek -t metadata fixtures/z.xml
+// Metadata was generated 2019-06-11 16:33:26 by tir on hayiti.
+type Metadata struct {
+        XMLName xml.Name `xml:"metadata"`
+        Text    string   `xml:",chardata"`
+        Dc      struct {
+                Text  string `xml:",chardata"`
+                Xmlns string `xml:"xmlns,attr"`
+                Title struct {
+                        Text  string `xml:",chardata"`
+                        Xmlns string `xml:"xmlns,attr"`
+                } `xml:"title"`
+                Identifier struct {
+                        Text  string `xml:",chardata"`
+                        Xmlns string `xml:"xmlns,attr"`
+                } `xml:"identifier"`
+                Rights struct {
+                        Text  string `xml:",chardata"`
+                        Xmlns string `xml:"xmlns,attr"`
+                        Lang  string `xml:"lang,attr"`
+                } `xml:"rights"`
+                AccessRights struct {
+                        Text  string `xml:",chardata"`
+                        Xmlns string `xml:"xmlns,attr"`
+                } `xml:"accessRights"`
+        } `xml:"dc"`
 }
 ```
 
