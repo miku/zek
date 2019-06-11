@@ -7,7 +7,7 @@ Zek is a **prototype** for creating a Go [struct](https://golang.org/ref/spec#St
 Given some [XML](https://raw.githubusercontent.com/miku/zek/master/fixtures/e.xml), run:
 
 ```go
-$ curl -s https://raw.githubusercontent.com/miku/zek/master/fixtures/e.xml | zek -e -c
+$ curl -s https://raw.githubusercontent.com/miku/zek/master/fixtures/e.xml | zek -e
 // Rss was generated 2018-08-30 20:24:14 by tir on sol.
 type Rss struct {
     XMLName xml.Name `xml:"rss"`

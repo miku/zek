@@ -26,7 +26,7 @@ var (
 	exampleMaxChars      = flag.Int("x", 25, "max chars for example")
 	version              = flag.Bool("version", false, "show version")
 	structName           = flag.String("n", "", "use a different name for the top-level struct")
-	compact              = flag.Bool("c", false, "emit more compact struct")
+	compact              = flag.Bool("c", false, "emit more compact struct (noop, as this is the default since 0.1.7)")
 	nonCompact           = flag.Bool("C", false, "emit less compact struct")
 	uniqueExamples       = flag.Bool("u", false, "filter out duplicated examples")
 )

@@ -33,11 +33,14 @@ at https://www.onlinetool.io/xmltogo/.
 
 # OPTIONS
 
+-C
+:  Emit less compact representation. This mimicks the former default setting.
+
 -F
 :  Skip formatting. The formatter might choke on funny characters.
 
 -c
-:  Emit more compact representation. This might be the default in a future version.
+:  Emit more compact representation. This is the default as of 0.1.8.
 
 -d
 :  Emit debug output.
@@ -86,7 +89,7 @@ There are numerous examples of XML files on the web (e.g. try:
 https://www.google.com/search?q=filetype:xml+inurl:rss). Below is an example
 from a publishers publication feed.
 
-	$ curl -sL http://epubs.siam.org/rss/SJOPE8.xml | zek -e -c
+	$ curl -sL http://epubs.siam.org/rss/SJOPE8.xml | zek -e
 	// RDF was generated 2018-11-23 14:21:21 by tir on nexus.
 	type RDF struct {
 		XMLName xml.Name `xml:"RDF"`
