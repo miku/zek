@@ -68,6 +68,10 @@ type Rss struct {
 }
 ```
 
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+
+The zek tools has been developed at [Leipzig University Library](https://ub.uni-leipzig.de).
+
 ## Online
 
 Try it online at [https://www.onlinetool.io/xmltogo/](https://www.onlinetool.io/xmltogo/).
