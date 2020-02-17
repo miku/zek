@@ -2,7 +2,13 @@
 
 Zek is a **prototype** for creating a Go
 [struct](https://golang.org/ref/spec#Struct_types) from an XML document. The
-resulting struct work best for *reading* XML (see also [#14](https://github.com/miku/zek/issues/14)).
+resulting struct work best for *reading* XML (see also
+[#14](https://github.com/miku/zek/issues/14)), to create XML, you might want to
+use [something else](https://github.com/avelino/awesome-go#xml).
+
+It was developed at [@ubleipzig](https://github.com/ubleipzig) to shorten the
+time to go from raw XML to a struct that allows to access XML data in Go
+programs.
 
 > Skip the fluff, just the code.
 
