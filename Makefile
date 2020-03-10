@@ -4,12 +4,14 @@ TARGETS = zek
 PKGNAME = zek
 ARCH = amd64
 
+.PHONY: all
 all: $(TARGETS)
 
 $(TARGETS): %: cmd/%/main.go
 	go get -v ./...
 	go build -ldflags="-s -w" -v -o $@ $<
 
+.PHONY: clean
 clean:
 	rm -f $(TARGETS)
 	rm -f $(PKGNAME)*.deb
@@ -20,6 +22,7 @@ clean:
 docs/$(PKGNAME).1: docs/$(PKGNAME).md
 	pandoc -s -t man $< > $@
 
+.PHONY: deb
 deb: $(TARGETS) docs/$(PKGNAME).1
 	mkdir -p packaging/deb/$(PKGNAME)/usr/sbin
 	cp $(TARGETS) packaging/deb/$(PKGNAME)/usr/sbin
@@ -32,6 +35,7 @@ deb: $(TARGETS) docs/$(PKGNAME).1
 	cd packaging/deb && fakeroot dpkg-deb --build $(PKGNAME) .
 	mv packaging/deb/$(PKGNAME)_*.deb .
 
+.PHONY: rpm
 rpm: $(TARGETS) docs/$(PKGNAME).1
 	mkdir -p $(HOME)/rpmbuild/{BUILD,SOURCES,SPECS,RPMS}
 	cp ./packaging/rpm/$(PKGNAME).spec $(HOME)/rpmbuild/SPECS
