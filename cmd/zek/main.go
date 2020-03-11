@@ -10,8 +10,10 @@ import (
 	"io"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/miku/zek"
+	"github.com/sethgrid/pester"
 )
 
 var (
@@ -34,6 +36,9 @@ var (
 func main() {
 	flag.Parse()
 
+	// Where to read XML data from.
+	var reader io.Reader = os.Stdin
+
 	root := new(zek.Node)
 	root.MaxExamples = *maxExamples
 
@@ -42,24 +47,31 @@ func main() {
 		os.Exit(0)
 	}
 
-	// Read one or more XML files given as arguments.
+	// Read one or more XML files or URLs given as arguments.
 	if flag.NArg() > 0 {
-		var readers []io.Reader
-		for _, fn := range flag.Args() {
-			f, err := os.Open(fn)
-			if err != nil {
-				log.Fatal(err)
+		var rs []io.Reader
+		for _, v := range flag.Args() {
+			switch {
+			case strings.HasPrefix(v, "http"):
+				resp, err := pester.Get(v)
+				if err != nil {
+					log.Fatal(err)
+				}
+				defer resp.Body.Close()
+				rs = append(rs, resp.Body)
+			default:
+				f, err := os.Open(v)
+				if err != nil {
+					log.Fatal(err)
+				}
+				defer f.Close()
+				rs = append(rs, f)
 			}
-			defer f.Close()
-			readers = append(readers, f)
 		}
-		if _, err := root.ReadFromAll(readers); err != nil {
-			log.Fatal(err)
-		}
-	} else {
-		if _, err := root.ReadFrom(os.Stdin); err != nil {
-			log.Fatal(err)
-		}
+		reader = io.MultiReader(rs...)
+	}
+	if _, err := root.ReadFrom(reader); err != nil {
+		log.Fatal(err)
 	}
 
 	// Move root, if we have a tagName. Ignore unknown names.

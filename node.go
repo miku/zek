@@ -74,23 +74,6 @@ func readNode(r io.Reader, root *Node, maxExamples int) (node *Node, n int64, er
 	return root, cw.n, nil
 }
 
-// ReadFromAll builds a single node from all readers.
-func (node *Node) ReadFromAll(readers []io.Reader) (n int64, err error) {
-	root := &Node{}
-	var nr int64
-	for _, r := range readers {
-		if root, nr, err = readNode(r, root, node.MaxExamples); err != nil {
-			return n, err
-		}
-		n = n + nr
-	}
-	if len(root.Children) > 0 {
-		// Decapitate node.
-		*node = *root.Children[0]
-	}
-	return n, nil
-}
-
 // ReadFrom reads XML from a reader.
 func (node *Node) ReadFrom(r io.Reader) (int64, error) {
 	nn, n, err := readNode(r, nil, node.MaxExamples)
