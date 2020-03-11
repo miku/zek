@@ -77,7 +77,7 @@ func CreateNameFunc(upper []string) func(string) string {
 	return f
 }
 
-// StructWriter can turn a node into a struct and can be configured.
+// StructWriter can turn a node into a struct and can be configured. TODO(miku): Use templates.
 type StructWriter struct {
 	w io.Writer
 
