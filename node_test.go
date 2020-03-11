@@ -907,7 +907,7 @@ func TestNodeReadFromAll(t *testing.T) {
 		}
 
 		node := new(Node)
-		_, err := node.ReadFromAll(readers)
+		_, err := node.ReadFrom(io.MultiReader(readers...))
 		if err != c.err {
 			t.Errorf("got %v, want %v", err, c.err)
 		}
