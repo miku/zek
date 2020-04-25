@@ -35,17 +35,14 @@ var (
 
 func main() {
 	flag.Parse()
-
-	// Where to read XML data from.
-	var reader io.Reader = os.Stdin
-
-	root := new(zek.Node)
-	root.MaxExamples = *maxExamples
-
 	if *version {
 		fmt.Println(zek.Version)
 		os.Exit(0)
 	}
+	// Where to read XML data from.
+	var reader io.Reader = os.Stdin
+	root := new(zek.Node)
+	root.MaxExamples = *maxExamples
 
 	// Read one or more XML files or URLs given as arguments.
 	if flag.NArg() > 0 {
@@ -73,18 +70,15 @@ func main() {
 	if _, err := root.ReadFrom(reader); err != nil {
 		log.Fatal(err)
 	}
-
 	// Move root, if we have a tagName. Ignore unknown names.
 	if *tagName != "" {
 		if n := root.ByName(*tagName); n != nil {
 			root = n
 		}
 	}
-
 	if *structName != "" {
 		root.Name = xml.Name{Space: "", Local: *structName}
 	}
-
 	switch {
 	default:
 		var buf bytes.Buffer
@@ -95,7 +89,6 @@ func main() {
 		sw.ExampleMaxChars = *exampleMaxChars
 		sw.Compact = !*nonCompact
 		sw.UniqueExamples = *uniqueExamples
-
 		if err := sw.WriteNode(root); err != nil {
 			log.Fatal(err)
 		}

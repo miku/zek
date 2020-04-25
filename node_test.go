@@ -9,42 +9,6 @@ import (
 	"testing"
 )
 
-func TestAttrListContains(t *testing.T) {
-	var cases = []struct {
-		attrs  []xml.Attr
-		attr   xml.Attr
-		result bool
-	}{
-		{
-			attrs:  []xml.Attr{{}},
-			attr:   xml.Attr{},
-			result: true,
-		},
-		{
-			attrs:  []xml.Attr{{}},
-			attr:   xml.Attr{Name: xml.Name{Local: "id"}},
-			result: false,
-		},
-		{
-			attrs:  []xml.Attr{{Name: xml.Name{Local: "id"}}},
-			attr:   xml.Attr{Name: xml.Name{Local: "id"}},
-			result: true,
-		},
-		{
-			attrs:  []xml.Attr{{Name: xml.Name{Local: "id"}, Value: "yyy"}},
-			attr:   xml.Attr{Name: xml.Name{Local: "id"}, Value: "xxx"},
-			result: true,
-		},
-	}
-
-	for _, c := range cases {
-		got := attrListContains(c.attrs, c.attr)
-		if c.result != got {
-			t.Errorf("got %v, want %v", got, c.result)
-		}
-	}
-}
-
 func TestNodeMergeAttr(t *testing.T) {
 	var cases = []struct {
 		node   *Node

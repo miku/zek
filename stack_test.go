@@ -11,7 +11,7 @@ func TestStack(t *testing.T) {
 	s.Put(2)
 	s.Put(3)
 	if s.Len() != 3 {
-		t.Errorf("empty stack contains %d items", s.Len())
+		t.Errorf("want 3, got %d items", s.Len())
 	}
 	if v := s.Pop(); v != 3 {
 		t.Errorf("pop want 3, got %v", v)

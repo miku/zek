@@ -9,6 +9,8 @@ import (
 	"golang.org/x/net/html/charset"
 )
 
+var emptyNode = new(Node)
+
 // Node represents an element in the XML tree. It keeps track of its name,
 // attributes, childnodes and example chardata and basic statistics, e.g. how
 // often a node has been seen within its parent node.
@@ -28,19 +30,14 @@ type Node struct {
 // files). XXX: maxExamples should be factored out into options.
 func readNode(r io.Reader, root *Node, maxExamples int) (node *Node, n int64, err error) {
 	cw := countwriter{}
-	rr := io.TeeReader(r, &cw)
-
-	dec := xml.NewDecoder(rr)
+	dec := xml.NewDecoder(io.TeeReader(r, &cw))
 	dec.CharsetReader = charset.NewReaderLabel
 	dec.Strict = false
-
 	if root == nil {
 		root = &Node{}
 	}
-
 	stack := Stack{}
 	stack.Put(root)
-
 	for {
 		token, err := dec.Token()
 		if err == io.EOF {
@@ -69,7 +66,6 @@ func readNode(r io.Reader, root *Node, maxExamples int) (node *Node, n int64, er
 			}
 		}
 	}
-
 	stack.Pop()
 	return root, cw.n, nil
 }
@@ -87,21 +83,14 @@ func (node *Node) ReadFrom(r io.Reader) (int64, error) {
 	return n, nil
 }
 
-// attrListContains determines containment only on attribute name, not value.
-func attrListContains(attrs []xml.Attr, attr xml.Attr) bool {
-	for _, a := range attrs {
-		if a.Name == attr.Name {
-			return true
-		}
-	}
-	return false
-}
-
 // mergeAttr adds attributes to node, which are not already there.
 func (node *Node) mergeAttr(attr []xml.Attr) {
+LOOP:
 	for _, a := range attr {
-		if attrListContains(node.Attr, a) {
-			continue
+		for _, na := range node.Attr {
+			if a.Name == na.Name {
+				continue LOOP
+			}
 		}
 		node.Attr = append(node.Attr, a)
 	}
@@ -129,13 +118,15 @@ func (node *Node) CreateOrGetChild(name xml.Name, attr []xml.Attr) *Node {
 		node.childFreqs[name]++
 		return child
 	}
-
 	if node.childFreqs == nil {
 		node.childFreqs = make(map[xml.Name]int)
 	}
 	node.childFreqs[name]++
-
-	n := &Node{Name: name, Attr: attr, MaxExamples: node.MaxExamples}
+	n := &Node{
+		Name:        name,
+		Attr:        attr,
+		MaxExamples: node.MaxExamples,
+	}
 	node.Children = append(node.Children, n)
 	return n
 }
@@ -158,7 +149,7 @@ func (node *Node) End() {
 // Height returns the height of the tree. A tree with zero nodes has height
 // zero, a single node tree has height 1.
 func (node *Node) Height() int {
-	if node == nil || reflect.DeepEqual(node, new(Node)) {
+	if node == nil || reflect.DeepEqual(node, emptyNode) {
 		return 0
 	}
 	max := 0

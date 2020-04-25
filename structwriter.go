@@ -38,24 +38,6 @@ func (sew stickyErrWriter) Write(p []byte) (n int, err error) {
 	return
 }
 
-// stringSliceContains returns true, if a string is found in a slice.
-func stringSliceContains(ss []string, s string) bool {
-	for _, v := range ss {
-		if v == s {
-			return true
-		}
-	}
-	return false
-}
-
-// truncateString after n chars and append ellipsis.
-func truncateString(s string, n int, ellipsis string) string {
-	if len(s) < n {
-		return s
-	}
-	return fmt.Sprintf("%s%s", s[:n], ellipsis)
-}
-
 // CreateNameFunc returns a function that converts a tag into a canonical Go
 // name. Given list of strings will be wholly upper cased.
 func CreateNameFunc(upper []string) func(string) string {
@@ -124,7 +106,7 @@ func (sw *StructWriter) WriteNode(node *Node) (err error) {
 	if sw.w == nil {
 		return nil
 	}
-	if node == nil || reflect.DeepEqual(node, new(Node)) {
+	if node == nil || reflect.DeepEqual(node, emptyNode) {
 		return nil
 	}
 	return sw.writeNode(node, true)
@@ -303,4 +285,22 @@ func uniqueStrings(ss []string) []string {
 		}
 	}
 	return uniq
+}
+
+// stringSliceContains returns true, if a string is found in a slice.
+func stringSliceContains(ss []string, s string) bool {
+	for _, v := range ss {
+		if v == s {
+			return true
+		}
+	}
+	return false
+}
+
+// truncateString after n chars and append ellipsis.
+func truncateString(s string, n int, ellipsis string) string {
+	if len(s) < n {
+		return s
+	}
+	return fmt.Sprintf("%s%s", s[:n], ellipsis)
 }
