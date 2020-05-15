@@ -130,6 +130,7 @@ Debian and RPM packages:
 
 * https://github.com/miku/zek/releases
 
+It's in [AUR](https://aur.archlinux.org/packages/zek-bin/), too.
 
 ![](https://github.com/miku/zek/blob/master/docs/114391.png)
 
