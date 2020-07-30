@@ -6,7 +6,7 @@ resulting struct works best for *reading* XML (see also
 [#14](https://github.com/miku/zek/issues/14)), to create XML, you might want to
 use [something else](https://github.com/avelino/awesome-go#xml).
 
-It was developed at [ubleipzig](https://github.com/ubleipzig) to shorten the
+It was developed at [Leipzig University Library](https://github.com/ubleipzig) to shorten the
 time to go from raw XML to a struct that allows to access XML data in Go
 programs.
 
@@ -76,11 +76,9 @@ type Rss struct {
 }
 ```
 
-The zek tools has been developed at [Leipzig University Library](https://ub.uni-leipzig.de).
-
 ## Online
 
-Try it online at [https://www.onlinetool.io/xmltogo/](https://www.onlinetool.io/xmltogo/).
+Try it online at [https://www.onlinetool.io/xmltogo/](https://www.onlinetool.io/xmltogo/) -- thanks, [kjk](https://github.com/kjk)!
 
 ## About
 
@@ -410,7 +408,7 @@ type OAIPMH struct {
                         Header struct {
                                 Text       string `xml:",chardata"`
                                 Identifier struct {
-                                        Text string `xml:",chardata"` // aleph-publish:000000001, ...
+                                        Text string `xml:",chardata"` // aleph-pub:000000001, ...
                                 } `xml:"identifier"`
                         } `xml:"header"`
                         Metadata struct {
