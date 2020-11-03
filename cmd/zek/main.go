@@ -31,6 +31,7 @@ var (
 	compact              = flag.Bool("c", false, "emit more compact struct (noop, as this is the default since 0.1.7)")
 	nonCompact           = flag.Bool("C", false, "emit less compact struct")
 	uniqueExamples       = flag.Bool("u", false, "filter out duplicated examples")
+	omitEmptyText        = flag.Bool("m", false, "omit empty Text fields")
 )
 
 func main() {
@@ -89,6 +90,7 @@ func main() {
 		sw.ExampleMaxChars = *exampleMaxChars
 		sw.Compact = !*nonCompact
 		sw.UniqueExamples = *uniqueExamples
+		sw.OmitEmptyText = *omitEmptyText
 		if err := sw.WriteNode(root); err != nil {
 			log.Fatal(err)
 		}

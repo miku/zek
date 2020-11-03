@@ -73,6 +73,7 @@ type StructWriter struct {
 	WithJSONTags      bool                // Include JSON struct tags.
 	Compact           bool                // Emit more compact struct.
 	UniqueExamples    bool                // Filter out duplicated examples
+	OmitEmptyText     bool                // Don't generate Text fields if no example elements have chardata.
 }
 
 // NewStructWriter can write a node to a given writer. Default list of
@@ -221,7 +222,9 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 	if top {
 		sw.writeNameField(sew, node)
 	}
-	sw.writeChardataField(sew, node)
+	if !sw.OmitEmptyText || len(node.Examples) > 0 {
+		sw.writeChardataField(sew, node)
+	}
 
 	// Helper to check for name clash of attribute with any generated field name.
 	isValidName := func(name string) bool {

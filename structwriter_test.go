@@ -55,6 +55,7 @@ func TestWriteNode(t *testing.T) {
 		input          string // Input XML filename.
 		result         string // Generated struct filename.
 		withComments   bool
+		omitEmptyText  bool
 		uniqueExamples bool
 		err            error
 	}{
@@ -131,6 +132,14 @@ func TestWriteNode(t *testing.T) {
 			uniqueExamples: true,
 			err:            nil,
 		},
+		{
+			input:          "testdata/w.14.xml",
+			result:         "testdata/w.14.go",
+			withComments:   true,
+			uniqueExamples: true,
+			omitEmptyText:  true,
+			err:            nil,
+		},
 	}
 
 	for _, c := range cases {
@@ -151,6 +160,7 @@ func TestWriteNode(t *testing.T) {
 		sw := NewStructWriter(&buf)
 		sw.WithComments = c.withComments
 		sw.UniqueExamples = c.uniqueExamples
+		sw.OmitEmptyText = c.omitEmptyText
 
 		if err := sw.WriteNode(node); err != c.err {
 			t.Errorf("WriteNode failed: got %v, want %v", err, c.err)
