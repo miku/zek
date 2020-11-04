@@ -157,5 +157,5 @@ from a publishers publication feed.
 
 # CONTRIBUTORS
 
-[Mateusz Burniak](https://github.com/matbur)
-
+* [Mateusz Burniak](https://github.com/matbur)
+* [Christian G. Warden](https://github.com/cwarden)
