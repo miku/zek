@@ -51,6 +51,9 @@ at https://www.onlinetool.io/xmltogo/.
 -j
 :  Add tags for JSON as well.
 
+-m
+:  Omit empty Text fields
+
 -max-examples *INT*
 :  Limit the number of examples (default 10).
 
