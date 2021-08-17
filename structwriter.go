@@ -31,6 +31,7 @@ import (
 	"reflect"
 	"strings"
 	"time"
+	"unicode"
 )
 
 var (
@@ -75,7 +76,13 @@ func CreateNameFunc(upper []string) func(string) string {
 				capped = append(capped, strings.Title(s))
 			}
 		}
-		return strings.Join(capped, "")
+		goName := strings.Join(capped, "")
+		// Do basic sanitization, e.g. prefix numbers;
+		// https://golang.org/ref/spec#Identifiers.
+		if len(goName) > 0 && !unicode.IsLetter(rune(goName[0])) {
+			goName = "V" + goName
+		}
+		return goName
 	}
 	return f
 }

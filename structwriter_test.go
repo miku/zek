@@ -161,6 +161,11 @@ func TestWriteNode(t *testing.T) {
 			omitEmptyText:  true,
 			err:            nil,
 		},
+		{
+			input:  "testdata/w.15.xml",
+			result: "testdata/w.15.go",
+			err:    nil,
+		},
 	}
 
 	for _, c := range cases {
