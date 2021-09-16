@@ -455,9 +455,11 @@ type OAIPMH struct {
 
 If you want in include generated file in the build process, e.g. with [go
 generate](https://go.dev/blog/generate), you may find `-P`, `-N` and `-o`
-helpful:
+helpful.
 
-```
+```sh
+$ cat fixtures/b.xml
+<a><b></b></a>
 $ zek -P mypkg -N "DO NOT EDIT" -o data.go < fixtures/b.xml
 ```
 
