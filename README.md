@@ -460,6 +460,11 @@ helpful.
 ```sh
 $ cat fixtures/b.xml
 <a><b></b></a>
+```
+
+Run on the command like of via go generate:
+
+```sh
 $ zek -P mypkg -N "DO NOT EDIT" -o data.go < fixtures/b.xml
 ```
 
