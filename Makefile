@@ -18,6 +18,7 @@ clean:
 	rm -f $(PKGNAME)-*.rpm
 	rm -rf packaging/deb/$(PKGNAME)/usr
 	rm -f docs/$(PKGNAME).1
+	rm -rf dist
 
 docs/$(PKGNAME).1: docs/$(PKGNAME).md
 	pandoc -s -t man $< > $@
