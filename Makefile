@@ -3,6 +3,7 @@ SHELL = /bin/bash
 TARGETS = zek
 PKGNAME = zek
 ARCH = amd64
+VERSION = 0.1.14
 
 .PHONY: all
 all: $(TARGETS)
@@ -44,4 +45,13 @@ rpm: $(TARGETS) docs/$(PKGNAME).1
 	cp docs/$(PKGNAME).1 $(HOME)/rpmbuild/BUILD
 	./packaging/rpm/buildrpm.sh $(PKGNAME)
 	cp $(HOME)/rpmbuild/RPMS/x86_64/$(PKGNAME)*.rpm .
+
+.PHONY: update-version
+update-version:
+	sed -i -e 's@^const Version =.*@const Version = "$(VERSION)"@' version.go
+	sed -i -e 's@^Version:.*@Version: $(VERSION)@' packaging/deb/zek/DEBIAN/control
+	sed -i -e 's@^Version:.*@Version: $(VERSION)@' packaging/deb/control.amd64
+	sed -i -e 's@^Version:.*@Version: $(VERSION)@' packaging/deb/control.any
+	sed -i -e 's@^Version:.*@Version: $(VERSION)@' packaging/deb/control.amd64
+	sed -i -e 's@^Version:.*@Version: $(VERSION)@' packaging/rpm/zek.spec
 
