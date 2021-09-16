@@ -1,0 +1,8 @@
+image: archlinux
+packages:
+  - go
+tasks:
+  - test: |
+      go get ./...
+      go test -v ./...
+
