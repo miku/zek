@@ -26,7 +26,7 @@ var (
 	skipFormatting       = flag.Bool("F", false, "skip formatting")
 	strict               = flag.Bool("s", false, "strict parsing and writing")
 	exampleMaxChars      = flag.Int("x", 25, "max chars for example")
-	version              = flag.Bool("version", false, "show version")
+	showVersion          = flag.Bool("version", false, "show version")
 	structName           = flag.String("n", "", "use a different name for the top-level struct")
 	compact              = flag.Bool("c", false, "emit more compact struct (noop, as this is the default since 0.1.7)")
 	nonCompact           = flag.Bool("C", false, "emit less compact struct")
@@ -39,7 +39,7 @@ var (
 
 func main() {
 	flag.Parse()
-	if *version {
+	if *showVersion {
 		fmt.Println(zek.Version)
 		os.Exit(0)
 	}
