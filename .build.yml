@@ -4,9 +4,8 @@ packages:
 sources:
   - https://github.com/miku/zek.git
 tasks:
-  - setup: |
-      cd zek
   - test: |
+      cd zek
       go get ./...
       go test -v ./...
 
