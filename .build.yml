@@ -1,7 +1,11 @@
 image: archlinux
 packages:
   - go
+sources:
+  - https://github.com/miku/zek.git
 tasks:
+  - setup: |
+      cd zek
   - test: |
       go get ./...
       go test -v ./...
