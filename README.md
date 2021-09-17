@@ -82,7 +82,7 @@ Try it online at [https://www.onlinetool.io/xmltogo/](https://www.onlinetool.io/
 
 ## About
 
-[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![builds.sr.ht status](https://builds.sr.ht/~miku/zek.svg)](https://builds.sr.ht/~miku/zek?) [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 
 Upsides:
 
