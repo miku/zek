@@ -33,6 +33,9 @@ at https://www.onlinetool.io/xmltogo/.
 
 # OPTIONS
 
+-B
+:  Use a fixed banner string (e.g. for CI).
+
 -C
 :  Emit less compact representation. This mimicks the former default setting.
 

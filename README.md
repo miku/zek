@@ -139,6 +139,7 @@ It's in [AUR](https://aur.archlinux.org/packages/zek-bin/), too.
 ```shell
 $ zek -h
 Usage of zek:
+  -B    use a fixed banner string (e.g. for CI)
   -C    emit less compact struct
   -F    skip formatting
   -P string
