@@ -172,8 +172,8 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Fprintln(writer, string(b))
+		fmt.Fprintf(writer, string(b))
 	} else {
-		fmt.Fprintln(writer, buf.String())
+		fmt.Fprintf(writer, buf.String())
 	}
 }
