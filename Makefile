@@ -46,6 +46,12 @@ rpm: $(TARGETS) docs/$(PKGNAME).1
 	./packaging/rpm/buildrpm.sh $(PKGNAME)
 	cp $(HOME)/rpmbuild/RPMS/x86_64/$(PKGNAME)*.rpm .
 
+.PHONY: release
+release:
+	@export GITHUB_TOKEN="..."
+	@echo go tag $(VERSION)
+	@echo goreleaser release --rm-dist
+
 .PHONY: update-version
 update-version:
 	sed -i -e 's@^const Version =.*@const Version = "$(VERSION)"@' version.go
