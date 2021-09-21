@@ -34,6 +34,7 @@ var (
 	omitEmptyText        = flag.Bool("m", false, "omit empty Text fields")
 	outputFile           = flag.String("o", "", "if set, write to output file, not stdout")
 	packageName          = flag.String("P", "", "if set, write out struct within a package with the given name")
+	fixedBanner          = flag.Bool("B", false, "use a fixed banner string (e.g. for CI)")
 )
 
 func main() {
@@ -92,16 +93,19 @@ func main() {
 		defer f.Close()
 		writer = f
 	}
+	sw := zek.NewStructWriter(&buf)
+	sw.WithComments = *withComments
+	sw.WithJSONTags = *withJSONTags
+	sw.Strict = *strict
+	sw.ExampleMaxChars = *exampleMaxChars
+	sw.Compact = !*nonCompact
+	sw.UniqueExamples = *uniqueExamples
+	sw.OmitEmptyText = *omitEmptyText
+	if *fixedBanner {
+		sw.Banner = "generated automatically."
+	}
 	switch {
 	default:
-		sw := zek.NewStructWriter(&buf)
-		sw.WithComments = *withComments
-		sw.WithJSONTags = *withJSONTags
-		sw.Strict = *strict
-		sw.ExampleMaxChars = *exampleMaxChars
-		sw.Compact = !*nonCompact
-		sw.UniqueExamples = *uniqueExamples
-		sw.OmitEmptyText = *omitEmptyText
 		if err := sw.WriteNode(root); err != nil {
 			log.Fatal(err)
 		}
@@ -119,11 +123,6 @@ func main() {
 
 			import "encoding/xml"
 		`, *packageName)
-		sw := zek.NewStructWriter(&buf)
-		sw.WithComments = *withComments
-		sw.Strict = *strict
-		sw.ExampleMaxChars = *exampleMaxChars
-		sw.Compact = !*nonCompact
 		if err := sw.WriteNode(root); err != nil {
 			log.Fatal(err)
 		}
@@ -141,11 +140,6 @@ func main() {
 				"golang.org/x/net/html/charset"
 			)
 		`)
-		sw := zek.NewStructWriter(&buf)
-		sw.WithComments = *withComments
-		sw.Strict = *strict
-		sw.ExampleMaxChars = *exampleMaxChars
-		sw.Compact = !*nonCompact
 		if err := sw.WriteNode(root); err != nil {
 			log.Fatal(err)
 		}
