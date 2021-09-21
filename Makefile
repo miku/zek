@@ -12,6 +12,10 @@ $(TARGETS): %: cmd/%/main.go
 	go get -v ./...
 	go build -ldflags="-s -w" -v -o $@ $<
 
+.PHONY: test
+test:
+	go test -cover -v ./...
+
 .PHONY: clean
 clean:
 	rm -f $(TARGETS)

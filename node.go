@@ -36,22 +36,23 @@ var emptyNode = new(Node)
 // attributes, childnodes and example chardata and basic statistics, e.g. how
 // often a node has been seen within its parent node.
 type Node struct {
-	Name        xml.Name   `json:"name,omitempty"`
-	Attr        []xml.Attr `json:"attr,omitempty"`
-	Examples    []string   `json:"examples,omitempty"`
-	Children    []*Node    `json:"children,omitempty"`
-	Freqs       []int      `json:"-"` // Collect number of occurrences of this node within parent.
-	MaxExamples int        `json:"-"` // Maximum number of examples to keep, gets passed to children.
-
-	childFreqs map[xml.Name]int // Count child tag occurrences, used temporarily.
+	Name        xml.Name         `json:"name,omitempty"`
+	Attr        []xml.Attr       `json:"attr,omitempty"`
+	Examples    []string         `json:"examples,omitempty"`
+	Children    []*Node          `json:"children,omitempty"`
+	Freqs       []int            `json:"-"` // Collect number of occurrences of this node within parent.
+	MaxExamples int              `json:"-"` // Maximum number of examples to keep, gets passed to children.
+	childFreqs  map[xml.Name]int // Count child tag occurrences, used temporarily.
 }
 
 // readNode reads XML from a reader and returns a parsed node. If node is
 // given, it is reused, allowing for multiple passes (e.g. from multiple
 // files). XXX: maxExamples should be factored out into options.
 func readNode(r io.Reader, root *Node, maxExamples int) (node *Node, n int64, err error) {
-	cw := countwriter{}
-	dec := xml.NewDecoder(io.TeeReader(r, &cw))
+	var (
+		cw  = countwriter{}
+		dec = xml.NewDecoder(io.TeeReader(r, &cw))
+	)
 	dec.CharsetReader = charset.NewReaderLabel
 	dec.Strict = false
 	if root == nil {
@@ -183,8 +184,8 @@ func (node *Node) Height() int {
 	return 1 + max
 }
 
-// ByName finds a node in the tree by name. Comparisons start at the current
-// node. First match is returned. If nothing matches, nil is returned.
+// ByName finds a node in the tree (dfs) by name. Comparisons start at the
+// current node. First match is returned. If nothing matches, nil is returned.
 func (node *Node) ByName(name string) *Node {
 	if node == nil {
 		return nil

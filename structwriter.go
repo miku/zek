@@ -104,8 +104,8 @@ type StructWriter struct {
 	OmitEmptyText     bool                // Don't generate Text fields if no example elements have chardata.
 }
 
-// NewStructWriter can write a node to a given writer. Default list of
-// abbreviations to wholly uppercase.
+// NewStructWriter returns a StructWriter that can write a node to a given
+// writer. Uses a default list of words to wholly uppercase.
 func NewStructWriter(w io.Writer) *StructWriter {
 	// Some info for banner.
 	usrName := "an unknown user"
@@ -152,26 +152,26 @@ func (sw *StructWriter) writeNameField(w io.Writer, node *Node) (int, error) {
 
 // writeChardataField writes a chardata field. Might add a comment as well.
 func (sw *StructWriter) writeChardataField(w io.Writer, node *Node) (int, error) {
-	isValidName := func(name string) bool {
-		for _, attr := range node.Attr {
-			if name == attr.Name.Local {
-				return false
+	var (
+		isValidName = func(name string) bool {
+			for _, attr := range node.Attr {
+				if name == attr.Name.Local {
+					return false
+				}
 			}
-		}
-		for _, child := range node.Children {
-			if name == sw.NameFunc(child.Name.Local) {
-				return false
+			for _, child := range node.Children {
+				if name == sw.NameFunc(child.Name.Local) {
+					return false
+				}
 			}
+			return true
 		}
-		return true
-	}
-
+		textFieldName string
+		s             string
+	)
 	if len(sw.TextFieldNames) == 0 {
 		return 0, fmt.Errorf("no value for chardata field specified")
 	}
-
-	var textFieldName string
-
 	for _, name := range sw.TextFieldNames {
 		if isValidName(name) {
 			textFieldName = name
@@ -181,18 +181,15 @@ func (sw *StructWriter) writeChardataField(w io.Writer, node *Node) (int, error)
 	if !isValidName(textFieldName) {
 		return 0, fmt.Errorf("name clash, text field")
 	}
-
-	var s string
 	if sw.WithJSONTags {
-		s = fmt.Sprintf("%s string `xml:\",chardata\" json:\"%s,omitempty\"`", textFieldName, strings.ToLower(textFieldName))
+		s = fmt.Sprintf("%s string `xml:\",chardata\" json:\"%s,omitempty\"`",
+			textFieldName, strings.ToLower(textFieldName))
 	} else {
 		s = fmt.Sprintf("%s string `xml:\",chardata\"`", textFieldName)
 	}
-
 	if sw.UniqueExamples {
 		node.Examples = uniqueStrings(node.Examples)
 	}
-
 	if sw.WithComments && len(node.Examples) > 0 {
 		examples := strings.Replace(strings.Join(node.Examples, ", "), "\n", " ", -1)
 		s = fmt.Sprintf("%s // %s", s, truncateString(examples, sw.ExampleMaxChars, "..."))
@@ -203,7 +200,8 @@ func (sw *StructWriter) writeChardataField(w io.Writer, node *Node) (int, error)
 // writeAttrField writes an attribute field.
 func (sw *StructWriter) writeAttrField(w io.Writer, name, typeName string, attr xml.Attr) (int, error) {
 	if sw.WithJSONTags {
-		return fmt.Fprintf(w, "%s %s `xml:\"%s,attr\" json:\"%s,omitempty\"`\n", name, typeName, attr.Name.Local, strings.ToLower(attr.Name.Local))
+		return fmt.Fprintf(w, "%s %s `xml:\"%s,attr\" json:\"%s,omitempty\"`\n",
+			name, typeName, attr.Name.Local, strings.ToLower(attr.Name.Local))
 	}
 	return fmt.Fprintf(w, "%s %s `xml:\"%s,attr\"`\n", name, typeName, attr.Name.Local)
 }
@@ -211,7 +209,8 @@ func (sw *StructWriter) writeAttrField(w io.Writer, name, typeName string, attr 
 // writeStructTag writes xml tag at the end of struct declaration.
 func (sw *StructWriter) writeStructTag(w io.Writer, node *Node) (int, error) {
 	if sw.WithJSONTags {
-		return fmt.Fprintf(w, "`xml:\"%s\" json:\"%s,omitempty\"`", node.Name.Local, strings.ToLower(node.Name.Local))
+		return fmt.Fprintf(w, "`xml:\"%s\" json:\"%s,omitempty\"`",
+			node.Name.Local, strings.ToLower(node.Name.Local))
 	}
 	return fmt.Fprintf(w, "`xml:\"%s\"`", node.Name.Local)
 }
@@ -231,11 +230,9 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 	if node.IsMultivalued() && !top {
 		io.WriteString(sew, "[]")
 	}
-
 	if sw.UniqueExamples {
 		node.Examples = uniqueStrings(node.Examples)
 	}
-
 	if sw.Compact && len(node.Children) == 0 && len(node.Attr) == 0 {
 		s := fmt.Sprintf("string `xml:\"%s\"`", node.Name.Local)
 		if sw.WithComments && len(node.Examples) > 0 {
@@ -245,7 +242,6 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 		fmt.Fprintf(sew, "%s\n", s)
 		return err
 	}
-
 	io.WriteString(sew, "struct {\n")
 	if top {
 		sw.writeNameField(sew, node)
@@ -253,7 +249,6 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 	if !sw.OmitEmptyText || len(node.Examples) > 0 {
 		sw.writeChardataField(sew, node)
 	}
-
 	// Helper to check for name clash of attribute with any generated field name.
 	isValidName := func(name string) bool {
 		if name == sw.TextFieldNames[0] {
@@ -266,7 +261,6 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 		}
 		return true
 	}
-
 	// Write attributes. XXX: Better handling of duplicate attributes.
 	written := make(map[string]bool)
 	for _, attr := range node.Attr {
@@ -291,13 +285,9 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 		sw.writeAttrField(sew, name, "string", attr)
 		written[attr.Name.Local] = true
 	}
-
-	// Write children.
 	for _, child := range node.Children {
 		sw.writeNode(child, false)
 	}
-
-	// Write outro.
 	io.WriteString(sew, "} ")
 	if !top {
 		sw.writeStructTag(sew, node)
