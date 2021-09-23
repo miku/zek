@@ -123,7 +123,7 @@ Presentations:
 ## Install
 
 ```
-$ go get github.com/miku/zek/cmd/...
+$ go install github.com/miku/zek/cmd/zek@latest
 ```
 
 Debian and RPM packages:
