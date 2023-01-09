@@ -99,7 +99,7 @@ Downsides:
 
 * experimental, early, buggy, unstable prototype,
 * no support for recursive types (similar to *Russian Doll* strategy, [[1](https://medbiq.org/std_specs/techguidelines/xmldesignguidelines.pdf#page=7)])
-* no type inference, everything is accessible as string.
+* no type inference, everything is accessible as string (without a schema, type inference may fail if the type *guess* is wrong)
 
 Bugs:
 
