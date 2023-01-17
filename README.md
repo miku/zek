@@ -114,6 +114,7 @@ Related projects:
 * https://github.com/bemasher/JSONGen
 * https://github.com/dutchcoders/XMLGen
 * https://github.com/gnewton/chidley
+* https://github.com/twpayne/go-xmlstruct
 
 And other [awesome XML utilities](https://github.com/avelino/awesome-go#xml).
 
