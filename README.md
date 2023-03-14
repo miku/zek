@@ -78,8 +78,8 @@ type Rss struct {
 
 ## Online
 
-* Try it online at [https://www.onlinetool.io/xmltogo/](https://www.onlinetool.io/xmltogo/) -- thanks, [kjk](https://github.com/kjk)!
-* Opensource wasm alternative [https://xml-to-go.github.io/](https://xml-to-go.github.io/)
+* Try online via WASM: [https://xml-to-go.github.io/](https://xml-to-go.github.io/), thanks [YaroslavPodorvanov](https://github.com/YaroslavPodorvanov)!
+* ([offline as of 03/2022](http://web.archive.org/web/20230000000000*/https://onlinetool.io/xmltogo/)) -- try it online at [https://www.onlinetool.io/xmltogo/](https://www.onlinetool.io/xmltogo/) -- thanks, [kjk](https://github.com/kjk)!
 
 ## About
 
