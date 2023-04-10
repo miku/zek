@@ -52,7 +52,7 @@ rpm: $(TARGETS) docs/$(PKGNAME).1
 
 .PHONY: release
 release:
-	@export GITHUB_TOKEN="..."
+	@echo export GITHUB_TOKEN="..."
 	@echo go tag $(VERSION)
 	@echo goreleaser release --rm-dist
 
