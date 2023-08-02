@@ -35,7 +35,7 @@ var (
 	outputFile           = flag.String("o", "", "if set, write to output file, not stdout")
 	packageName          = flag.String("P", "", "if set, write out struct within a package with the given name")
 	fixedBanner          = flag.Bool("B", false, "use a fixed banner string (e.g. for CI)")
-	readAtMost           = flag.Int64("S", 0, "read at most this many bytes, approximately (0=unlimited)")
+	readAtMost           = flag.Int64("S", 0, "read at most this many tags, approximately (0=unlimited)")
 )
 
 func main() {
@@ -76,7 +76,7 @@ func main() {
 	}
 	opts := zek.ReadOpts{
 		MaxExamples: *maxExamples,
-		ReadAtMost:  *readAtMost,
+		MaxTokens:   *readAtMost,
 	}
 	if _, err := root.ReadFrom(reader, &opts); err != nil {
 		log.Fatal(err)

@@ -48,7 +48,7 @@ type Node struct {
 // ReadOpts groups options for parsing.
 type ReadOpts struct {
 	MaxExamples int
-	ReadAtMost  int64
+	MaxTokens   int64
 }
 
 // readNode reads XML from a reader and returns a parsed node. If node is
@@ -66,6 +66,7 @@ func readNode(r io.Reader, root *Node, opts *ReadOpts) (node *Node, n int64, err
 	}
 	stack := Stack{}
 	stack.Put(root)
+	var i int64
 OUTER:
 	for {
 		token, err := dec.Token()
@@ -75,6 +76,7 @@ OUTER:
 		if err != nil {
 			return root, cw.n, err
 		}
+		i++
 		switch t := token.(type) {
 		case xml.StartElement:
 			parent := stack.Peek().(*Node)
@@ -83,7 +85,7 @@ OUTER:
 		case xml.EndElement:
 			n := stack.Pop().(*Node)
 			n.End()
-			if opts.ReadAtMost > 0 && cw.n > opts.ReadAtMost {
+			if opts.MaxTokens > 0 && i > opts.MaxTokens {
 				break OUTER
 			}
 		case xml.CharData:

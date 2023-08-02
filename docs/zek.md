@@ -76,7 +76,7 @@ at https://www.onlinetool.io/xmltogo/.
 :  Strict parsing.
 
 -S
-: raed at most this many bytes, approximately (0=unlimited)
+: raed at most this many tokens, approximately (0=unlimited)
 
 -t
 :  Emit struct for tag matching this name.
