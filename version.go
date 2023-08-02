@@ -22,4 +22,4 @@
 package zek
 
 // Version of application.
-const Version = "0.1.20"
+const Version = "0.1.21"
