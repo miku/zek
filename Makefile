@@ -3,7 +3,7 @@ SHELL = /bin/bash
 TARGETS = zek
 PKGNAME = zek
 ARCH = amd64
-VERSION = 0.1.19
+VERSION = 0.1.20
 
 .PHONY: all
 all: $(TARGETS)

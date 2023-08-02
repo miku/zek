@@ -1,5 +1,5 @@
 Package: zek
-Version: 0.1.19
+Version: 0.1.20
 Section: utils
 Priority: optional
 Architecture: amd64

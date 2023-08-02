@@ -1,6 +1,6 @@
 Summary:    Generate a Go struct from an XML document.
 Name:       zek
-Version: 0.1.19
+Version: 0.1.20
 Release:    0
 License:    GPL
 BuildArch:  x86_64
