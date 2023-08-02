@@ -35,6 +35,7 @@ var (
 	outputFile           = flag.String("o", "", "if set, write to output file, not stdout")
 	packageName          = flag.String("P", "", "if set, write out struct within a package with the given name")
 	fixedBanner          = flag.Bool("B", false, "use a fixed banner string (e.g. for CI)")
+	readAtMost           = flag.Int("S", 1<<30, "read at most this many bytes, approximately")
 )
 
 func main() {

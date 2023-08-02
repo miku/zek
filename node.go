@@ -92,7 +92,7 @@ func readNode(r io.Reader, root *Node, maxExamples int) (node *Node, n int64, er
 	return root, cw.n, nil
 }
 
-// ReadFrom reads XML from a reader.
+// ReadFrom reads XML from a reader. TODO: pass read options.
 func (node *Node) ReadFrom(r io.Reader) (int64, error) {
 	nn, n, err := readNode(r, nil, node.MaxExamples)
 	if err != nil {
