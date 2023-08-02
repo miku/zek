@@ -146,6 +146,8 @@ Usage of zek:
   -F    skip formatting
   -P string
         if set, write out struct within a package with the given name
+  -S int
+        read at most this many bytes, approximately (0=unlimited)
   -c    emit more compact struct (noop, as this is the default since 0.1.7)
   -d    debug output
   -e    add comments with example

@@ -45,10 +45,16 @@ type Node struct {
 	childFreqs  map[xml.Name]int // Count child tag occurrences, used temporarily.
 }
 
+// ReadOpts groups options for parsing.
+type ReadOpts struct {
+	MaxExamples int
+	ReadAtMost  int64
+}
+
 // readNode reads XML from a reader and returns a parsed node. If node is
 // given, it is reused, allowing for multiple passes (e.g. from multiple
 // files). XXX: maxExamples should be factored out into options.
-func readNode(r io.Reader, root *Node, maxExamples int) (node *Node, n int64, err error) {
+func readNode(r io.Reader, root *Node, opts *ReadOpts) (node *Node, n int64, err error) {
 	var (
 		cw  = countwriter{}
 		dec = xml.NewDecoder(io.TeeReader(r, &cw))
@@ -60,6 +66,7 @@ func readNode(r io.Reader, root *Node, maxExamples int) (node *Node, n int64, er
 	}
 	stack := Stack{}
 	stack.Put(root)
+OUTER:
 	for {
 		token, err := dec.Token()
 		if err == io.EOF {
@@ -76,13 +83,16 @@ func readNode(r io.Reader, root *Node, maxExamples int) (node *Node, n int64, er
 		case xml.EndElement:
 			n := stack.Pop().(*Node)
 			n.End()
+			if opts.ReadAtMost > 0 && cw.n > opts.ReadAtMost {
+				break OUTER
+			}
 		case xml.CharData:
 			v := strings.TrimSpace(string(t))
 			if v == "" {
 				break
 			}
 			n := stack.Peek().(*Node)
-			if len(n.Examples) < maxExamples {
+			if len(n.Examples) < opts.MaxExamples {
 				// XXX: sample better, e.g. reservoir dictionary.
 				n.Examples = append(n.Examples, v)
 			}
@@ -93,8 +103,8 @@ func readNode(r io.Reader, root *Node, maxExamples int) (node *Node, n int64, er
 }
 
 // ReadFrom reads XML from a reader. TODO: pass read options.
-func (node *Node) ReadFrom(r io.Reader) (int64, error) {
-	nn, n, err := readNode(r, nil, node.MaxExamples)
+func (node *Node) ReadFrom(r io.Reader, opts *ReadOpts) (int64, error) {
+	nn, n, err := readNode(r, nil, opts)
 	if err != nil {
 		return n, err
 	}

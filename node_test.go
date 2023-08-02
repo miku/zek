@@ -419,7 +419,7 @@ func TestNodeReadFrom(t *testing.T) {
 	for _, c := range cases {
 		r := strings.NewReader(c.input)
 		node := new(Node)
-		_, err := node.ReadFrom(r)
+		_, err := node.ReadFrom(r, &ReadOpts{MaxExamples: 10})
 		if err != c.err {
 			t.Errorf("got %v, want %v", err, c.err)
 		}
@@ -462,7 +462,7 @@ func TestHeight(t *testing.T) {
 	for _, c := range cases {
 		r := strings.NewReader(c.input)
 		node := new(Node)
-		_, err := node.ReadFrom(r)
+		_, err := node.ReadFrom(r, &ReadOpts{MaxExamples: 10})
 		if err != nil {
 			t.Errorf("failed to parse tree: %s", err)
 		}
@@ -475,7 +475,7 @@ func TestHeight(t *testing.T) {
 func TestByName(t *testing.T) {
 	r := strings.NewReader(`<a><b><c></c></b></a>`)
 	root := new(Node)
-	if _, err := root.ReadFrom(r); err != nil {
+	if _, err := root.ReadFrom(r, &ReadOpts{MaxExamples: 10}); err != nil {
 		t.Errorf("got %v, want nil", err)
 	}
 
@@ -892,7 +892,7 @@ func TestNodeReadFromAll(t *testing.T) {
 		}
 
 		node := new(Node)
-		_, err := node.ReadFrom(io.MultiReader(readers...))
+		_, err := node.ReadFrom(io.MultiReader(readers...), &ReadOpts{MaxExamples: 10})
 		if err != c.err {
 			t.Errorf("got %v, want %v", err, c.err)
 		}

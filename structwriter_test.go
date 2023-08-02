@@ -178,7 +178,7 @@ func TestWriteNode(t *testing.T) {
 		node := new(Node)
 		node.MaxExamples = 10
 
-		if _, err := node.ReadFrom(f); err != nil {
+		if _, err := node.ReadFrom(f, &ReadOpts{MaxExamples: 10}); err != nil {
 			t.Errorf("failed to read XML input: %s", err)
 		}
 
