@@ -12,6 +12,7 @@ import (
 	"os"
 	"strings"
 
+	go_denest "github.com/JustDaile/go-denest-structs/pkg/core"
 	"github.com/miku/zek"
 	"github.com/sethgrid/pester"
 )
@@ -166,6 +167,11 @@ func main() {
 			}
 		`, sw.NameFunc(root.Name.Local)))
 	}
+
+	b := buf.Bytes()
+	buf.Reset()
+	go_denest.NewStructDenester(b).Process(&buf)
+
 	if !*skipFormatting {
 		b, err := format.Source(buf.Bytes())
 		if err != nil {
