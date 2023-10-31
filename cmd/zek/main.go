@@ -20,6 +20,7 @@ import (
 var (
 	withComments         = flag.Bool("e", false, "add comments with example")
 	withJSONTags         = flag.Bool("j", false, "add JSON tags")
+	denestStructs        = flag.Bool("D", false, "seperate nested structs")
 	maxExamples          = flag.Int("max-examples", 10, "limit number of examples")
 	debug                = flag.Bool("d", false, "debug output")
 	createExampleProgram = flag.Bool("p", false, "write out an example program")
@@ -168,9 +169,11 @@ func main() {
 		`, sw.NameFunc(root.Name.Local)))
 	}
 
-	b := buf.Bytes()
-	buf.Reset()
-	go_denest.NewStructDenester(b).Process(&buf)
+	if *denestStructs {
+		b := buf.Bytes()
+		buf.Reset()
+		go_denest.NewStructDenester(b).Process(&buf)
+	}
 
 	if !*skipFormatting {
 		b, err := format.Source(buf.Bytes())
