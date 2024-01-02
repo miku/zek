@@ -4,5 +4,5 @@ go 1.16
 
 require (
 	github.com/sethgrid/pester v1.2.0
-	golang.org/x/net v0.13.0
+	golang.org/x/net v0.19.0
 )
