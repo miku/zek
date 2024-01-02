@@ -1,6 +1,6 @@
 module github.com/miku/zek
 
-go 1.14
+go 1.16
 
 require (
 	github.com/sethgrid/pester v1.2.0
