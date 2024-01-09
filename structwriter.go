@@ -60,8 +60,8 @@ var (
 	}
 	// DefaultTextFieldNames list struct field names for chardata, most preferred first.
 	DefaultTextFieldNames = []string{
-		"Chardata",
 		"Text",
+		"Chardata",
 	}
 	// DefaultAttributePrefixes are used, if there are name clashes.
 	DefaultAttributePrefixes = []string{
