@@ -100,8 +100,8 @@ type StructWriter struct {
 	Strict            bool                // Whether to ignore implementation holes.
 	WithJSONTags      bool                // Include JSON struct tags.
 	Compact           bool                // Emit more compact struct.
-	ReplaceStruct     []string            // Replaces anonymous struct for <field name> into a named struct of the same name
-	UniqueExamples    bool                // Filter out duplicated examples
+	InlineStructs     bool                // Inlines children tags as anonymous structs.
+	UniqueExamples    bool                // Filter out duplicated examples.
 	OmitEmptyText     bool                // Don't generate Text fields if no example elements have chardata.
 }
 
@@ -244,17 +244,7 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 		return err
 	}
 
-	var namedStruct string
-
-	if !top {
-		for _, s := range sw.ReplaceStruct {
-			if s == sw.NameFunc(node.Name.Local) {
-				namedStruct = s
-			}
-		}
-	}
-
-	if namedStruct == "" {
+	if sw.InlineStructs || top {
 		io.WriteString(sew, "struct {\n")
 		if top {
 			sw.writeNameField(sew, node)
@@ -303,7 +293,7 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 		}
 		io.WriteString(sew, "} ")
 	} else {
-		io.WriteString(sew, namedStruct+" ")
+		io.WriteString(sew, sw.NameFunc(node.Name.Local)+" ")
 	}
 
 	if !top {
