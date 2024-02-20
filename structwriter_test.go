@@ -78,72 +78,85 @@ func TestWriteNode(t *testing.T) {
 		withComments   bool
 		omitEmptyText  bool
 		uniqueExamples bool
+		inlineStructs  bool
 		err            error
 	}{
 		{
-			input:  "testdata/w.1.xml",
-			result: "testdata/w.1.go",
-			err:    nil,
+			input:         "testdata/w.1.xml",
+			result:        "testdata/w.1.go",
+			inlineStructs: true,
+			err:           nil,
 		},
 		{
-			input:  "testdata/w.2.xml",
-			result: "testdata/w.2.go",
-			err:    nil,
+			input:         "testdata/w.2.xml",
+			result:        "testdata/w.2.go",
+			inlineStructs: true,
+			err:           nil,
 		},
 		{
-			input:  "testdata/w.3.xml",
-			result: "testdata/w.3.go",
-			err:    nil,
+			input:         "testdata/w.3.xml",
+			result:        "testdata/w.3.go",
+			inlineStructs: true,
+			err:           nil,
 		},
 		{
-			input:  "testdata/w.4.xml",
-			result: "testdata/w.4.go",
-			err:    nil,
+			input:         "testdata/w.4.xml",
+			result:        "testdata/w.4.go",
+			inlineStructs: true,
+			err:           nil,
 		},
 		{
-			input:  "testdata/w.5.xml",
-			result: "testdata/w.5.go",
-			err:    nil,
+			input:         "testdata/w.5.xml",
+			result:        "testdata/w.5.go",
+			inlineStructs: true,
+			err:           nil,
 		},
 		{
-			input:  "testdata/w.6.xml",
-			result: "testdata/w.6.go",
-			err:    nil,
+			input:         "testdata/w.6.xml",
+			result:        "testdata/w.6.go",
+			inlineStructs: true,
+			err:           nil,
 		},
 		{
-			input:  "testdata/w.7.xml",
-			result: "testdata/w.7.go",
-			err:    nil,
+			input:         "testdata/w.7.xml",
+			result:        "testdata/w.7.go",
+			inlineStructs: true,
+			err:           nil,
 		},
 		{
-			input:        "testdata/w.8.xml",
-			result:       "testdata/w.8.go",
-			withComments: true,
-			err:          nil,
+			input:         "testdata/w.8.xml",
+			result:        "testdata/w.8.go",
+			withComments:  true,
+			inlineStructs: true,
+			err:           nil,
 		},
 		{
-			input:        "testdata/w.9.xml",
-			result:       "testdata/w.9.go",
-			withComments: true,
-			err:          nil,
+			input:         "testdata/w.9.xml",
+			result:        "testdata/w.9.go",
+			withComments:  true,
+			inlineStructs: true,
+			err:           nil,
 		},
 		{
-			input:        "testdata/w.10.xml",
-			result:       "testdata/w.10.go",
-			withComments: true,
-			err:          nil,
+			input:         "testdata/w.10.xml",
+			result:        "testdata/w.10.go",
+			withComments:  true,
+			inlineStructs: true,
+			err:           nil,
 		},
 		{
-			input:        "testdata/w.11.xml",
-			result:       "testdata/w.11.go",
-			withComments: true,
-			err:          nil,
+			input:         "testdata/w.11.xml",
+			result:        "testdata/w.11.go",
+			withComments:  true,
+			inlineStructs: true,
+			err:           nil,
 		},
 		{
 			input:          "testdata/w.12.xml",
 			result:         "testdata/w.12.go",
 			withComments:   true,
 			uniqueExamples: false,
+			inlineStructs:  true,
 			err:            nil,
 		},
 		{
@@ -151,6 +164,7 @@ func TestWriteNode(t *testing.T) {
 			result:         "testdata/w.13.go",
 			withComments:   true,
 			uniqueExamples: true,
+			inlineStructs:  true,
 			err:            nil,
 		},
 		{
@@ -158,13 +172,21 @@ func TestWriteNode(t *testing.T) {
 			result:         "testdata/w.14.go",
 			withComments:   true,
 			uniqueExamples: true,
+			inlineStructs:  true,
 			omitEmptyText:  true,
 			err:            nil,
 		},
 		{
-			input:  "testdata/w.15.xml",
-			result: "testdata/w.15.go",
-			err:    nil,
+			input:         "testdata/w.15.xml",
+			result:        "testdata/w.15.go",
+			inlineStructs: true,
+			err:           nil,
+		},
+		{
+			input:         "testdata/w.16.xml",
+			result:        "testdata/w.16.go",
+			inlineStructs: false,
+			err:           nil,
 		},
 	}
 
@@ -187,6 +209,7 @@ func TestWriteNode(t *testing.T) {
 		sw.WithComments = c.withComments
 		sw.UniqueExamples = c.uniqueExamples
 		sw.OmitEmptyText = c.omitEmptyText
+		sw.InlineStructs = c.inlineStructs
 
 		if err := sw.WriteNode(node); err != c.err {
 			t.Errorf("WriteNode failed: got %v, want %v", err, c.err)
