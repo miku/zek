@@ -28,8 +28,9 @@ opposed to the otherwise great
 [*XMLGen*](https://github.com/dutchcoders/XMLGen) - and it will work on raw
 data, that has no DTD or XSD.
 
-An online version has been created by Krzysztof Kowalczyk which is available
-at https://www.onlinetool.io/xmltogo/.
+Online versions have been created by Krzysztof Kowalczyk, available at
+https://www.onlinetool.io/xmltogo/ and Yaroslav Podorvanov, available at
+https://xml-to-go.github.io/.
 
 # OPTIONS
 
