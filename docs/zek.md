@@ -43,8 +43,14 @@ https://xml-to-go.github.io/.
 -F
 :  Skip formatting. The formatter might choke on funny characters.
 
+-I
+:  Use verbatim innerxml instead of chardata.
+
 -P *NAME*
 :  If set, write out struct within a package with the given name.
+
+-S int
+: Read at most this many tags, approximately (0=unlimited).
 
 -c
 :  Emit more compact representation. This is the default as of 0.1.8.
@@ -75,9 +81,6 @@ https://xml-to-go.github.io/.
 
 -s
 :  Strict parsing.
-
--S
-: raed at most this many tokens, approximately (0=unlimited)
 
 -t
 :  Emit struct for tag matching this name.

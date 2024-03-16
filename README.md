@@ -140,10 +140,10 @@ It's in [AUR](https://aur.archlinux.org/packages/zek-bin/), too.
 
 ```shell
 $ zek -h
-Usage of zek:
   -B    use a fixed banner string (e.g. for CI)
   -C    emit less compact struct
   -F    skip formatting
+  -I    use verbatim innerxml instead of chardata
   -P string
         if set, write out struct within a package with the given name
   -S int
@@ -489,6 +489,27 @@ type A struct {
 ```
 
 Note that any existing file will be overwritten, without any warning.
+
+## Use innerxml instead of chardata
+
+You may want `chardata` or `innerxml` tag. Default is `chardata`, to use `innerxml` use the `-I` flag.
+
+```sh
+$ zek -B -I fixtures/d.xml
+// Root was generated automatically by zek 0.1.24. DO NOT EDIT.
+type Root struct {
+        XMLName xml.Name `xml:"root"`
+        Text    string   `xml:",innerxml"`
+        A       []struct {
+                Text string `xml:",innerxml"`
+                B    []struct {
+                        Text string `xml:",innerxml"`
+                        C    string `xml:"c"`
+                        D    string `xml:"d"`
+                } `xml:"b"`
+        } `xml:"a"`
+}
+```
 
 ## Misc
 
