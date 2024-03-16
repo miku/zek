@@ -36,6 +36,7 @@ var (
 	packageName          = flag.String("P", "", "if set, write out struct within a package with the given name")
 	fixedBanner          = flag.Bool("B", false, "use a fixed banner string (e.g. for CI)")
 	readAtMost           = flag.Int64("S", 0, "read at most this many tags, approximately (0=unlimited)")
+	useInnerXML          = flag.Bool("I", false, "use verbatim innerxml instead of chardata")
 )
 
 func main() {
@@ -106,6 +107,7 @@ func main() {
 	sw.Compact = !*nonCompact
 	sw.UniqueExamples = *uniqueExamples
 	sw.OmitEmptyText = *omitEmptyText
+	sw.UseInnerXML = *useInnerXML
 	if *fixedBanner {
 		sw.Banner = fmt.Sprintf(`generated automatically by zek %s. DO NOT EDIT.`, zek.Version)
 	}

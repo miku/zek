@@ -127,6 +127,7 @@ type StructWriter struct {
 	Compact           bool                // Emit more compact struct.
 	UniqueExamples    bool                // Filter out duplicated examples
 	OmitEmptyText     bool                // Don't generate Text fields if no example elements have chardata.
+	UseInnerXML       bool                // Use innerxml instead of chardata for text.
 }
 
 // NewStructWriter returns a StructWriter that can write a node to a given
@@ -206,11 +207,15 @@ func (sw *StructWriter) writeChardataField(w io.Writer, node *Node) (int, error)
 	if !isValidName(textFieldName) {
 		return 0, fmt.Errorf("name clash, text field")
 	}
+	tag := "chardata"
+	if sw.UseInnerXML {
+		tag = "innerxml"
+	}
 	if sw.WithJSONTags {
-		s = fmt.Sprintf("%s string `xml:\",chardata\" json:\"%s,omitempty\"`",
-			textFieldName, strings.ToLower(textFieldName))
+		s = fmt.Sprintf("%s string `xml:\",%s\" json:\"%s,omitempty\"`",
+			textFieldName, tag, strings.ToLower(textFieldName))
 	} else {
-		s = fmt.Sprintf("%s string `xml:\",chardata\"`", textFieldName)
+		s = fmt.Sprintf("%s string `xml:\",%s\"`", textFieldName, tag)
 	}
 	if sw.UniqueExamples {
 		node.Examples = uniqueStrings(node.Examples)
