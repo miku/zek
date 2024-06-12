@@ -125,7 +125,8 @@ type StructWriter struct {
 	Strict            bool                // Whether to ignore implementation holes.
 	WithJSONTags      bool                // Include JSON struct tags.
 	Compact           bool                // Emit more compact struct.
-	UniqueExamples    bool                // Filter out duplicated examples
+	InlineStructs     bool                // Inlines children tags as anonymous structs.
+	UniqueExamples    bool                // Filter out duplicated examples.
 	OmitEmptyText     bool                // Don't generate Text fields if no example elements have chardata.
 }
 
@@ -267,53 +268,59 @@ func (sw *StructWriter) writeNode(node *Node, top bool) (err error) {
 		fmt.Fprintf(sew, "%s\n", s)
 		return err
 	}
-	io.WriteString(sew, "struct {\n")
-	if top {
-		sw.writeNameField(sew, node)
-	}
-	if !sw.OmitEmptyText || len(node.Examples) > 0 {
-		sw.writeChardataField(sew, node)
-	}
-	// Helper to check for name clash of attribute with any generated field name.
-	isValidName := func(name string) bool {
-		if name == sw.TextFieldNames[0] {
-			return false
+
+	if sw.InlineStructs || top {
+		io.WriteString(sew, "struct {\n")
+		if top {
+			sw.writeNameField(sew, node)
 		}
-		for _, child := range node.Children {
-			if name == sw.NameFunc(child.Name.Local) {
+		if !sw.OmitEmptyText || len(node.Examples) > 0 {
+			sw.writeChardataField(sew, node)
+		}
+		// Helper to check for name clash of attribute with any generated field name.
+		isValidName := func(name string) bool {
+			if name == sw.TextFieldNames[0] {
 				return false
 			}
-		}
-		return true
-	}
-	// Write attributes. XXX: Better handling of duplicate attributes.
-	written := make(map[string]bool)
-	for _, attr := range node.Attr {
-		name := sw.NameFunc(attr.Name.Local)
-		for _, prefix := range sw.AttributePrefixes {
-			if isValidName(name) {
-				break
+			for _, child := range node.Children {
+				if name == sw.NameFunc(child.Name.Local) {
+					return false
+				}
 			}
-			name = fmt.Sprintf("%s%s", prefix, name)
+			return true
 		}
-		if !isValidName(name) {
-			return fmt.Errorf("name clash: %s", attr.Name.Local)
-		}
-		if _, ok := written[attr.Name.Local]; ok {
-			if sw.Strict {
-				log.Fatalf("[not implemented] duplicate local attribute name: %s", attr)
-			} else {
-				log.Printf("warning: duplicate local attribute name: %s", attr)
+		// Write attributes. XXX: Better handling of duplicate attributes.
+		written := make(map[string]bool)
+		for _, attr := range node.Attr {
+			name := sw.NameFunc(attr.Name.Local)
+			for _, prefix := range sw.AttributePrefixes {
+				if isValidName(name) {
+					break
+				}
+				name = fmt.Sprintf("%s%s", prefix, name)
 			}
-			continue
+			if !isValidName(name) {
+				return fmt.Errorf("name clash: %s", attr.Name.Local)
+			}
+			if _, ok := written[attr.Name.Local]; ok {
+				if sw.Strict {
+					log.Fatalf("[not implemented] duplicate local attribute name: %s", attr)
+				} else {
+					log.Printf("warning: duplicate local attribute name: %s", attr)
+				}
+				continue
+			}
+			sw.writeAttrField(sew, name, "string", attr)
+			written[attr.Name.Local] = true
 		}
-		sw.writeAttrField(sew, name, "string", attr)
-		written[attr.Name.Local] = true
+		for _, child := range node.Children {
+			sw.writeNode(child, false)
+		}
+		io.WriteString(sew, "} ")
+	} else {
+		io.WriteString(sew, sw.NameFunc(node.Name.Local)+" ")
 	}
-	for _, child := range node.Children {
-		sw.writeNode(child, false)
-	}
-	io.WriteString(sew, "} ")
+
 	if !top {
 		sw.writeStructTag(sew, node)
 	}

@@ -23,6 +23,7 @@ var (
 	debug                = flag.Bool("d", false, "debug output")
 	createExampleProgram = flag.Bool("p", false, "write out an example program")
 	tagName              = flag.String("t", "", "emit struct for tag matching this name")
+	notInlineStructs     = flag.Bool("I", false, "do not inline children tags as anonymous structs")
 	skipFormatting       = flag.Bool("F", false, "skip formatting")
 	strict               = flag.Bool("s", false, "strict parsing and writing")
 	exampleMaxChars      = flag.Int("x", 25, "max chars for example")
@@ -104,6 +105,7 @@ func main() {
 	sw.Strict = *strict
 	sw.ExampleMaxChars = *exampleMaxChars
 	sw.Compact = !*nonCompact
+	sw.InlineStructs = !*notInlineStructs
 	sw.UniqueExamples = *uniqueExamples
 	sw.OmitEmptyText = *omitEmptyText
 	if *fixedBanner {
