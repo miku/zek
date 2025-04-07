@@ -1,4 +1,5 @@
 # Make sure to check the documentation at https://goreleaser.com
+version: 2
 before:
   hooks:
     - go mod tidy
@@ -11,12 +12,14 @@ builds:
       - darwin
     main: ./cmd/zek/main.go
 archives:
-  - replacements:
-      darwin: Darwin
-      linux: Linux
-      windows: Windows
-      386: i386
-      amd64: x86_64
+  - id: zek
+    name_template: >-
+     {{- .ProjectName }}_
+     {{- title .Os }}_
+     {{- if eq .Arch "amd64" }}x86_64
+     {{- else if eq .Arch "386" }}i386
+     {{- else }}{{ .Arch }}{{ end }}
+     {{- if .Arm }}v{{ .Arm }}{{ end -}}
 checksum:
   name_template: "{{ .ProjectName }}_checksums.txt"
 snapshot:
