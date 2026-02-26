@@ -43,7 +43,6 @@ var (
 		"eissn",
 		"http",
 		"id",
-		"id",
 		"isbn",
 		"ismn",
 		"issn",
