@@ -64,7 +64,7 @@ func readNode(r io.Reader, root *Node, opts *ReadOpts) (node *Node, n int64, err
 	if root == nil {
 		root = &Node{}
 	}
-	stack := Stack{}
+	stack := Stack[*Node]{}
 	stack.Put(root)
 	var i int64
 OUTER:
@@ -79,11 +79,11 @@ OUTER:
 		i++
 		switch t := token.(type) {
 		case xml.StartElement:
-			parent := stack.Peek().(*Node)
+			parent := stack.Peek()
 			n := parent.CreateOrGetChild(t.Name, t.Attr)
 			stack.Put(n)
 		case xml.EndElement:
-			n := stack.Pop().(*Node)
+			n := stack.Pop()
 			n.End()
 			if opts.MaxTokens > 0 && i > opts.MaxTokens {
 				break OUTER
@@ -93,7 +93,7 @@ OUTER:
 			if v == "" {
 				break
 			}
-			n := stack.Peek().(*Node)
+			n := stack.Peek()
 			if len(n.Examples) < opts.MaxExamples {
 				// XXX: sample better, e.g. reservoir dictionary.
 				n.Examples = append(n.Examples, v)

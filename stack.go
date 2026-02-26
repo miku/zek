@@ -21,42 +21,31 @@
 
 package zek
 
-import "sync"
-
-// Stack is a simple stack for arbitrary types.
-type Stack struct {
-	sync.Mutex
-	v []interface{}
+// Stack is a simple generic stack.
+type Stack[T any] struct {
+	v []T
 }
 
 // Len returns number of items on the stack.
-func (s *Stack) Len() int {
-	s.Lock()
-	defer s.Unlock()
+func (s *Stack[T]) Len() int {
 	return len(s.v)
 }
 
 // Put item onto stack.
-func (s *Stack) Put(item interface{}) {
-	s.Lock()
-	defer s.Unlock()
+func (s *Stack[T]) Put(item T) {
 	s.v = append(s.v, item)
 }
 
-// Peek returns the top element without removing it. Panic it stack is empty.
-func (s *Stack) Peek() interface{} {
-	s.Lock()
-	defer s.Unlock()
+// Peek returns the top element without removing it. Panics if stack is empty.
+func (s *Stack[T]) Peek() T {
 	if len(s.v) == 0 {
 		panic("peek at empty stack")
 	}
 	return s.v[len(s.v)-1]
 }
 
-// Pop item from stack. It's a panic if stack is empty.
-func (s *Stack) Pop() interface{} {
-	s.Lock()
-	defer s.Unlock()
+// Pop item from stack. Panics if stack is empty.
+func (s *Stack[T]) Pop() T {
 	if len(s.v) == 0 {
 		panic("pop from empty stack")
 	}

@@ -24,7 +24,7 @@ package zek
 import "testing"
 
 func TestStack(t *testing.T) {
-	s := Stack{}
+	s := Stack[int]{}
 	if s.Len() != 0 {
 		t.Errorf("empty stack contains %d items", s.Len())
 	}
