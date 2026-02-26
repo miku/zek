@@ -53,6 +53,7 @@ func main() {
 	)
 	root.MaxExamples = *maxExamples
 	// Read one or more XML files or URLs given as arguments.
+	var closers []io.Closer
 	if flag.NArg() > 0 {
 		var rs []io.Reader
 		for _, v := range flag.Args() {
@@ -62,19 +63,24 @@ func main() {
 				if err != nil {
 					log.Fatal(err)
 				}
-				defer resp.Body.Close()
+				closers = append(closers, resp.Body)
 				rs = append(rs, resp.Body)
 			default:
 				f, err := os.Open(v)
 				if err != nil {
 					log.Fatal(err)
 				}
-				defer f.Close()
+				closers = append(closers, f)
 				rs = append(rs, f)
 			}
 		}
 		reader = io.MultiReader(rs...)
 	}
+	defer func() {
+		for _, c := range closers {
+			c.Close()
+		}
+	}()
 	opts := zek.ReadOpts{
 		MaxExamples: *maxExamples,
 		MaxTokens:   *readAtMost,
