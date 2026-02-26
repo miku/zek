@@ -1,5 +1,5 @@
 # Run test suite.
-image: golang:1.12.7-buster
+image: golang:1.25.0-trixie
 
 cache:
   paths:
