@@ -28,6 +28,6 @@ type countwriter struct {
 
 // Write increments the number by len(p).
 func (w *countwriter) Write(p []byte) (n int, err error) {
-	w.n += w.n + int64(len(p))
+	w.n += int64(len(p))
 	return len(p), nil
 }
