@@ -526,3 +526,7 @@ Over 30 different struct generated manually in the course of a few hours
 
 -- Current extent leader: [1532](https://github.com/miku/zek/blob/master/fixtures/r.txt) lines struct
 
+Using zek:
+
+* [Finding Aids Unleashed: Iterative Development of a Portable Publication System](https://ital.corejournals.org/index.php/ital/article/download/17328/11945), New York University Libraries
+
