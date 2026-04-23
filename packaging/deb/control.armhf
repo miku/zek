@@ -1,8 +1,0 @@
-Package: zek
-Version: 0.1.28
-Section: utils
-Priority: optional
-Architecture: armhf
-Depends: libc6 (>= 2.12)
-Maintainer: Martin Czygan <martin.czygan@uni-leipzig.de>
-Description: Generate a Go struct from an XML document.

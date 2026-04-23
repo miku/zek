@@ -1,0 +1,33 @@
+name: zek
+arch: ${GOARCH}
+platform: linux
+version: ${SEMVER}
+version_schema: semver
+epoch: 0
+release: 0
+section: utils
+priority: optional
+maintainer: Martin Czygan <martin.czygan@uni-leipzig.de>
+description: Generate a Go struct from an XML document.
+vendor: Leipzig University Library, https://www.ub.uni-leipzig.de
+homepage: https://github.com/miku/zek
+license: GPL-3.0+
+
+contents:
+  # Binary
+  - src: zek
+    dst: /usr/local/bin/zek
+    file_info:
+      mode: 0755
+
+  # Man page
+  - src: docs/zek.1
+    dst: /usr/local/share/man/man1/zek.1
+    file_info:
+      mode: 0644
+
+deb:
+  compression: zstd
+
+rpm:
+  compression: zstd
