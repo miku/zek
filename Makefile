@@ -10,7 +10,7 @@ all: $(TARGETS)
 
 $(TARGETS): %: cmd/%/main.go
 	go get -v ./...
-	go build -ldflags="-s -w" -v -o $@ $<
+	go build -ldflags="-s -w -X github.com/miku/zek.Version=$(VERSION)" -v -o $@ $<
 
 .PHONY: test
 test:
@@ -45,7 +45,5 @@ release:
 	@echo go tag $(VERSION)
 	@echo goreleaser release --rm-dist
 
-.PHONY: update-version
-update-version:
-	sed -i -e 's@^const Version =.*@const Version = "$(VERSION)"@' version.go
+
 

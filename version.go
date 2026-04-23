@@ -21,5 +21,5 @@
 
 package zek
 
-// Version of application.
-const Version = "0.1.31"
+// Version of application, injected at build time via -ldflags "-X github.com/miku/zek.Version=...".
+var Version = "dev"
